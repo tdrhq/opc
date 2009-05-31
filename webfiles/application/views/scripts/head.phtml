@@ -8,10 +8,11 @@
   <?
 
    $base_url = Zend_Controller_Front::getInstance()->getBaseUrl() ; 
+	$static_baseurl = webconfig::$static_baseurl;
 ?>
 
 <style type="text/css" media="screen" >
-	@import url(<? echo "'$base_url/public/styles/basic.css'" ?> ); 
+	@import url(<? echo "'$static_baseurl/public/styles/basic.css'" ?> ); 
 </style>
 
 <link rel="alternate" type="application/atom+xml" title="Atom 1.0" href=<? echo "'". $base_url . "announcements/feed.php'"; ?>  />

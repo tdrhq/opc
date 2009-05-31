@@ -74,6 +74,8 @@ if (Zend_Auth::getInstance()->hasIdentity()) {
 	}
 }
 
+webconfig::$static_baseurl = dirname ($_SERVER['SCRIPT_NAME']);
+
 /* setup the controller and routes */
 $frontController = Zend_Controller_Front::getInstance();
 $frontController->throwExceptions(true);

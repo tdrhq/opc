@@ -66,6 +66,8 @@ class webconfig {
 	 * Default timezone to set for all time displays.
 	 */
 	static $default_timezone = "Asia/Calcutta" ;
+
+	static $static_baseurl = "";
 }
 
 webconfig::$backend_location = realpath(dirname(__FILE__) . "/../backend/") ;

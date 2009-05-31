@@ -1,11 +1,9 @@
 
-RewriteEngine on
-# RewriteLog /tmp/rewritelog
-RewriteBase /
-RewriteRule .* index.php 
+#Uncomment the following lines for RewriteEngine.
+#RewriteEngine on
+#RewriteBase <add url path here, for example /~arnold/opc, or just "/">
+#RewriteRule .* index.php 
 
-#php_flag magic_quotes_gpc off
-#php_flag register_globals off
 
 
 
