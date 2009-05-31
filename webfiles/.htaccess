@@ -1,8 +1,8 @@
 
 #Uncomment the following lines for RewriteEngine.
 #RewriteEngine on
-#RewriteBase <add url path here, for example /~arnold/opc, or just "/">
-#RewriteRule .* index.php 
+#RewriteBase /~arnold/opc #or the URL path, which can be just "/" >
+#RewriteRule !(public/.*) index.php 
 
 
 
