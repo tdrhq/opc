@@ -16,13 +16,7 @@ ini_set('display_errors', 'On') ;
 
 class webconfig {
 
-	/**
-	 * Where the backend is located. In a default deployment where the 
-	 * webfiles directory is placed under the backend root, this should
-	 * be sufficient. 
-	 * @default "../"
-	 */
-  	static $backend_location = "../";
+  	static $backend_location = "../backend/";
 
 	static $base_url="" ;
 	
