@@ -1,12 +1,12 @@
 <?
 
 $base_url = Zend_Controller_Front::getInstance()->getBaseUrl()  ; 
-
+$static_baseurl = webconfig::$static_baseurl;
 ?>
 
 <div id="header">
 
-  <a class="cmilogo" href="<? echo webconfig::$logo_href; ?>"><img alt="logo" src="<? echo "$base_url/images/" . webconfig::$logo ?>" /></a>
+  <a class="cmilogo" href="<? echo webconfig::$logo_href; ?>"><img alt="logo" src="<? echo "$static_baseurl/public/images/" . webconfig::$logo ?>" /></a>
 
 
 <?php
