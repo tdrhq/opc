@@ -68,7 +68,7 @@ class webconfig {
 	static $default_timezone = "Asia/Calcutta" ;
 }
 
-webconfig::$backend_location = realpath(dirname(__FILE__) . "/../") ;
+webconfig::$backend_location = realpath(dirname(__FILE__) . "/../backend/") ;
 
 if (is_file ( dirname(__FILE__)  . "/local_config.inc" )) 
 	require dirname(__FILE__) . "/local_config.inc" ;
