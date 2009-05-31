@@ -1,0 +1,20 @@
+<?
+$baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();
+if ( webconfig::$contest_id != 'general' )  {
+	$name = Contest::factory(webconfig::$contest_id)->getFriendlyName();
+	echo "<p>You are currently logged into the following contest: <b>" . $name . "</b>. To go back to mainsite, you must <a href='$baseurl/contests/general'>leave this contest by clicking here</a>. You can return to this contest later.</p>";
+} else { 
+	/* how about a list of contests then? */
+	Zend_Loader::loadClass("ContestModel");
+	$cm = new ContestModel() ;
+	$contests = $cm->findAll() ;
+
+	if ( sizeof($contests) <= 1) return;
+	echo "<p class='widgettitle' style='font-size: smaller'>Running Contests</p><ul>  ";
+	foreach ($contests as $contest) {
+		if ( $contest->id == "general" ) continue;
+		if ( $contest->isPrivate() ) continue; 
+		echo "<li><a href='$baseurl/contests/{$contest->id}'  style='font-size: smaller'>" .$contest->getFriendlyName() . "</a></li>";
+	}
+	echo "</ul>";
+}

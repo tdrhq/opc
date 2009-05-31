@@ -1,0 +1,102 @@
+<?
+
+Zend_Loader::loadClass("Zend_Form") ;
+Zend_Loader::loadClass("Zend_Form_Element_Text");
+Zend_Loader::loadClass("Zend_Validate_Alnum");
+Zend_Loader::loadClass("Zend_Form_Element_Password") ;
+Zend_Loader::loadClass("Zend_Form_Element_Select") ;
+
+$form = new Zend_Form ; 
+
+$form->setAction($this->url(array("action" => "{$this->mode}2")))->setMethod('post') ;
+$form->setAttrib("class", "registerform") ;
+
+$username = new Zend_Form_Element_Text("user") ;
+$username->addValidator(new  Zend_Validate_Alnum()) ;
+$username->setRequired(true) ;
+$username->setValue($this->user) ;
+$username->setLabel("Username: ");
+
+
+
+$form->addElement($username) ;
+
+
+/* password */
+
+$password = new Zend_Form_Element_Password("password");
+$password->setRequired(true) ;
+$password->setLabel("Password: ") ;
+
+
+$form->addElement($password);
+
+$confirm = new Zend_Form_Element_Password("confirm") ;
+$confirm->setRequired(true) ;
+$confirm->setLabel("Confirm Password: ") ;
+
+$form->addElement($confirm) ;
+
+
+
+
+$name0 = new Zend_Form_Element_Text("name0") ;
+$name0->setRequired(true) ;
+$name0->setLabel("Name: ") ;
+$name0->setValue($this->name0); 
+$form->addElement($name0) ;
+
+$email0 = new Zend_Form_Element_Text("email0") ;
+$email0->setRequired(true) ;
+$email0->setLabel("Email: ");
+$email0->setValue($this->email0);
+$form->addElement($email0) ;
+
+$names = array($this->name0, $this->name1, $this->name2) ;
+$emails = array($this->email0, $this->email1, $this->email2) ;
+
+for ( $i = 1 ; $i < webconfig::$team_size ; $i ++ ) {  
+  $name0 = new Zend_Form_Element_Text("name$i") ;
+  $name0->setRequired(true) ;
+  $name0->setLabel("Name (Team member #" . ($i+1) . "): ") ;
+  $name0->setValue($names[$i]); 
+  $form->addElement($name0) ;
+  
+  $email0 = new Zend_Form_Element_Text("email$i") ;
+  $email0->setRequired(true) ;
+  $email0->setLabel("Email (Team member #" . ($i+1) ."): ");
+  $email0->setValue($emails[$i]);
+  $form->addElement($email0) ;
+ 
+ }
+
+
+$country = new Zend_Form_Element_Text("Country") ;
+$country->setLabel("Country: ") ;
+if ( empty($this->country) && $this->mode == "register") 
+  $country->setValue("India");
+else
+  $country->setValue($this->country);
+$form->addElement($country);
+
+
+$inst = new Zend_Form_Element_Text("institute") ;
+$inst->setLabel("Institute/Organization: ") ;
+$inst->setValue($this->institute) ;
+$form->addElement($inst) ;
+
+
+$timezone = new Zend_Form_Element_Select("timezone") ;
+$timezone->setLabel("Timezone: ") ;
+$alltz = timezone_identifiers_list() ;
+foreach ($alltz as $tz) {
+	$timezone->addMultiOption($tz, $tz);
+}
+$timezone->setValue($this->timezone) ;
+
+$form->addElement($timezone);
+
+$form->addElement("submit", "Submit") ;
+echo $form; 
+
+

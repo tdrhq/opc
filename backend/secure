@@ -1,0 +1,8 @@
+#!/bin/bash
+# Run this if your working directory is made using 
+# svn up.
+# OR just use svn export
+#
+ find . -iname '\.svn' -exec chmod o-rx {} \; 
+
+

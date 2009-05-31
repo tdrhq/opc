@@ -1,0 +1,27 @@
+
+<? 
+Zend_Loader::loadClass("RanklistModel");
+$ranklist = new RanklistModel () ; 
+$ranks = $ranklist->getRanks($this->username, NULL, webconfig::$contest_id); 
+
+if ( empty($ranks) ) {
+	echo "<p><em>$this->username hasn't solved any problem yet. This page will contain a list of problems that have been solved.</em></p>";
+	return;
+}
+$baseUrl = Zend_Controller_Front::getInstance()->getBaseUrl() ;
+?>
+
+<p>
+<table class='styled'> 
+<tr class='styled'> <th class='styled'>Problem Code</th> <th class='styled'>Score</th></tr>
+
+<?
+  foreach ($ranks[0] as $prob => $value) { 
+  if ( $prob != 'team' && $prob != 'score' &&  $prob != 'time' ) 
+	echo "<tr> <td> <a href='$baseUrl/problems/{$prob}'>{$prob}</a></td> <td>{$value['score']}</td></tr>";
+}
+
+?>
+
+</table>
+</p>

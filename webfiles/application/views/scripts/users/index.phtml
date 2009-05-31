@@ -1,0 +1,25 @@
+<?
+echo "<h1>Team: $this->username</h1>\n";
+Zend_Loader::loadClass("UserModel");
+$userm = new UserModel() ;  
+$user = $userm->getRow($this->username) ;
+
+if ( webconfig::$team_size == 1 ) {  
+echo "<p>
+People in the real world call me: " . $userm->getMember($user, 0)->name ."</p>
+";
+ } else  { 
+  $members = $userm->getMember($user, 0)->name ; 
+  for ( $i = 1 ; $i < webconfig::$team_size ; $i ++ ) { 
+	$name = $userm->getMember($user, $i)->name ;
+	if ( !empty($name)) $members .= ", $name" ;
+  }
+  echo "<p>Members: $members</p>";
+	
+ } 
+
+echo "<p>Institute/Organization: " . $userm->getInstitute($user) . "</p>";
+echo "<p>Country: " . $userm->getCountry($user) . " </p>";
+
+echo $this->render("users/status.phtml") ;
+

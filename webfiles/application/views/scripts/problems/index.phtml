@@ -1,0 +1,9 @@
+<?
+$baseurl = Zend_Controller_Front::getInstance()->getBaseUrl() ; 
+echo "<ul>\n";
+foreach ( $this->problems as $pro ) { 
+  echo "  <li><a href='$baseurl/problems/{$pro->id}'>[{$pro->id}] {$pro->nickname}</a></li>\n";
+}
+echo "</ul>\n";
+
+?>

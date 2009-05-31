@@ -1,0 +1,180 @@
+<?
+
+$base_url = Zend_Controller_Front::getInstance()->getBaseUrl()  ; 
+
+?>
+
+<div id="header">
+
+  <a class="cmilogo" href="<? echo webconfig::$logo_href; ?>"><img alt="logo" src="<? echo "$base_url/images/" . webconfig::$logo ?>" /></a>
+
+
+<?php
+$main_menu =array();
+$main_pages=array();
+
+$_auth = Zend_Auth::getInstance() ; 
+
+
+require_once "lib/contest.inc" ;
+$contest = Contest::factory(webconfig::$contest_id) ;
+$xp = $contest->getXPath() ;
+$pages = $xp->query("/contest/frontend/page");
+
+foreach ($pages as $page) { 
+  $id = $xp->query('@id', $page)->item(0)->nodeValue;
+  array_push($main_menu, $page->nodeValue);
+  array_push($main_pages, "pages/$id");
+}
+if ( Zend_Auth::getInstance()->hasIdentity() ) { 
+  array_push($main_menu,"Profile");
+  array_push($main_pages,"profile/update");
+ }
+
+$i = 0;
+
+echo '<div class="topmenu">' ; 
+foreach ($main_menu As $option) {
+    if($i==0){
+        $ii=1;
+    }else{
+	  echo " <span style='font-size: smaller'>|</span> " ;
+        $ii = ($i%4)+2;
+    }
+?><a  href='<? echo "$base_url/$main_pages[$i]"?>'   > 
+		 <? echo $main_menu[$i] ?> 	   
+	  </a> 
+<?
+    ++$i;
+}
+
+echo "</div> <!-- topmenu --> "; 
+echo "</div> <!-- header --> ";
+?>
+
+<div id="headerbar">
+<div id="sublinks">
+<?php 
+ 
+  $contest_menu=array();
+$contest_pages=array();
+
+/*
+array_push($contest_menu, "Team List");
+array_push($contest_pages, "info/?form=teamlist");
+*/
+
+  {
+	array_push($contest_menu, "Problems");
+	array_push($contest_pages, "problems/");
+	
+	array_push($contest_menu, "Submit");
+	
+	if ( empty($this->problem_code) ) 
+	  array_push($contest_pages,"submit/");
+	else
+	  array_push($contest_pages,"submit/?probid={$this->problem_code}");
+	
+	array_push($contest_menu, "Rankings");
+	array_push($contest_pages,"ranks/");
+	
+	array_push($contest_menu,"Queue Status");
+	array_push($contest_pages,"queue");
+
+	if ( Zend_Auth::getInstance()->hasIdentity()) { 
+		array_push($contest_menu, "My Submissions");
+		array_push($contest_pages, "queue/mine");
+	}
+	
+  }
+
+
+$i = 0;
+foreach ($contest_menu as $option) {
+  
+  echo "<a href='" . $base_url . "/$contest_pages[$i]'>$option</a>\n";
+  ++$i;
+  
+  //    echo "<a class=\"main_menu_item\" href=\"$base_url/$contest_pages[$i]\">$option</a></li>\n";
+  
+}
+if ( Zend_Auth::getInstance()->hasIdentity() ) 
+	echo "<a href='$base_url/auth/logout'>Logout</a>\n";
+
+echo "</div> <!-- sublinks --> \n</div> <!--subheader-->\n ";
+//$option = $contest_menu[$i]; //Why do we need this?
+
+
+if ( !empty($this->login_message) )  
+  {
+	
+	echo ' 
+<script type="text/javascript">
+document.getElementById("wronglogin").innerHTML = "Incorrect Login";
+</script>';
+	
+  }
+
+
+
+
+
+echo '<div id="main">' ;
+echo "   <table id='announces'><tr><td>" ;
+
+   if ( ! Zend_Auth::getInstance()->hasIdentity() )  { 
+	echo "<form method='post' action='$base_url/auth/login' >
+      <div>
+        <input type='hidden' name='redirectto' value='" . (empty($this->login_redirect) ? Zend_Controller_Front::getInstance()->getRequest()->getPathInfo() : $this->login_redirect) . "'/>
+        <label for='username' >Username</label>
+        <input id='username' type='text' name='username' />
+
+        <label for='password'>Password</label>
+        <input id='password' type='password' name='password' />
+        <input type='submit' id='submit' value='Login' />";
+	 if (webconfig::$allow_register) 
+	   echo "<a id='registerlink' href='$base_url/profile/register/' >Register Now</a><span id='wronglogin'></span>";
+	 echo "</div></form>
+";
+	   }
+   else { 
+
+	   echo "<p style='font-size:smaller;'>Current Server Time: <br /> ". 
+	   date(DATE_RFC1123) . "</p>"; 
+	 echo "<p style='font-size:smaller;'>". webconfig::$contest_name  ;
+	Zend_Loader::loadClass("ContestModel");
+	$contestm = new ContestModel() ;
+	$state = $contestm->getContestState(webconfig::$contest_id); 
+	$contest = $contestm->getRow(webconfig::$contest_id);
+	
+	 if ( $state == "before" ) {
+	   echo " starts at: <br/>" . strftime("%a, %d %b %Y %H:%M:%S %z", $contest->getContestTime()) ;
+	 }
+	 elseif ($state == "ongoing") {
+	   echo " ends at: <br/>" . strftime("%a, %d %b %Y %H:%M:%S %z", $contest->getContestEndTime()) ; 
+	 }
+	 elseif ($state == "after" ) {
+	   echo " has ended.<br />";
+	   echo "<!-- End time : " . strftime("%a, %d %b %Y %H:%M:%S %z", $contest->getContestEndTime()) . " -->\n";
+
+	 }
+   
+	 echo "</p>";
+
+
+   }
+
+echo "    </td></tr>\n" ;
+
+/* lets load any widgets */
+foreach (webconfig::$widgets as $widget) { 
+  echo "<tr><td>\n";
+  echo $this->render($widget) ;
+  echo "</td></tr>\n";
+}
+echo "  </table> <!-- announces -->\n";
+?>
+<div id="maincontent">
+
+
+

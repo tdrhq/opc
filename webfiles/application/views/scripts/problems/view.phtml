@@ -1,0 +1,24 @@
+<? 
+echo $this->content_html ;
+
+$prob = $this->prob; 
+
+echo "<table class='styled' >\n "; 
+
+if ( !empty($prob->resourcelimits )) 
+	 echo "<tr> <td>Resource Limits: </td><td>$prob->resourcelimits</td></tr>\n";
+
+if ( !empty($prob->submissionlimit) && $prob->submissionlimit < 1000 ) 
+	 echo "<tr> <td>Sumbmission Limit: </td><td>". $prob->getSubmissionLimit() . "</td></tr>\n";
+
+echo "<tr> <td>CPU Timelimit: </td><td>" . $prob->getRuntimeLimit() . " seconds </td></tr>\n";
+echo "<tr> <td>Memory limit: </td><td>" . $prob->getMemoryLimit() . "</td></tr>\n";
+echo "<tr> <td>Grading style: </td><td>" . $prob->grading_style . "</td></tr>\n";
+
+if ( !empty($prob->resource) )
+	echo "<tr> <td>Resource</td> <td> $prob->resource </td></tr>\n";
+
+echo "</table>";
+
+?>
+

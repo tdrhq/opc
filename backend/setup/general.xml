@@ -1,0 +1,15 @@
+<contest>
+ <name>The Big Contest of The Year</name>
+ <contestTime>2002-05-30T09:00:00</contestTime>
+ <contestPeriod>P5H</contestPeriod>
+
+ <admin>arnstein</admin>
+
+ <frontend>
+   <!-- these are not critical changes, these show up at the top -->
+   <page id="home" href="general/home.html">Home</page>
+   <page id="rules" href="general/rules.html">Rules</page>
+   <page id="sponsors" href="general/sponsors.html">Sponsors</page>
+ </frontend>
+</contest>
+

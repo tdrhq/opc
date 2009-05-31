@@ -1,0 +1,126 @@
+<?
+require_once "lib/problems.inc";
+$id = $this->id ; 
+
+
+$sub = $this->sub ;
+
+if ( $this->download ) { 
+  echo file_get_contents($sub->getPathToCode());
+  return;
+ }
+/* Display the information */
+
+echo "<p>Submission ID: $sub->id <br />" ; 
+echo "Submission Time: " . strftime("%R:%S",strtotime($sub->time)) . "<br />\n" ;
+echo "Language: $sub->lang<br />";
+echo "Team: <a href='users/{$sub->user}'>" . $sub->team . "</a><br />\n";
+echo "Problem: <a href='" . Zend_Controller_Front::getInstance()->getBaseUrl() . "/problems/" . 
+   $sub->problemid . "'>{$sub->problemid}</a></p>\n";
+
+/* if state is waiting/queue/running, then just say so and 
+ * quit
+ */
+
+$prob = ProblemTable::get_problem($sub->problemid);
+
+echo "<p>State: $sub->state</p>" ;
+if ( in_array($sub->state, array('waiting','queue','running'))){
+  return ; 
+ }
+
+if (is_file ( $sub->getPathToResult() ) ) {
+  $dom = new DomDocument() ;
+  $dom -> load( $sub->getPathToResult()  ) ;
+  $xp = new domxpath($dom);
+  
+  
+  echo "<p>Total score for this submission: $sub->score</p>";
+  /* Show compiler error/warnings */
+  
+  
+  if( $xp->query("/judge/compiler/status")
+	  ->item(0)->nodeValue == 'error' ) {
+	echo "Error while compilation: <pre style='font-size:smaller;'
+	width='80'>";
+	echo $xp->query("/judge/compiler/error")->item(0)->nodeValue ;
+	echo "</pre>";
+  }
+  
+  $ar = $xp -> query("/judge/compiler/warnings" ) ;
+  foreach ( $ar as $warning ) {
+	echo   "Your code compiled successfully but produced the" ;
+	echo " following warnings<br />";
+	echo "<pre width='80' style='font-size:smaller;'>" ;
+	echo $warning->nodeValue ; 
+	echo "</pre>";
+  }
+  $testar = $xp -> query ( "/judge/testcase" ) ;
+  
+  foreach ($testar as $test) {
+    echo "<p>";
+	echo "<table width='100%' style='border: solid 1px; border-color:#777;'>";
+	echo "<tr style='background:#ddd' cellpadding='0' cellspacing='0' ><td 
+style='padding:4px 4px 4px 4px; background: #ddd;'>";
+	$res = $xp->query("message",$test) -> item(0) ->nodeValue;
+	echo "$res<br />";
+	echo "</td></tr><tr><td style='padding: 8px 8px 8px 16px;'>";
+	$exec_status =  $xp->query("exec/status",$test)->item(0)->nodeValue ; 
+	if (  $exec_status != "success" ) {
+	  echo "Runtime Error: " . $exec_status . "<br />";
+	  $desc = $xp->query("exec/description",$test)->item(0) ; 
+	  if ( !empty($desc) ){ 
+	    echo "Description: " . $desc->nodeValue
+	      . "<br />";
+	  }
+	}
+	else { 	
+	  $res = $xp->query("check/status",$test)->item(0)->nodeValue ;
+	  if ( $res != "success" ) {
+	    echo  "Wrong Answer<br /> "; 
+	  }
+	  else {
+	    echo "Correct Answer<br />\n";
+	  }
+	}
+
+
+	if ( $prob->doesCheckerOutputScore ) {
+	  $message = $xp->query("check/message",$test);
+	  if ( $message->length) { 
+	    $message = $message->item(0)->nodeValue;
+	    echo "Message: $message<br />";
+	  }
+	}
+	$runtime = $xp->query("exec/runtime",$test)->item(0)->nodeValue ;
+	if ( $exec_status != 'TLE' ) echo "Runtime: $runtime<br />\n";
+	echo "</td></tr></table> </p>";
+
+  }
+  if ($this->admin ) {
+	
+	echo "<div><p><pre width='80'>".htmlentities($dom->saveXML())."</pre></p></div>" ;
+  }
+
+ }
+	echo "<p><table width='100%' style='border: solid 1px; border-color:#777;'>";
+	echo "<tr style='background:#ddd' cellpadding='0' cellspacing='0' ><td 
+style='padding:4px 4px 4px 4px; background: #ddd;'>";
+
+	echo "<div valign='top' style='float:left'>Your submitted code:</div>";
+
+        echo "<div valign='top' style='float:right;'>
+<a href='{$_SERVER['REQUEST_URI']}?download=true'>Download</a></div>";
+	echo "</td></tr><tr><td style='padding: 0px 0px 0px 0px;'>";
+
+
+if ( $sub -> lang == "c" ) 
+  passthru( "cat {$sub->getPathToCode()} | c2html -nsw 80 " ) ;
+ else if ( $sub-> lang == "java" or $sub->lang == "gcj" or $sub->lang=="cpp") 
+   passthru (" cat {$sub->getPathToCode()} | java2html -nsw 80 " ) ;
+else 
+  passthru (" cat $sub->pathtocode ") ;
+echo "";
+	echo "</td></tr></table> </p>";
+
+

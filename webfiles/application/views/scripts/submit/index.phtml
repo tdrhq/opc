@@ -1,0 +1,98 @@
+<?
+include_once "lib/problems.inc"; 
+
+Zend_Loader::loadClass("ContestModel");
+$contestm = new ContestModel ;
+$contest_status = $contestm->getContestState(webconfig::$contest_id) ;
+
+?>
+
+<script type="text/javascript" > 
+<!--
+
+function validate() 
+{ 
+  lang = document.getElementById ("lang").value ; 
+  code = document.getElementById ("source").value ; 
+  
+  ext = code.substr( code.lastIndexOf('.') ).toLowerCase();; 
+  warn = false ; 
+  if ( lang == "cpp" && ! (ext == ".cpp" || ext == ".cc" || ext == ".c++" ) )
+	   warn = true ;
+  
+  if ( (lang == "java" || lang == "gcj")  && ext != ".java" ) 
+	warn = true ;
+  
+  if ( lang == "c" && ext != ".c" ) 
+	warn = true ; 
+
+  if ( lang == "java" || lang == "gcj" ) lang = "Java" ;
+  if ( lang == "cpp" ) lang ="C++"; 
+  if ( lang == "c" ) lang = "C" ;
+
+  if ( warn )  {
+	ans = confirm ("You have chosen language '" + lang + "' but your file has"
+				  + " extension '" + ext + "'. Are you sure you want to " 
+				   + "continue?") ;
+	if ( !ans ) return false ; 
+  }
+
+  return true  ;
+}
+  // -->
+</script> 
+<p class="para">Submit your solutions here:</p>
+<form action="upload" method="post" onsubmit="return validate()" 
+  enctype="multipart/form-data">
+<table>
+<tr>
+  <td>Problem:</td>
+  <? if (! config::$enable_problem_list_on_submit ) { ?>
+
+  <td> <input type='text' name="probid" value=<? echo "'$probid'" ?> > </td> 
+
+	 <? }else{ ?>
+	 
+   <td><select name="probid"><?
+	
+foreach($this->problems as $obj){
+  $idd =  $obj-> id ;
+  $nick = $obj -> nickname ;
+  $sel = ($obj->id == $this->problem_code ? " selected='selected' ": "" );
+  echo "<option value='$idd' $sel >$idd $nick</option>\n";
+ }
+
+?></select></td>
+
+
+	  <?  } /* endif */  ?> 
+</tr>
+<tr>
+  <td>Language:</td>
+  <td>
+    <select name="lang" id="lang" >
+
+<?
+
+  $ll = "cpp" ;
+  foreach ( config::$supported_submission_languages 
+		  as $key => $val ) 
+  echo "<option value='$key' " . ($ll==$key?" selected='selected' ":"") 
+  ." >$val</option>\n";
+?>
+
+      </select>
+  </td>
+</tr>
+   <tr>
+  <td>Source file:</td>
+  <td>
+    <input type="hidden" name="MAX_FILE_SIZE" value="100000" /> <!--In bytes-->
+
+    <input id="source" name="source" type="file" />
+    <input type="submit" value="Send" />
+  </td>
+  </tr>
+</table>
+</form>
+

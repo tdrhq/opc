@@ -1,0 +1,21 @@
+<?
+echo "<table class='styled' >\n" ; 
+echo " <tr class='styled'>
+	<th class='styled'>User</th>
+	<th class='styled'>Score</th>
+ </tr>\n";
+
+$baseurl = Zend_Controller_Front::getInstance()->getBaseUrl() ; 
+
+$even = false ; 
+foreach( $this->ranks as $entry) { 
+  $class = ($even ? "styleda" : "styled") ;
+  echo " <tr class='$class'>\n";
+  echo "  <td class='styled'><a href='$baseurl/users/{$entry['team']}'>{$entry['team']}</a></td>\n";
+  echo "  <td class='styled'>{$entry['score']}</td>\n";
+  echo " </tr>\n";
+  $even = !$even ; 
+}
+echo "</table>" ;
+
+

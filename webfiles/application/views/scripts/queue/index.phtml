@@ -1,0 +1,93 @@
+<?
+$baseurl = Zend_Controller_Front::getInstance()->getBaseUrl() ;
+
+$ar = $this->queue_status ; 
+
+$count = $this->queue_size ; 
+$offset = $this->offset ; 
+$limit = $this->limit ; 
+$user = $this->user; 
+
+$thispage = $this->url(array("action" => "index") ) ;
+
+if ( $offset <= 0 ) 
+  echo "&lt; Prev" ;
+ else 
+   echo "<a href='" . $this->escape("$thispage?offset=" . ($offset-$limit). 
+	 "&limit=$limit") . "' >&lt;Prev</a>" ; 
+echo ' | ' ;
+$upperbnd = ceil ( $count / $limit ) ; 
+for( $i = 0 ; $i * $limit <= $count ; $i ++ )  { 
+  if ( $i*$limit ==  $offset ) 
+	echo " " . ($upperbnd - $i ) . " " ;
+  else
+	echo " <a href='$thispage?offset=" . $i*$limit . 
+	  "&amp;limit=$limit'>" . ($upperbnd - $i) ."</a> " ; 
+ }
+echo " | ";
+if ( $offset + $limit >= $count ) 
+  echo "Next&gt;" ;
+ else
+   echo "<a href='$thispage?offset=" . ($offset+$limit). 
+	 "&amp;limit=$limit&amp;team=$user' >Next &gt;</a>" ; 
+
+
+
+echo "<table class='styled' width='500'>";
+echo "<tr class='styled'><th class='styled' align='center'>ID</th><th class='styled' align='center'>Problem ID</th><th class='styled' align='center'>Submission<br /> Time</th>
+<th class='styled' align='center'>Team<br /> Name</th>
+<th class='styled' align='center'> Language </th>
+
+<th class='styled' align='center'>Score</th><th class='styled' align='center'>Status</th></tr>";
+
+$mee = User::factory(Zend_Auth::getInstance()->getIdentity()); 
+if ( empty($mee) ) $isadmin = false ; 
+ else $isadmin = $mee -> isAdmin() ;
+
+$rowcount=0;
+foreach ( $ar as $x ) {
+  $access = (  Zend_Auth::getInstance()->getIdentity() == $x->team) ;
+  if ( $isadmin ) $access = true ;
+  
+  echo "<tr class='styled";
+  if($rowcount%2==0){
+      echo "a";
+  }
+  echo "'>";
+  if ( ! $access ) 
+	echo " <td> " . $x->id ." </td>";
+  else 
+	echo "<td> <a href='$baseurl/results/{$x->id}'> $x->id </a></td>";
+  
+  $ts = strftime("%d %b %Y %H:%M:%S %z",strtotime($x -> time ));
+
+  //  echo "<td class='styled'>". print_r(strtotime($x -> time )) . "</td>" ;
+  echo " <td class='styled' align='center'> <a href='$baseurl/problems/{$x->problemid}'>" . $x->problemid . "</a></td>\n ";
+  echo "<td class='styled' align='center'> " . $ts . "</td>\n";
+  
+  echo " <td class='styled' align='center'> <a href='$baseurl/users/{$x->team}'>$x->team</a> </td>\n" ;
+  if ( $x -> lang == "cpp" ) $flang = "C++" ;
+  elseif ( $x->lang == "c" ) $flang = "C" ; 
+  elseif ($x->lang == "gcj" ) $flang = "Java" ; 
+  else $flang = $x->lang ;
+
+  echo " <td class='styled' align='center'> $flang </td> \n" ;
+  echo "<td class='styled' align='center'> " . $x -> score . " </td>\n" ;
+  if ( !$access) {
+  echo "<td class='styled' align='center'> " . $x ->state . "</td>\n" ;
+  }
+  else {
+	echo "<td class='styled' align='center'><a href='$baseurl/results/{$x->id}'>" ;
+	echo "{$x->state} </a></td>";
+  }
+  
+  echo "</tr>\n";
+  $rowcount++;
+}
+
+echo "</table>";
+
+?>
+
+
+

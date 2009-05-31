@@ -1,0 +1,15 @@
+element contest {
+	element name {text} &
+	element contestTime {xsd:dateTime}? &
+	element contestPeriod {xsd:duration}? &
+	element contestDuration {text}? &
+	element contestEndTime {xsd:dateTime}? & 
+	element admin {text}? & 
+	element frontend { 
+		element page { 
+			text,
+			attribute id {text}? , 
+			attribute href {text}? 
+		}*
+	}?
+}

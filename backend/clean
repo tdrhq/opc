@@ -1,0 +1,9 @@
+#!/bin/bash
+# Run this if your working directory is made using 
+# svn up and you want to get rid of the .svn directories.
+#
+# OR just use svn export like normal people do.
+#
+ find . -iname '\.svn' -exec rm -rf {} \; 
+
+

@@ -1,0 +1,9 @@
+element user { 
+	element member { 
+		element name {text}? &
+		element email {text}? &
+		element institute {text}? 
+	}* &
+	element institute {text}? &
+	element country {text}? 
+}
