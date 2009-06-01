@@ -32,8 +32,7 @@ zend_test: local_config
 database_test:
 	@$(PHP5_CLI) setup/install_database.php   
 
-all-local: local_config zend_test opc_directories database_test default_contest 
-	@printf "\n\nRun 'make database' if you haven't done so already\n"
+all-local: local_config zend_test opc_directories database default_contest 
 
 database: database_test
 	$(PHP5_CLI) setup/install_db_tables.php
