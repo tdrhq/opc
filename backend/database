@@ -9,7 +9,7 @@ create table submissionqueue (
  lang text,
  state text ,
  score integer default 0,
- time timestamp default now(),
+ time timestamp with time zone default now(),
  notcounted boolean default false,
  hash text
 ) ;
