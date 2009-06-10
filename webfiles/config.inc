@@ -68,6 +68,8 @@ class webconfig {
 	static $default_timezone = "Asia/Calcutta" ;
 
 	static $static_baseurl = "";
+
+	static $enable_gravatars = false;
 }
 
 webconfig::$backend_location = realpath(dirname(__FILE__) . "/../backend/") ;
