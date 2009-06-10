@@ -4,11 +4,10 @@ function getgravatar ($user)
 { 
 	Zend_Loader::loadClass("UserModel");
 	$user = UserModel::getRow ($user);
-	$email = UserModel::getMember ($user, 0);
+	$email = UserModel::getMember ($user, 0)->email;
 
 	$grav_url = "http://www.gravatar.com/avatar.php?gravatar_id=".md5( strtolower($email) ).
-		"&default=".urlencode($default).
-		"&size=40";
+		'&size=40';
 
 	return $grav_url;
 }
@@ -24,7 +23,7 @@ class GravatarModel
 						   'automatic_serialization' => true ) );
 	}
 
-	public function getGravatar($user, $prob, $owner) 
+	public function getGravatar($user) 
 	{
 		return $this->cache->call("getgravatar", array($user) );
 
