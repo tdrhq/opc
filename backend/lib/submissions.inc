@@ -284,12 +284,13 @@ class SubmissionTable {
    */
   public static function set_state( $id, $state, $oldstate = NULL) {
 	  $db = contestDB::get_zend_db ();
-	  $state = $db->quote($state);
-	  $id = (int) ($id);
+
+	  /* WARNING TODO: $state isn't quoted */
+	  $id = $db->quote ($id, 'INTEGER');
 	  $where = array ('id=$id');
 	  if (!empty($oldstate)) $where [] = 'state=' . $db->quote ($oldstate);
 	      
-	  $n = $db->update (SubmissionTable::tablename, 'state=$state',
+	  $n = $db->update (SubmissionTable::tablename, array('state' => '$state'),
 			$where);
 	  return ($n > 0);
   }
