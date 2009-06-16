@@ -29,6 +29,8 @@ for ($i = 1; $i < $argc; $i++) {
 		$sublim = $argv[++$i];
 	else if ($argv[$i] == "--resource-limits") /* deprecated */
 		$rlim = $argv[++$i];
+	else if ($argv[$i] == "--checker")
+		$checker = $argv[++$i];
 	else if ($argv[$i] == "--only-update")
 		$onlyupdate = true;
 	else if ($argv[$i] == "--use-sample") 
@@ -166,6 +168,11 @@ $res->appendChild($element) ;
 $element = $dom->createElement("output", "") ;
 $res->appendChild($element) ;
 
+
+if (!empty($checker)) {
+	$element = $dom->createElement ("checker", $checker);
+	$root->appendChild ($element);
+}
 
 if (empty($rlim)) $rlim = "";
 $element = $dom->createElement("resourcelimits_string", $rlim) ;
