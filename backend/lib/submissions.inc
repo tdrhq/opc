@@ -290,7 +290,7 @@ class SubmissionTable {
 	  $where = array ("id=$id");
 	  if (!empty($oldstate)) $where [] = 'state=' . $db->quote ($oldstate);
 	      
-	  $n = $db->update (SubmissionTable::tablename, array('state' => '$state'),
+	  $n = $db->update (SubmissionTable::tablename, array('state' => $state),
 			$where);
 	  return ($n > 0);
   }
