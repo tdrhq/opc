@@ -283,14 +283,15 @@ class SubmissionTable {
    *        state was not $oldstate.
    */
   public static function set_state( $id, $state, $oldstate = NULL) {
-	contestDB::connect() ;
-	$state = pg_escape_string($state);
-	$res = contestDB::query("update " 
-							. SubmissionTable::tablename 
-							. " set state='$state' where id=$id " 
-							. ( empty($oldstate)? "" : 
-								" and state='$oldstate' " ) );
-	return (pg_affected_rows($res) > 0 ) ;
+	  $db = contestDB::get_zend_db ();
+	  $state = $db->quote($state);
+	  $id = (int) ($id);
+	  $where = array ('id=$id');
+	  if (!empty($oldstate)) $where [] = 'state=' . $db->quote ($oldstate);
+	      
+	  $n = $res->update (SubmissionTable::tablename, 'state=$state',
+			$where);
+	  return ($n > 0);
   }
 
   /**
