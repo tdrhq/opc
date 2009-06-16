@@ -186,7 +186,7 @@ if (empty($onlyupdate)) {
 ('$id',$numcases,'$nick','ok',$sublim,'$contest')" ;
 } else {
 	$sql = "update problemdata set numcases=$numcases,nickname='$nick',
-state='ok',submissionlimit=$sublim,contest='$contest' where id='$id'";
+state='ok',submissionlimit=$sublim,owner='$contest' where id='$id'";
 
 }
 
