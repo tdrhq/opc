@@ -254,25 +254,18 @@ class SubmissionTable {
    */
 
   public static function get_waiting_queue($limit) {
-	contestDB::connect() ;
-	
-	$res = contestDB::query("select * from " . 
-							SubmissionTable::tablename . 
-							" where state='waiting' order by id asc" .  
-							( $limit != 0 ? " limit $limit " : "" )
-							);
+	  $db = contestDB::get_zend_db ();  
+	  $stmt = $db->select()->from(SubmissionTable::tablename)
+		  ->where ("state='waiting'");
+	  if ($limit != 0) $stmt = $stmt->limit ($limit);
+	  $stmt->order ('id asc');
+	  $res = $stmt->query ();
 
-	if ( ! $res  )
-	  throw new Exception("Unable to get waiting queue" ) ;
-	
-	$ret = array() ;
-	
-	$count = pg_num_rows ( $res ) ;
 
-	while ( $count -- ) 
-	  array_push ( $ret, pg_fetch_object($res)->id ) ;
+	  if ( ! $res  )
+		  throw new Exception("Unable to get waiting queue" ) ;
 	
-	return $ret ; 
+	  return $res->fetchAll () ; 
   }
   
   /**

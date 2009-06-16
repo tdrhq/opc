@@ -97,7 +97,6 @@ class ContestQueueManager {
    * @returns void
    */ 
   function start_queue () {
-	contestDB::connect() ;
 	fprintf(STDOUT,"The queue has started.\n");
 	while ( !file_exists("stop_queue_manager")  ) {
 
