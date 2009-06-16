@@ -4,6 +4,7 @@
 chdir( dirname($argv[0]) );
 
 /* read commandline options */
+$namespace = "";
 for ($i = 1; $i < $argc; $i++) {
 	if ($argv[$i] == "--id")
 		$id = $argv[++$i];
@@ -30,6 +31,8 @@ for ($i = 1; $i < $argc; $i++) {
 		$rlim = $argv[++$i];
 	else if ($argv[$i] == "--only-update")
 		$onlyupdate = true;
+	else if ($argv[$i] == "--use-sample") 
+		$namespace = "sample.";
 	else {
 		echo "Unknown option: " . $argv[$i] . "\n";
 		exit (1);
@@ -111,7 +114,7 @@ for( $i = 0 ; $i < $numcases ; $i ++ ) {
 
   $testcase = $dom->createElement("test") ;
 
-  $def = "data/problems/$id/$i.in" ;
+  $def = "data/problems/$id/$namespace$i.in" ;
   if ( !is_file(get_file_name($def)) ) 
 	  die("$def: not found\n");
 
@@ -119,7 +122,7 @@ for( $i = 0 ; $i < $numcases ; $i ++ ) {
   $testcase->appendChild($element) ;
 
 
-  $def = "data/problems/$id/$i.out" ; 
+  $def = "data/problems/$id/$namespace$i.out" ; 
   if ( !is_file(get_file_name($def)) ) 
 	  die("$def: not found\n");
 
