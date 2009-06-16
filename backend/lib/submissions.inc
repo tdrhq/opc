@@ -333,13 +333,14 @@ class SubmissionTable {
    * @return TRUE if and only if the hash was found.
    */
   public static function exists_submission_by_hash($team,$probid,$hash) {
-	contestDB::connect() ;
-	$team = pg_escape_string($team);
-	$sql = "select * from " . SubmissionTable::tablename . 
-	  " where hash='$hash' " ;
-	if ( !empty($team) ) $sql .= " and team='$team' and problemid='$probid' " ;
-	$res = contestDB::query($sql) ;
-	return (pg_num_rows ($res) != 0) ;
+	  $db = contestDB::get_zend_db();
+	  $res = $db->select()->from(SubmissionTable::tablename)->
+		  where('hash = ?', $hash);
+	  if (!empty($team))
+		  $res = $res->where('team = ?', $team)
+			  ->where('problemid=?', $probid);
+	  $res = $res->query()->fetch ();
+	  return (!empty($res));
   }
 
   /**
