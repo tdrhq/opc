@@ -301,7 +301,9 @@ class SubmissionTable {
    public static function get_state($id) { 
 	   $db = contestDB::get_zend_db ();
 	   $res = $db->select()->from(SubmissionTable::tablename)->query();
-	   return $res->fetch()->state;
+	   $obj = $res->fetch();
+	   if (empty($obj)) return "";
+	   else return $obj->state;
    }  
   /**
    * Only sets the score in the queue database.
