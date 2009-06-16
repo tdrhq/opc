@@ -19,6 +19,8 @@ for ($i = 1; $i < $argc; $i++) {
 		$cpulim = $argv[++$i];
 	else if ($argv[$i] == "--resource-limits") /* deprecated */
 		$rlim = $argv[++$i];
+	else if ($argv[$i] == "--only-update")
+		$onlyupdate = true;
 	else {
 		echo "Unknown option: " . $argv[$i] . "\n";
 		exit (1);
@@ -167,10 +169,16 @@ $id=pg_escape_string($id);
 $nick=pg_escape_string($nick);
 $rlim=pg_escape_string($rlim);
 
-$sql = "insert into problemdata (id,numcases,nickname,state,submissionlimit,owner) values 
+if (empty($onlyupdate)) {
+	$sql = "insert into problemdata (id,numcases,nickname,state,submissionlimit,owner) values 
 ('$id',$numcases,'$nick','ok',$sublim,'$contest')" ;
+} else {
+	$sql = "update problemdata set numcases=$numcases,nickname='$nick',
+state='ok',submissionlimit=$sublim,contest='$contest' where id='$id'";
 
-echo "DEBUG: ". $sql . "\n"  ;
+}
+
+	echo "DEBUG: ". $sql . "\n"  ;
 echo "\n\n";
 $db->query($sql ) ;
 
