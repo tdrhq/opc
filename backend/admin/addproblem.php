@@ -139,7 +139,7 @@ chmod(get_file_name("data/problems/$id.xml"), 0755) ;
 echo "-----LOG-----\n" ;
 echo $dom->saveXML();
 
-contestDB::connect() ;
+$db = contestDB::get_zend_db() ;
 
 $id=pg_escape_string($id);
 $nick=pg_escape_string($nick);
@@ -150,7 +150,7 @@ $sql = "insert into problemdata (id,numcases,nickname,state,submissionlimit,owne
 
 echo "DEBUG: ". $sql . "\n"  ;
 echo "\n\n";
-contestDB::query($sql ) ;
+$db->query($sql ) ;
 
 
 
