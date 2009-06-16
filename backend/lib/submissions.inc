@@ -268,25 +268,7 @@ class SubmissionTable {
 	  return $res->fetchAll () ; 
   }
   
-  /**
-   * Set a parameter (or database field value) for a submission.
-   * 
-   * @param $id The submission id
-   * @param $field (string) The parameter (field) to change.
-   * @param $value The value to change to. Currently only string is
-   *                supported.
-   * @return Non-zero value on success.
-   * @see get_field_value 
-   */
-  public static function set_field_value ( $id, $field, $value) {
-	contestDB::connect();
-	$res = contestDB::query("update " 
-							. SubmissionTable::tablename 
-							. " set $field='" . $value 
-							. "' where id=$id"  ) ;
-	return (pg_affected_rows($res) > 0 ) ;
-  }
-
+  
   /**
    * Get a parameter (or database field value) for a submission. 
    * 
