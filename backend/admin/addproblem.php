@@ -1,8 +1,30 @@
 #!/usr/bin/php5
-
 <?
  
 chdir( dirname($argv[0]) );
+
+/* read commandline options */
+for ($i = 1; $i < $argc; $i++) {
+	if ($argv[$i] == "--id")
+		$id = $argv[++$i];
+	else if ($argv[$i] == "--nick")
+		$nick = $argv[++$i];
+	else if ($argv[$i] == "--contest")
+		$contest = $argv[++$i];
+	else if ($argv[$i] == "--num-test-case")
+		$numcases = $argv[++$i];
+	else if ($argv[$i] == "--memory-limit")
+		$memlim = $argv[++$i];
+	else if ($argv[$i] == "--cpu-limit")
+		$cpulim = $argv[++$i];
+	else if ($argv[$i] == "--resource-limits") /* deprecated */
+		$rlim = $argv[++$i];
+	else {
+		echo "Unknown option: " . $argv[$i] . "\n";
+		exit (1);
+	}
+		
+}
 
 /* delete these functions if you are having compiler troubles*/
 if ( ! function_exists("readline") )  {
@@ -33,9 +55,9 @@ $dom->appendChild($root) ;
 echo "Please ensure you've created the necessary testcases and\n " ;
 echo "outputfiles for the problem before running this\n" ;
 
-$id = readline( "Enter the problem ID(need not be an integer, but you may keep it so):  " ) ;
+if (empty($id))
+	$id = readline( "Enter a unique problem ID: " ) ;
 
-readline_add_history($id) ;
 $element = $dom->createComment("id is used for informative purposes only, "
  . "and does not overload the id stored in the database or as the current "
 							   . "filename.") ;
@@ -48,7 +70,9 @@ if ( !is_file(get_file_name("data/problems/$id.html") ) ){
   echo "data/problems/$id.html does not exist. Aborting right now.\n" ;
   exit(1) ;
  }
-$nick = readline( "Enter a nickname for the problem: " ) ;
+
+if (empty($nick))
+	$nick = readline( "Enter a nickname for the problem: " ) ;
 
 $element = $dom->createComment(
 			"nickname is also stored for informative purposes only.");
@@ -56,19 +80,20 @@ $root->appendChild($element);
 
 $element = $dom->createElement("nick", $nick) ;
 $root->appendChild($element) ;
-readline_add_history($nick) ;
 
-$contest = readline( "Enter a contest. Leave as blank if you want to add it 'general', or if you're not running in multicontest mode. ");
-if ( empty($contest) ) $contest = 'general' ;   
+if (empty($contest))
+	$contest = readline( "Enter a contest. Leave as blank if you want to add it 'general', or if you're not running in multicontest mode. ");
+
+if (empty($contest) ) $contest = 'general' ;   
 require_once "lib/contest.inc";
 $c = Contest::factory($contest);
 if ( empty($c) ) { 
 	die("That contest does not exist.\n");
 }
 
-$numcases = 0 + readline("Number of testcases: ") ;
+if (empty($numcases)) 
+	$numcases = 0 + readline("Number of testcases: ") ;
 
-readline_add_history($numcases) ; 
 
 echo "I'm going to ask you details for each test case now. " ;
 
@@ -105,30 +130,27 @@ $sublim = trim(fgets(STDIN)) ;
 $res = $dom->createElement("resourcelimits") ;
 $root->appendChild($res) ;
 
-echo "What is the memory usage limit for a submission? [e.g 16M, 100k]:" ;
-$memlim = trim(fgets(STDIN)) ; 
+if (empty($memlim)) {
+	echo "What is the memory usage limit for a submission? [e.g 16M, 100k]:" ;
+	$memlim = trim(fgets(STDIN)); 
+}
+
 $element = $dom->createElement("memory", $memlim) ;
 $res->appendChild($element) ;
 
-echo "How much CPU time is a submission allowed [in seconds, decimal points allowd]?:" ; 
-$cpulim = trim(fgets(STDIN)) ;
+if (empty($cpulim)) {
+	echo "How much CPU time is a submission allowed [in seconds, decimal points allowd]?:" ; 
+	$cpulim = trim(fgets(STDIN)) ;
+}
+
 $element = $dom->createElement("runtime", $cpulim) ;
 $res->appendChild($element) ;
 
 $element = $dom->createElement("output", "") ;
 $res->appendChild($element) ;
 
-echo "\nAdditional resourcelimits: This is actually deprecated, but can be used
-for fine grained control over some advanced resouce limits. A typical usage
-would be:
-    mem=64M stack=8M fsize=2000000 time=3
-(Note that fsize should be specified in bytes!)
-However in the event that a limit is overridden specifically in the XML file, 
-the overriden value will take precedence.
 
-Enter a resource limit string: ";
-
-$rlim = trim(fgets(STDIN)); 
+if (empty($rlim)) $rlim = "";
 $element = $dom->createElement("resourcelimits_string", $rlim) ;
 $root->appendChild($element) ;
 
@@ -143,7 +165,7 @@ $db = contestDB::get_zend_db() ;
 
 $id=pg_escape_string($id);
 $nick=pg_escape_string($nick);
-$rlim=pg_escape_string($lim);
+$rlim=pg_escape_string($rlim);
 
 $sql = "insert into problemdata (id,numcases,nickname,state,submissionlimit,owner) values 
 ('$id',$numcases,'$nick','ok',$sublim,'$contest')" ;
