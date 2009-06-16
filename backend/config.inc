@@ -168,7 +168,7 @@ class config {
    * 
    * TYPE: boolean
    */
-  static $enable_hash_test = true ;
+  static $enable_hash_test = false;
 
   /**
    * The apache user/group as whom the web PHP scripts are run,
