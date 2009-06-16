@@ -13,6 +13,13 @@ for ($i = 1; $i < $argc; $i++) {
 		$contest = $argv[++$i];
 	else if ($argv[$i] == "--num-test-case")
 		$numcases = $argv[++$i];
+	else if ($argv[$i] == "--scores") {
+		assert (!empty($numcases));
+		for ($t = 0; $t < $numcases; $t++) {
+			$scores [$t] = (int) $argv[++$i];
+			assert(!empty($scores[$t]));
+		}
+	}
 	else if ($argv[$i] == "--memory-limit")
 		$memlim = $argv[++$i];
 	else if ($argv[$i] == "--cpu-limit")
@@ -105,20 +112,26 @@ for( $i = 0 ; $i < $numcases ; $i ++ ) {
   $testcase = $dom->createElement("test") ;
 
   $def = "data/problems/$id/$i.in" ;
-  if ( !is_file(get_file_name($def)) ) $def = "no-file-found" ;
-  echo "Path to input data [$def]. "; 
+  if ( !is_file(get_file_name($def)) ) 
+	  die("$def: not found\n");
+
   $element = $dom->createElement("inputpath", $def) ;
   $testcase->appendChild($element) ;
 
 
   $def = "data/problems/$id/$i.out" ; 
-  if ( !is_file(get_file_name($def)) ) $def = "no-file-found" ;
-  echo "Path to output data [$def]. " ;
+  if ( !is_file(get_file_name($def)) ) 
+	  die("$def: not found\n");
+
   $element = $dom->createElement("outputpath", $def) ;
   $testcase->appendChild($element) ;
 
-  echo "And score for this test case? : ";
-  fscanf(STDIN,"%d\n", $sc ) ;
+  if (empty($scores[$i])) {
+	  echo "Score for test case $i? : ";
+	  fscanf(STDIN,"%d\n", $sc ) ;
+  } else
+	  $sc = $scores[$i];
+
   $element = $dom->createElement("score", $sc) ;
   $testcase ->appendChild($element) ;
 
