@@ -287,7 +287,7 @@ class SubmissionTable {
 
 	  /* WARNING TODO: $state isn't quoted */
 	  $id = $db->quote ($id, 'INTEGER');
-	  $where = array ('id=$id');
+	  $where = array ("id=$id");
 	  if (!empty($oldstate)) $where [] = 'state=' . $db->quote ($oldstate);
 	      
 	  $n = $db->update (SubmissionTable::tablename, array('state' => '$state'),
