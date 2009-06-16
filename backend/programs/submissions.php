@@ -83,7 +83,6 @@ if ( $argv[2] == "--debug" ) {
  */
 $sub_id = $argv[1] ; 
 
-contestDB::connect() ;
 
 /*
  *  Information about the submission

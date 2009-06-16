@@ -254,64 +254,21 @@ class SubmissionTable {
    */
 
   public static function get_waiting_queue($limit) {
-	contestDB::connect() ;
-	
-	$res = contestDB::query("select * from " . 
-							SubmissionTable::tablename . 
-							" where state='waiting' order by id asc" .  
-							( $limit != 0 ? " limit $limit " : "" )
-							);
+	  $db = contestDB::get_zend_db ();  
+	  $stmt = $db->select()->from(SubmissionTable::tablename)
+		  ->where ("state='waiting'");
+	  if ($limit != 0) $stmt = $stmt->limit ($limit);
+	  $stmt->order ('id asc');
+	  $res = $stmt->query ();
 
-	if ( ! $res  )
-	  throw new Exception("Unable to get waiting queue" ) ;
-	
-	$ret = array() ;
-	
-	$count = pg_num_rows ( $res ) ;
 
-	while ( $count -- ) 
-	  array_push ( $ret, pg_fetch_object($res)->id ) ;
+	  if ( ! $res  )
+		  throw new Exception("Unable to get waiting queue" ) ;
 	
-	return $ret ; 
+	  return $res->fetchAll () ; 
   }
   
-  /**
-   * Set a parameter (or database field value) for a submission.
-   * 
-   * @param $id The submission id
-   * @param $field (string) The parameter (field) to change.
-   * @param $value The value to change to. Currently only string is
-   *                supported.
-   * @return Non-zero value on success.
-   * @see get_field_value 
-   */
-  public static function set_field_value ( $id, $field, $value) {
-	contestDB::connect();
-	$res = contestDB::query("update " 
-							. SubmissionTable::tablename 
-							. " set $field='" . $value 
-							. "' where id=$id"  ) ;
-	return (pg_affected_rows($res) > 0 ) ;
-  }
-
-  /**
-   * Get a parameter (or database field value) for a submission. 
-   * 
-   * @param $id The submission id
-   * @param $field The parameter ($field) whose value is being queried.
-   * @return The current value of the parameter.
-   */
-  public static function get_field_value( $id, $field) {
-	contestDB::connect() ;
-	if ( !is_int($id) )
-	  throw new Exception("Not an integer");
-	$res = contestDB::query(" select $field from " 
-							.SubmissionTable::tablename 
-							. " where id=$id " );
-	if (pg_num_rows($res) == 0 ) return NULL ;
-	$ar =  pg_fetch_row($res)  ;
-	return $ar [0] ;
-  }
+  
 
   /**
    * Set the submission state. A submission state is typical of the form
@@ -326,14 +283,16 @@ class SubmissionTable {
    *        state was not $oldstate.
    */
   public static function set_state( $id, $state, $oldstate = NULL) {
-	contestDB::connect() ;
-	$state = pg_escape_string($state);
-	$res = contestDB::query("update " 
-							. SubmissionTable::tablename 
-							. " set state='$state' where id=$id " 
-							. ( empty($oldstate)? "" : 
-								" and state='$oldstate' " ) );
-	return (pg_affected_rows($res) > 0 ) ;
+	  $db = contestDB::get_zend_db ();
+
+	  /* WARNING TODO: $state isn't quoted */
+	  $id = $db->quote ($id, 'INTEGER');
+	  $where = array ("id=$id");
+	  if (!empty($oldstate)) $where [] = 'state=' . $db->quote ($oldstate);
+	      
+	  $n = $db->update (SubmissionTable::tablename, array('state' => $state),
+			$where);
+	  return ($n > 0);
   }
 
   /**
@@ -342,7 +301,11 @@ class SubmissionTable {
    * @return the state
    */
    public static function get_state($id) { 
-          return SubmissionTable::get_field_value($id, "state") ;
+	   $db = contestDB::get_zend_db ();
+	   $res = $db->select()->from(SubmissionTable::tablename)->query();
+	   $obj = $res->fetch();
+	   if (empty($obj)) return "";
+	   else return $obj->state;
    }  
   /**
    * Only sets the score in the queue database.
@@ -353,13 +316,12 @@ class SubmissionTable {
    * @param $score integer the new score
    */
   public static function set_score ($id, $score) {
-	contestDB::connect() ;
-	$res = contestDB::query("update " 
-							. SubmissionTable::tablename
-							. " set score=" .  $score
-							. " where id=$id " );
+	$db = contestDB::get_zend_db ();
+	$id = $db->quote($id, 'INTEGER');
 
-	return ($res);
+	return $db->update (SubmissionTable::tablename, 
+		array('score' => $db->quote ($score, 'INTEGER')),
+		array("id=$id"));
   }
 
   /**
@@ -371,13 +333,14 @@ class SubmissionTable {
    * @return TRUE if and only if the hash was found.
    */
   public static function exists_submission_by_hash($team,$probid,$hash) {
-	contestDB::connect() ;
-	$team = pg_escape_string($team);
-	$sql = "select * from " . SubmissionTable::tablename . 
-	  " where hash='$hash' " ;
-	if ( !empty($team) ) $sql .= " and team='$team' and problemid='$probid' " ;
-	$res = contestDB::query($sql) ;
-	return (pg_num_rows ($res) != 0) ;
+	  $db = contestDB::get_zend_db();
+	  $res = $db->select()->from(SubmissionTable::tablename)->
+		  where('hash = ?', $hash);
+	  if (!empty($team))
+		  $res = $res->where('team = ?', $team)
+			  ->where('problemid=?', $probid);
+	  $res = $res->query()->fetch ();
+	  return (!empty($res));
   }
 
   /**

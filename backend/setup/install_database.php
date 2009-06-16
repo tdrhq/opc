@@ -14,7 +14,8 @@ if ( $argv[1] == "--check" ) {
 
   /* the next function call will cause the script to die with 0 return value
    if it fails */
-  contestDB::connect() ; 
+  $db = contestDB::get_zend_db () ; 
+  $db->getConnection();
 
   echo "Database Check successful\n";
   exit(0) ;
