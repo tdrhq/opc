@@ -269,24 +269,6 @@ class SubmissionTable {
   }
   
   
-  /**
-   * Get a parameter (or database field value) for a submission. 
-   * 
-   * @param $id The submission id
-   * @param $field The parameter ($field) whose value is being queried.
-   * @return The current value of the parameter.
-   */
-  public static function get_field_value( $id, $field) {
-	contestDB::connect() ;
-	if ( !is_int($id) )
-	  throw new Exception("Not an integer");
-	$res = contestDB::query(" select $field from " 
-							.SubmissionTable::tablename 
-							. " where id=$id " );
-	if (pg_num_rows($res) == 0 ) return NULL ;
-	$ar =  pg_fetch_row($res)  ;
-	return $ar [0] ;
-  }
 
   /**
    * Set the submission state. A submission state is typical of the form
@@ -317,7 +299,9 @@ class SubmissionTable {
    * @return the state
    */
    public static function get_state($id) { 
-          return SubmissionTable::get_field_value($id, "state") ;
+	   $db = contestDB::get_zend_db ();
+	   $res = $db->select()->from(SubmissionTable::tablename)->query();
+	   return $res->fetch()->state;
    }  
   /**
    * Only sets the score in the queue database.
