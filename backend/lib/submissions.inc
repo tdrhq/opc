@@ -316,13 +316,12 @@ class SubmissionTable {
    * @param $score integer the new score
    */
   public static function set_score ($id, $score) {
-	contestDB::connect() ;
-	$res = contestDB::query("update " 
-							. SubmissionTable::tablename
-							. " set score=" .  $score
-							. " where id=$id " );
+	$db = contestDB::get_zend_db ();
+	$id = $db->quote($id, 'INTEGER');
 
-	return ($res);
+	return $db->update (SubmissionTable::tablename, 
+		array('score' => $db->quote ($score, 'INTEGER')),
+		array("id=$id"));
   }
 
   /**
