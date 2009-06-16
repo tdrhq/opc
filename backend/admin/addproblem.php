@@ -17,6 +17,8 @@ for ($i = 1; $i < $argc; $i++) {
 		$memlim = $argv[++$i];
 	else if ($argv[$i] == "--cpu-limit")
 		$cpulim = $argv[++$i];
+	else if ($argv[$i] == "--submission-limit")
+		$sublim = $argv[++$i];
 	else if ($argv[$i] == "--resource-limits") /* deprecated */
 		$rlim = $argv[++$i];
 	else if ($argv[$i] == "--only-update")
@@ -53,9 +55,6 @@ $dom = new DOMDocument("1.0", "UTF-8") ;
 $dom->formatOutput = TRUE ; 
 $root = $dom->createElement("problem") ;
 $dom->appendChild($root) ;
-
-echo "Please ensure you've created the necessary testcases and\n " ;
-echo "outputfiles for the problem before running this\n" ;
 
 if (empty($id))
 	$id = readline( "Enter a unique problem ID: " ) ;
@@ -126,8 +125,8 @@ for( $i = 0 ; $i < $numcases ; $i ++ ) {
   $root->appendChild($testcase);
 
  }
-echo "What is the submission limit for this problem?:" ;
-$sublim = trim(fgets(STDIN)) ;
+
+if (empty($sublim)) $sublim = 10000;
 
 $res = $dom->createElement("resourcelimits") ;
 $root->appendChild($res) ;
