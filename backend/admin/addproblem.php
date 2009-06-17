@@ -35,6 +35,8 @@ for ($i = 1; $i < $argc; $i++) {
 		$onlyupdate = true;
 	else if ($argv[$i] == "--use-sample") 
 		$namespace = "sample.";
+	else if ($argv[$i] == "--force")
+		$force_overwrite = true;
 	else {
 		echo "Unknown option: " . $argv[$i] . "\n";
 		exit (1);
@@ -57,6 +59,34 @@ if ( ! function_exists("readline_add_history") ) {
   }
  }
 /******/
+
+function uncompress_archive ($file, $probid) {
+	global $force_overwrite;
+
+	$oldpwd = getcwd ();
+	$file = realpath($file);
+
+	chdir ("../data/problems/");
+	if (empty($force_overwrite))
+		$opt = "xvzf";
+	else 
+		$opt = "kxvzf";
+
+	system ("tar $opt $file $probid/", $return_val);
+
+	if ($return_val != 0) {
+		echo "Error in extracting archive. Either the archive doesn't have $probid/ or perhaps you tried installing the problem before? Use --force in that case to overwrite.\n";
+		exit (1);
+	}
+	
+	if (!is_file ("$probid/problem.html")) {
+		echo "ERROR: problem.html problem description missing in archive.\n";
+		exit (1);
+	}
+	copy ("$probid/problem.html", "$probid.html");
+
+	chdir ($oldpwd);
+}
 
 require_once "../config.inc" ;
 require_once "lib/db.inc" ;
