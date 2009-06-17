@@ -1,8 +1,6 @@
 #!/usr/bin/php5
 <?
  
-chdir( dirname($argv[0]) );
-
 /* read commandline options */
 $namespace = "";
 for ($i = 1; $i < $argc; $i++) {
@@ -37,12 +35,18 @@ for ($i = 1; $i < $argc; $i++) {
 		$namespace = "sample.";
 	else if ($argv[$i] == "--force")
 		$force_overwrite = true;
+	else if (empty($archive) && substr ($argv[$i], 0, 1) != "-"){
+		$archive = realpath ($argv[$i]);
+	}
 	else {
 		echo "Unknown option: " . $argv[$i] . "\n";
 		exit (1);
 	}
 		
 }
+
+chdir(dirname($argv[0]));
+
 
 /* delete these functions if you are having compiler troubles*/
 if ( ! function_exists("readline") )  {
@@ -68,9 +72,9 @@ function uncompress_archive ($file, $probid) {
 
 	chdir ("../data/problems/");
 	if (empty($force_overwrite))
-		$opt = "xvzf";
-	else 
 		$opt = "kxvzf";
+	else 
+		$opt = "xvzf";
 
 	system ("tar $opt $file $probid/", $return_val);
 
@@ -108,6 +112,9 @@ $root->appendChild($element) ;
 $element = $dom->createElement("id", $id) ;
 $root->appendChild($element) ;
 
+if (!empty($archive)) {
+	uncompress_archive ($archive, $id);
+}
 
 if ( !is_file(get_file_name("data/problems/$id.html") ) ){ 
   echo "data/problems/$id.html does not exist. Aborting right now.\n" ;
