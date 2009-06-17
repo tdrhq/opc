@@ -35,9 +35,13 @@ for ($i = 1; $i < $argc; $i++) {
 		$namespace = "sample.";
 	else if ($argv[$i] == "--force")
 		$force_overwrite = true;
+	else if ($argv[$i] == "--help") {
+		display_help ();
+		exit (1);
+	}
 	else if (empty($archive) && substr ($argv[$i], 0, 1) != "-"){
 		$archive = realpath ($argv[$i]);
-	}
+	} 
 	else {
 		echo "Unknown option: " . $argv[$i] . "\n";
 		exit (1);
@@ -92,6 +96,44 @@ function uncompress_archive ($file, $probid) {
 	chdir ($oldpwd);
 }
 
+function display_help ()
+{
+	echo "
+Usage: addproblem.php [OPTION]... [FILE]
+
+Where [FILE] is a single .tar.gz file having all the testdata in the
+right format.
+
+Options are (most options will be asked interactively if not specified
+on commandline):
+  --id <id>         A unique problem identifier (e.g. SAMPLE)
+  --nick <nick>     A friendly name for this problem (e.g. 'A Sample Problem')
+  --contest <name>  Which contest should this problem added to.
+  --num-test-case n Number of test cases 
+  --scores n n .. n A list of <num-test-cases> integers indicating the score
+                    for each testcase. Note that --scores should be used 
+                    only after a --num-test-case.
+  --memory-limit m  Memory limit per execution (e.g. 64M, 1000K)
+  --cpu-limit       Time limit in seconds per exectution (e.g. 3,1.5)
+  --submission-limit n   Maximum number of submissions per user for this 
+                         problem.
+  --checker         Location to the checker to be used for this problem.
+                    (See documentation for checker specification). The 
+                    location of the checker should be given with relative to
+                    the backend directory.
+  --only-update     Used to update the problem, if the problem was already
+                    added previously.
+  --use-sample      Instead of using input files in 0.in,1.in etc, use
+                    sample.0.in, sample.1.in etc. This makes it easy to keep
+                    both sample and final testdata in the same archive.
+  --force           Usually will be used with --only-update. The idea is to
+                    keep the user aware that file overwrites will happen and
+                    therefore you shouldn't make a mistake and provide the
+                    wrong problemid for instance.
+  --help            Display this help and exit.
+
+";
+}
 require_once "../config.inc" ;
 require_once "lib/db.inc" ;
 
