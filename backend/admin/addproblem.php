@@ -102,7 +102,9 @@ function display_help ()
 Usage: addproblem.php [OPTION]... [FILE]
 
 Where [FILE] is a single .tar.gz file having all the testdata in the
-right format.
+right format. Note that even this is optional, if you do not specify
+an archive it is assumed that the the testdata has already been copied
+to the data/problems/
 
 Options are (most options will be asked interactively if not specified
 on commandline):
