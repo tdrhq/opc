@@ -258,12 +258,12 @@ class ProblemTable {
 	/* fill in all the details. */
 	$prob -> id = $id ;
 	$prob -> numcases = $obj->numcases ; 
-	$prob -> inputpaths = $obj->inputpaths ; 
-	$prob -> outputpaths = $obj->outputpaths ; 
-	$prob -> scoreweights = $obj->scoreweights; 
+	$prob -> inputpaths = NULL;
+	$prob -> outputpaths = NULL;
+	$prob -> scoreweights = NULL;
 	$prob -> submissionlimit = $obj->submissionlimit ; 
 	$prob -> resourcelimits = $obj->resourcelimits ;
-	$prob -> checker = $obj->checker ; 
+	$prob -> checker = NULL;
 	$prob -> owner = $obj->owner;
 	$prob -> misc = $obj->misc ; 
 	$prob -> grading_style = config::$default_grading_style ;
