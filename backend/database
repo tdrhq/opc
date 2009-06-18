@@ -23,15 +23,11 @@ create index submission_hash_idx on submissionqueue ( hash ) ;
 create table problemdata ( 
   id text unique primary key ,
   numcases integer,
-  inputpaths text[],
-  outputpaths text[],
-  scoreweights integer[],
   nickname  text,
   state  text,
   owner text, 
   submissionlimit integer,
   resourcelimits text,
-  checker text default '',
   misc   text ) ;
 
 create table teaminfo (
