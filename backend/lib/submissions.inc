@@ -267,7 +267,7 @@ class SubmissionTable {
 	  
 	  $arr = $res->fetchAll ();
 	  $ret = array ();
-	  while ($arr as $item) {
+	  foreach ($arr as $item) {
 		  array_push ($ret, $item->id);
 	  }
 	  return $ret;
