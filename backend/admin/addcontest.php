@@ -72,6 +72,16 @@ if (empty($name)) $name = "Unnamed contest";
 $e = $dom->createElement ("name", $name);
 $root->appendChild ($e);
 
+$frontend = $dom->createElement ("frontend");
+$root->appendChild ($frontend);
+
+$home = $dom->createElement ("page", "Home");
+$frontend->appendChild ($home);
+
+$home->setAttribute ("id", "home");
+$home->setAttribute ("href", "general/home.html");
+
+
 file_put_contents (get_file_name ("data/contests/$id.xml"), $dom->saveXML ());
 chmod(get_file_name("data/contests/$id.xml"), 0755) ;
 
