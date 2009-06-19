@@ -264,8 +264,13 @@ class SubmissionTable {
 
 	  if ( ! $res  )
 		  throw new Exception("Unable to get waiting queue" ) ;
-	
-	  return $res->fetchAll () ; 
+	  
+	  $arr = $res->fetchAll ();
+	  $ret = array ();
+	  while ($arr as $item) {
+		  array_push ($ret, $item->id);
+	  }
+	  return $ret;
   }
   
   
