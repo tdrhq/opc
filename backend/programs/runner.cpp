@@ -262,6 +262,16 @@ int main(int narg,char* arg[])
 
   if ( usertime + systime > timelimit ) die("TLE Time Limit exceeded\n") ;
  
+  if (!WIFEXITED(status)) {
+	  printf ("EXIT Program exited abnormally. This could be due to excessive memory usage, or any runtime error that is impossible to determine.\n");
+	  exit (0);
+  }
+
+  if (WEXITSTATUS(status) != 0) { 
+	  printf ("EXIT Bad return value. Your program returned %d, when it should return 0. This could be due to various reasons including excessive memory usage, or simply forgetting to put a 'return 0' at the end of your code.\n", WEXITSTATUS(status));
+	  exit (0);
+  }
+
   return 0;
 
 }
