@@ -37,6 +37,9 @@ function display_help ()
 {
 	
 }
+
+chdir(dirname($argv[0]));
+
 require_once "../config.inc" ;
 require_once "lib/db.inc" ;
 
