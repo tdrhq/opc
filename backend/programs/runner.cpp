@@ -32,7 +32,7 @@ map<string,int> limits;
 void init_default_limits () {
   limits["stack"]=8*1024*1024;
   limits["mem"]= 64*1024 * 1024;
-  limits["fsize"]=25*MB; //specified in bytes?
+  limits["fsize"]=50*MB; //specified in bytes?
   limits["time"] = 2 ; /* this value will not be used as is. Take a look at the timelimit variable in main () */ 
   /*
    * Under a proper chroot, a limit on number of files
