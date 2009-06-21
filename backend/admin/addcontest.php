@@ -7,7 +7,7 @@ for ($i = 1; $i < $argc; $i++) {
 	if ($argv[$i] == "--id")
 		$id = $argv[++$i];
 	else if ($argv[$i] == "--name")
-		$nick = $argv[++$i];
+		$name = $argv[++$i];
 	else if ($argv[$i] == "--start-time")
 		$start_time = $argv[++$i];
 	else if ($argv[$i] == "--duration")
