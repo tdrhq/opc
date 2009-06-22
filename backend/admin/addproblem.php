@@ -35,6 +35,13 @@ for ($i = 1; $i < $argc; $i++) {
 		$rlim = $argv[++$i];
 	else if ($argv[$i] == "--checker")
 		$checker = $argv[++$i];
+	else if ($argv[$i] == "--grading-style") {
+		$grading_style = $argv[++$i];
+		if ($grading_style != "ioi" && $grading_style != "opc") {
+			echo "ERROR: invalid grading style. (should be ioi or opc)\n";
+			exit (0);
+		}
+	}
 	else if ($argv[$i] == "--only-update")
 		$onlyupdate = true;
 	else if ($argv[$i] == "--use-sample") 
@@ -248,6 +255,11 @@ if (!empty($checker)) {
 	$element = $dom->createElement ("checker", $checker);
 	$root->appendChild ($element);
 }
+
+if (empty($grading_style))
+	$grading_style = config::$default_grading_style;
+$element = $dom->createElement ("grading-style", $grading_style);
+$root->appendChild ($element);
 
 if (empty($rlim)) $rlim = "";
 $element = $dom->createElement("resourcelimits_string", $rlim) ;
