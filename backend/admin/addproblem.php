@@ -136,7 +136,7 @@ on commandline):
   --contest <name>  The contest to which this problem should be added to.
                     (Default: 'general')
   --num-test-case n Number of test cases 
-  --scores n n .. n A list of <num-test-cases> integers indicating the score
+  --scores n,n,..,n A list of <num-test-cases> integers indicating the score
                     for each testcase. Note that --scores should be used 
                     only after a --num-test-case.
   --total-score     The total score for this problem. The points will be
