@@ -140,6 +140,9 @@ on commandline):
   --scores n n .. n A list of <num-test-cases> integers indicating the score
                     for each testcase. Note that --scores should be used 
                     only after a --num-test-case.
+  --total-score     The total score for this problem. The points will be
+                    divided evenly between each test case. More convenient than
+                    using --scores.
   --memory-limit m  Memory limit per execution (e.g. 64M, 1000K)
   --cpu-limit       Time limit in seconds per exectution (e.g. 3,1.5)
   --output-limit m  Limit the size of output produced by the user's program
