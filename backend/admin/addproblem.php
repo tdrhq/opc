@@ -3,6 +3,10 @@
  
 /* read commandline options */
 $namespace = "";
+$outputlim = "50M";
+$cpulim = "3";
+$memlim = "64M";
+
 for ($i = 1; $i < $argc; $i++) {
 	if ($argv[$i] == "--id")
 		$id = $argv[++$i];
@@ -23,6 +27,8 @@ for ($i = 1; $i < $argc; $i++) {
 		$memlim = $argv[++$i];
 	else if ($argv[$i] == "--cpu-limit")
 		$cpulim = $argv[++$i];
+	else if ($argv[$i] == "--output-limit")
+		$outputlim = $argv[++$i];
 	else if ($argv[$i] == "--submission-limit")
 		$sublim = $argv[++$i];
 	else if ($argv[$i] == "--resource-limits") /* deprecated */
@@ -246,7 +252,7 @@ if (empty($cpulim)) {
 $element = $dom->createElement("runtime", $cpulim) ;
 $res->appendChild($element) ;
 
-$element = $dom->createElement("output", "") ;
+$element = $dom->createElement("output", $outputlim) ;
 $res->appendChild($element) ;
 
 
