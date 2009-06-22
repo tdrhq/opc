@@ -66,19 +66,13 @@ chdir(dirname($argv[0]));
 
 
 /* delete these functions if you are having compiler troubles*/
-if ( ! function_exists("readline") )  {
-  function readline($s) {
-	echo $s ; 
-	
-	return trim(fgets(STDIN)) ;
-  }
- }
+if (!function_exists("readline"))  {
+	function readline($s) {
+		echo $s ; 
+		return trim(fgets(STDIN)) ;
+	}
+}
 
-if ( ! function_exists("readline_add_history") ) {
-  function readline_add_history($s) {
-	
-  }
- }
 /******/
 
 function uncompress_archive ($file, $probid) {
