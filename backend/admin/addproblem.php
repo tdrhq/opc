@@ -16,6 +16,8 @@ for ($i = 1; $i < $argc; $i++) {
 		$contest = $argv[++$i];
 	else if ($argv[$i] == "--num-test-case")
 		$numcases = $argv[++$i];
+	else if ($argv[$i] == "--total-score")
+		$total_score = $argv[++$i];
 	else if ($argv[$i] == "--scores") {
 		assert (!empty($numcases));
 		for ($t = 0; $t < $numcases; $t++) {
@@ -60,6 +62,21 @@ for ($i = 1; $i < $argc; $i++) {
 		exit (1);
 	}
 		
+}
+
+if (!empty($total_score) && !empty($scores)) {
+	echo "ERROR: use only one of --total-score or --scores\n";
+	exit (1);
+}
+
+if (!empty ($total_score)) {
+	$scores = array();
+	$left = $total_score;
+	for ($i = 0; $i < $numcases; $i++) {
+		$cur = floor($left/($numcases-$i));
+		$left -= $cur;
+		$scores [] = $cur;
+	}
 }
 
 chdir(dirname($argv[0]));
