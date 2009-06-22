@@ -138,6 +138,7 @@ on commandline):
                     (See documentation for checker specification). The 
                     location of the checker should be given with relative to
                     the backend directory.
+  --grading-style {ioi|opc} See documentation for details.
   --only-update     Used to update the problem, if the problem was already
                     added previously.
   --use-sample      Instead of using input files in 0.in,1.in etc, use
