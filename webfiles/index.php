@@ -80,9 +80,10 @@ if (webconfig::$static_baseurl == "/")
 
 /* setup the controller and routes */
 $frontController = Zend_Controller_Front::getInstance();
-$frontController->throwExceptions(true);
 $frontController->setControllerDirectory('./application/controllers');
 
+Zend_Loader::loadClass ("Zend_Controller_Plugin_ErrorHandler");
+$frontController->registerPlugin (new Zend_Controller_Plugin_ErrorHandler());
 
 $router = $frontController->getRouter(); // returns a rewrite router by default
 $router->addRoute(
