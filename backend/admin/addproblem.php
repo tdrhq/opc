@@ -123,7 +123,8 @@ Options are (most options will be asked interactively if not specified
 on commandline):
   --id <id>         A unique problem identifier (e.g. SAMPLE)
   --nick <nick>     A friendly name for this problem (e.g. 'A Sample Problem')
-  --contest <name>  Which contest should this problem added to.
+  --contest <name>  The contest to which this problem should be added to.
+                    (Default: 'general')
   --num-test-case n Number of test cases 
   --scores n n .. n A list of <num-test-cases> integers indicating the score
                     for each testcase. Note that --scores should be used 
