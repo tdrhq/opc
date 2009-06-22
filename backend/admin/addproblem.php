@@ -183,9 +183,6 @@ $root->appendChild($element);
 $element = $dom->createElement("nick", $nick) ;
 $root->appendChild($element) ;
 
-if (empty($contest))
-	$contest = readline( "Enter a contest. Leave as blank if you want to add it 'general', or if you're not running in multicontest mode. ");
-
 if (empty($contest) ) $contest = 'general' ;   
 require_once "lib/contest.inc";
 $c = Contest::factory($contest);
