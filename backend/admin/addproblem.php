@@ -18,13 +18,8 @@ for ($i = 1; $i < $argc; $i++) {
 		$numcases = $argv[++$i];
 	else if ($argv[$i] == "--total-score")
 		$total_score = $argv[++$i];
-	else if ($argv[$i] == "--scores") {
-		assert (!empty($numcases));
-		for ($t = 0; $t < $numcases; $t++) {
-			$scores [$t] = (int) $argv[++$i];
-			assert(!empty($scores[$t]));
-		}
-	}
+	else if ($argv[$i] == "--scores")
+		$scores = explode (',', $argv[++$i]);
 	else if ($argv[$i] == "--memory-limit")
 		$memlim = $argv[++$i];
 	else if ($argv[$i] == "--cpu-limit")
@@ -55,6 +50,10 @@ for ($i = 1; $i < $argc; $i++) {
 		exit (1);
 	}
 	else if (empty($archive) && substr ($argv[$i], 0, 1) != "-"){
+		if (!is_file ($argv[$i])) {
+			echo "{$argv[$i]}: file does not exist\n";
+			exit (1);
+		}
 		$archive = realpath ($argv[$i]);
 	} 
 	else {
