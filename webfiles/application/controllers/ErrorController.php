@@ -26,7 +26,9 @@ class ErrorController extends Zend_Controller_Action {
 			$this->view->message = "404 Page Not Found";
 			break;
 		default:
-			$this->view->message = ($exception->getMessage() . "\n"
+			$exception = $errors->exception;
+			$this->view->message = "An exception was thrown. We would appreciate it if you could report this bug to us. \n\n" 
+			  . ($exception->getMessage() . "\n"
 				    . $exception->getTraceAsString());
 			break;
 		}
