@@ -123,6 +123,8 @@ on commandline):
                     only after a --num-test-case.
   --memory-limit m  Memory limit per execution (e.g. 64M, 1000K)
   --cpu-limit       Time limit in seconds per exectution (e.g. 3,1.5)
+  --output-limit m  Limit the size of output produced by the user's program
+                    (e.g. 64M, 1000K)
   --submission-limit n   Maximum number of submissions per user for this 
                          problem.
   --checker         Location to the checker to be used for this problem.
