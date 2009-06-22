@@ -194,11 +194,8 @@ if (empty($numcases))
 	$numcases = 0 + readline("Number of testcases: ") ;
 
 
-echo "I'm going to ask you details for each test case now. " ;
-
 
 for( $i = 0 ; $i < $numcases ; $i ++ ) {
-  echo "Test Case #$i: \n" ;
 
   $testcase = $dom->createElement("test") ;
 
@@ -235,18 +232,10 @@ if (empty($sublim)) $sublim = 10000;
 $res = $dom->createElement("resourcelimits") ;
 $root->appendChild($res) ;
 
-if (empty($memlim)) {
-	echo "What is the memory usage limit for a submission? [e.g 16M, 100k]:" ;
-	$memlim = trim(fgets(STDIN)); 
-}
 
 $element = $dom->createElement("memory", $memlim) ;
 $res->appendChild($element) ;
 
-if (empty($cpulim)) {
-	echo "How much CPU time is a submission allowed [in seconds, decimal points allowd]?:" ; 
-	$cpulim = trim(fgets(STDIN)) ;
-}
 
 $element = $dom->createElement("runtime", $cpulim) ;
 $res->appendChild($element) ;
@@ -286,8 +275,7 @@ state='ok',submissionlimit=$sublim,owner='$contest' where id='$id'";
 
 }
 
-	echo "DEBUG: ". $sql . "\n"  ;
-echo "\n\n";
+
 $db->query($sql ) ;
 
 
@@ -295,9 +283,5 @@ $db->query($sql ) ;
 echo "Done, copy your problem statement to " . config::$problems_directory 
 . "/$id.{html|pdf|ps}. Note that html file should contain only the body "
 . "part!\n";
-
-
-?>
-
 
 
