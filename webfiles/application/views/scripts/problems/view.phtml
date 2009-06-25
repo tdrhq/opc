@@ -1,5 +1,8 @@
 <? 
-echo $this->content_html ;
+
+echo "<object data='" . $_SERVER['REQUEST_URI'] . "?plain=true'>
+<a href='" . $_SERVER['REQUEST_URI'] . "?plain=true'>View problem statement</a>
+</object>";
 
 $prob = $this->prob; 
 
