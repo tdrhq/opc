@@ -36,6 +36,12 @@ class ProblemsController extends Zend_Controller_Action {
 		$this->view->content_html = file_get_contents(get_file_name("data/problems/"  
 							  . $this->_request->get("probid")
 									    . ".html")) ;
+
+		if ($this->_request->get("plain") == "true") {
+			$this->_helper->layout->disableLayout ();
+			$this->_helper->viewRenderer->setNoRender ();
+			$this->getResponse()->setBody ($this->view->content_html);
+		}
 	}
 	
 
