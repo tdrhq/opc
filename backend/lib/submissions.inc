@@ -255,7 +255,7 @@ class SubmissionTable {
 
   public static function get_waiting_queue($limit) {
 	  $db = contestDB::get_zend_db ();  
-	  $stmt = $db->select()->from(SubmissionTable::tablename)
+	  $stmt = $db->select()->from(SubmissionTable::tablename, 'id')
 		  ->where ("state='waiting'");
 	  if ($limit != 0) $stmt = $stmt->limit ($limit);
 	  $stmt->order ('id asc');
