@@ -159,7 +159,7 @@ class Submission {
 		  "problemid" => $this->getProblemId() ,
 		  "lang" => $this->getLang(), 
 		  "state" => $this->state,
-		  "score" => $this->score, 
+		  "score" => new Zend_Db_Expr ($this->score), 
 		  "hash" => "{$this->hash}" ) ;
 	  if ( $this->notcounted ) 
 		  $data["notcounted"] = true ;
