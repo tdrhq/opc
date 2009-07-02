@@ -16,7 +16,7 @@ class contestDB {
    * Get a Zend_Db object. 
    */
   static function get_zend_db() { 
-	$ret = Zend_Db::factory('Pdo_Pgsql', 
+	$ret = Zend_Db::factory(config::$DB_Adapter, 
 							array('host' => config::$DB_Hostname,
 								  'username' => config::$DB_User, 
 								  'password' => config::$DB_Password,

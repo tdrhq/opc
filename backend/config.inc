@@ -33,6 +33,7 @@ class config {
   static $DB_Name ="";
   static $DB_User ="";
   static $DB_Password ="";
+  static $DB_Adapter = "Pdo_Pgsql"; /* use Mysqli for MySQL */
 
   /* Submission Aspects */
   /**
