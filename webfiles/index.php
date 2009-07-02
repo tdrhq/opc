@@ -128,7 +128,6 @@ $router->addRoute('pages', new Zend_Controller_Router_Route
 
 $router->addRoute('su', new Zend_Controller_Router_Route
 		('su/:user', array('controller' => 'su')));
-ob_clean() ;
 $frontController->dispatch();
 
 
