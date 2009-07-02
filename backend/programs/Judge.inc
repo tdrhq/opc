@@ -307,4 +307,3 @@ function __judge_self_test () {
 
 
 //__judge_self_test() ;
-?>

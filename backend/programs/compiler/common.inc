@@ -1,4 +1,3 @@
-
 <?
 
 function  runandgetoutput($cmd, &$output) {
@@ -47,4 +46,3 @@ function runandgetoutputerr( $cmd, &$output, &$err ) {
 }
 
 define(DATE_STRING,'r');
-?>
