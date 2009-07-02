@@ -222,11 +222,13 @@ class SubmissionTable {
 
 	  $res = $db->insert(SubmissionTable::tablename, $data) ;
 
-	  /*
-	   * TODO: the following line is Postgres dependent.
-	   */
-	  return self::get_submission(
-		  $db->lastInsertId());
+
+	  $id = $db->lastInsertId();
+	  if (empty($id)) {
+	    /* probably running on Postgres */
+	    $id = $db->lastSequenceId("submissionqueue_id");
+	  }
+	  return self::get_submission($id);
 
   }
 
