@@ -15,6 +15,12 @@ class Problem {
   var $id ;
 
   /**
+   * The global unique rowid for this problem.
+   * @private
+   */
+  var $rowid;
+
+  /**
    * The friendly name for the problem. 
    * @private
    */
@@ -35,6 +41,10 @@ class Problem {
 
   public function getId() {
 	return $this->id ; 
+  }
+
+  public function getRowId () {
+	  return $this->rowid;
   }
 
   public function getNickname() { 
@@ -257,6 +267,7 @@ class ProblemTable {
 
 	/* fill in all the details. */
 	$prob -> id = $id ;
+	$prob -> rowid = $obj->rowid;
 	$prob -> numcases = $obj->numcases ; 
 	$prob -> inputpaths = NULL;
 	$prob -> outputpaths = NULL;
@@ -346,8 +357,9 @@ class ProblemTable {
 	$res = $db->select()
 	  ->where("owner = ?", $owner)
 	  ->from(ProblemTable::tablename)
-	  ->order('rowid')->query() ;
+	  ->order('rowid');
 
+	$res = $res->query();
 	return $res->fetchAll(); 
   }
 
