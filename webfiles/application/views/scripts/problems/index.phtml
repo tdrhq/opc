@@ -1,9 +1,13 @@
+<table class='styled'>
+  <tr class='styled'>
+    <th class='styled'>#</th>
+    <th class='styled'>ID</th>
+    <th class='styled'>Name</th>
+  </tr>
+
 <?
 $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl() ; 
-echo "<ul>\n";
 foreach ( $this->problems as $pro ) { 
-  echo "  <li><a href='$baseurl/problems/{$pro->id}'>[{$pro->id}] {$pro->nickname}</a></li>\n";
+  echo "  <tr><td>{$pro->rowid}</td><td><a href='$baseurl/problems/{$pro->id}'>{$pro->id}</a></td><td><a href='$baseurl/problems/{$pro->id}'>{$pro->nickname}</a></td></tr>\n";
 }
-echo "</ul>\n";
-
-?>
+?></table>
