@@ -1,0 +1,41 @@
+start transaction;
+
+
+create table problemdata ( 
+  id varchar(100) unique primary key ,
+  rowid integer unique auto_increment,
+  numcases integer,
+  nickname  text,
+  state  text,
+  owner text, 
+  submissionlimit integer,
+  resourcelimits text) ENGINE=InnoDB;
+
+create index problem_rowid_idx on problemdata (rowid);
+
+create table teaminfo (
+teamname varchar(100) unique primary key,
+isadmin boolean,
+pwd text) ENGINE=InnoDB;
+
+create table submissionqueue (
+ id integer unique primary key auto_increment,
+ team varchar(100) references teaminfo(teamname),
+ problemid varchar(100) references problemdata(id),
+ owner text, 
+ lang text,
+ state varchar(200),
+ score integer default 0,
+ time timestamp default now(),
+ notcounted boolean default false,
+ hash varchar(200)
+) ENGINE=InnoDB;
+
+create INDEX submission_state_idx on submissionqueue (state);
+create index submission_team_idx on submissionqueue (team);
+create index submission_hash_idx on submissionqueue (hash); 
+
+commit;
+
+
+
