@@ -276,7 +276,6 @@ class ProblemTable {
 	$prob -> resourcelimits = $obj->resourcelimits ;
 	$prob -> checker = NULL;
 	$prob -> owner = $obj->owner;
-	$prob -> misc = $obj->misc ; 
 	$prob -> grading_style = config::$default_grading_style ;
 	$prob -> compileOptions = array ();
 	/* override any information if found in problem XML file. */
