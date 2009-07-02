@@ -1,7 +1,7 @@
 begin;
 
 create sequence submissionqueue_id;
-
+create sequence problem_id;
 
 create table submissionqueue (
  id integer unique primary key default nextval('submissionqueue_id'),
@@ -22,6 +22,7 @@ create index submission_hash_idx on submissionqueue ( hash ) ;
 
 create table problemdata ( 
   id text unique primary key ,
+  rowid integer unique default nextval('problem_id'),
   numcases integer,
   nickname  text,
   state  text,
@@ -29,6 +30,8 @@ create table problemdata (
   submissionlimit integer,
   resourcelimits text,
   misc   text ) ;
+
+create index problem_rowid_idx on problemdata (rowid);
 
 create table teaminfo (
 teamname text unique primary key,
