@@ -6,8 +6,12 @@
   </tr>
 
 <?
+   $class = "styled";
 $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl() ; 
 foreach ( $this->problems as $pro ) { 
-  echo "  <tr><td>{$pro->rowid}</td><td><a href='$baseurl/problems/{$pro->id}'>{$pro->id}</a></td><td><a href='$baseurl/problems/{$pro->id}'>{$pro->nickname}</a></td></tr>\n";
+  echo "  <tr class='$class'><td class='$class'>{$pro->rowid}</td><td class='$class'><a href='$baseurl/problems/{$pro->id}'>{$pro->id}</a></td><td class='$class'><a href='$baseurl/problems/{$pro->id}'>{$pro->nickname}</a></td></tr>\n";
+
+  if ($class == "styled") $class = "styleda";
+  else $class = "styled";
 }
 ?></table>
