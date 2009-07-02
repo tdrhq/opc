@@ -149,13 +149,6 @@ border:#d2d2d2 solid 1px;
 margin-right:10px;
 }
 
-input[type=submit]{
-border:#d2d2d2 solid 1px;
-margin-left:8px;
-margin-right:12px;
-width:50px;
-color:#444;
-}
 
 #headerbar #submit:hover {
 color:#59A8EB;
