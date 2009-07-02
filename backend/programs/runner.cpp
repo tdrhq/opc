@@ -126,6 +126,10 @@ int main(int narg,char* arg[])
     chrootdir = NULL;
   }
 
+  /* close any inherited file descriptors. Can somebody tell me if this
+   * is right? */
+  for (int i = 3; i < 20; i++)
+	  close (i);
 
   pid_t pid = fork();
   
