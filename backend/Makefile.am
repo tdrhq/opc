@@ -21,6 +21,10 @@ opc_directories:
 	!(test -O data/users) || chmod a+w data/users 
 	test -d data/contests || mkdir -p data/contests
 	chmod a+rx data/contests
+	test -d data/sqlite || mkdir -p data/sqlite
+	!(test -O data/sqlite) || chmod a+rwx data/sqlite
+	touch data/sqlite/db
+	!(test -O data/sqlite/db) || chmod a+rw data/sqlite/db
 
 local_config: 
 	if ! [ -f local_config.inc ] ; then cp setup/sample_conf.inc local_config.inc ; fi 
@@ -46,5 +50,9 @@ secure: programs/runner
 	chmod a+r data/uploads
 	chown root:root programs/runner
 	chmod a+s programs/runner
+	chown www-data data/sqlite
+	chown www-data data/sqlite/db
+	chmod o-w data/sqlite
+	chmod o-w data/sqlite/db
 
 
