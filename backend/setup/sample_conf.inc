@@ -4,7 +4,7 @@
 
 /* SQLite (default, easiest to set up) */
 config::$DB_Adapter = "Pdo_Sqlite";
-config::$DB_Name = dir(__FILE__) . "/data/sqlite/db";
+config::$DB_Name = dirname(__FILE__) . "/data/sqlite/db";
 
 /* Postgres and MySQL*/
 // config::$DB_Adapter = "Pdo_pgsql"; // default value, use "Mysqli" for MySQL
