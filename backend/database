@@ -11,15 +11,14 @@ create table problemdata (
   state  text,
   owner text, 
   submissionlimit integer,
-  resourcelimits text,
-  misc   text ) ;
+  resourcelimits text);
 
 create index problem_rowid_idx on problemdata (rowid);
 
 create table teaminfo (
 teamname text unique primary key,
 isadmin boolean,
-pwd text ) ;
+pwd text);
 
 create table submissionqueue (
  id integer unique primary key default nextval('submissionqueue_id'),
@@ -34,9 +33,9 @@ create table submissionqueue (
  hash text
 ) ;
 
-create INDEX submission_state_idx on submissionqueue ( state )  ;
-create index submission_team_idx on submissionqueue ( team ) ;
-create index submission_hash_idx on submissionqueue ( hash ) ; 
+create INDEX submission_state_idx on submissionqueue (state);
+create index submission_team_idx on submissionqueue (team);
+create index submission_hash_idx on submissionqueue (hash); 
 
 commit;
 
