@@ -3,23 +3,6 @@ begin;
 create sequence submissionqueue_id;
 create sequence problem_id;
 
-create table submissionqueue (
- id integer unique primary key default nextval('submissionqueue_id'),
- team text ,
- problemid text,
- owner text, 
- lang text,
- state text ,
- score integer default 0,
- time timestamp with time zone default now(),
- notcounted boolean default false,
- hash text
-) ;
-
-create INDEX submission_state_idx on submissionqueue ( state )  ;
-create index submission_team_idx on submissionqueue ( team ) ;
-create index submission_hash_idx on submissionqueue ( hash ) ; 
-
 create table problemdata ( 
   id text unique primary key ,
   rowid integer unique default nextval('problem_id'),
@@ -37,6 +20,24 @@ create table teaminfo (
 teamname text unique primary key,
 isadmin boolean,
 pwd text ) ;
+
+create table submissionqueue (
+ id integer unique primary key default nextval('submissionqueue_id'),
+ team text references teaminfo(teamname),
+ problemid text references problemdata(id),
+ owner text, 
+ lang text,
+ state text ,
+ score integer default 0,
+ time timestamp with time zone default now(),
+ notcounted boolean default false,
+ hash text
+) ;
+
+create INDEX submission_state_idx on submissionqueue ( state )  ;
+create index submission_team_idx on submissionqueue ( team ) ;
+create index submission_hash_idx on submissionqueue ( hash ) ; 
+
 commit;
 
 
