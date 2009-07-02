@@ -1,6 +1,6 @@
 <table class='styled'>
   <tr class='styled'>
-    <th class='styled'>#</th>
+    <th class='styled' align='right'>#</th>
     <th class='styled'>ID</th>
     <th class='styled'>Name</th>
   </tr>
@@ -9,7 +9,7 @@
    $class = "styled";
 $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl() ; 
 foreach ( $this->problems as $pro ) { 
-  echo "  <tr class='$class'><td class='$class'>{$pro->rowid}</td><td class='$class'><a href='$baseurl/problems/{$pro->id}'>{$pro->id}</a></td><td class='$class'><a href='$baseurl/problems/{$pro->id}'>{$pro->nickname}</a></td></tr>\n";
+  echo "  <tr class='$class'><td class='$class' align='right'>{$pro->rowid}</td><td class='$class'><a href='$baseurl/problems/{$pro->id}'>{$pro->id}</a></td><td class='$class'><a href='$baseurl/problems/{$pro->id}'>{$pro->nickname}</a></td></tr>\n";
 
   if ($class == "styled") $class = "styleda";
   else $class = "styled";
