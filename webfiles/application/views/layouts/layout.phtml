@@ -1,8 +1,21 @@
-<?
+<?= $this->doctype('XHTML1_STRICT') ?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<?= $this->render ("head.phtml") ?>
+<body><div id="wrapper">
 
-echo $this->render ("head.phtml") ;
-echo $this->render ("menu.phtml") ;
+<?= $this->render ("menu.phtml") ?>
 
-echo $this->layout()->content; 
 
-echo $this->render ("foot.phtml") ;
+
+ <div id="main">
+ <div id="maincontent">
+
+<?= $this->layout()->content; ?>
+
+ </div> <!-- maincontent -->
+<?= $this->render ("righthand.phtml"); ?>
+ </div> <!-- main -->
+ </div> <!-- wrapper -->
+</body>
+</html>
+
