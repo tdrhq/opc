@@ -20,7 +20,7 @@ class webconfig {
 
 	static $base_url="" ;
 	
-	static $contest_name="Please modify local_config.inc"; 
+	static $contest_name='Please modify webconfig::$contest_name in webfiles/local_config.inc'; 
 
 	static $team_size = 1 ; 
 
