@@ -126,6 +126,10 @@ int main(int narg,char* arg[])
     chrootdir = NULL;
   }
 
+  /* close any inherited file descriptors. Can somebody tell me if this
+   * is right? */
+  for (int i = 3; i < 20; i++)
+	  close (i);
 
   pid_t pid = fork();
   
@@ -171,14 +175,14 @@ int main(int narg,char* arg[])
       {
         perror("ERRIN");
         fprintf(stderr,"Internal error: Couldn't redirect input to stdin\n");
-    	return 1;
+    	return 23;
       }
       
     if(freopen(outfile,"w",stdout)==NULL)
       {
         perror("ERROUT");
         fprintf(stderr,"Internal error: Couldn't redirect output to stdout\n");
-    	return 1;
+    	return 24;
       }
 
     if ( !chrootdir )
@@ -207,7 +211,7 @@ int main(int narg,char* arg[])
       {
 	perror("freopen");
 	fprintf(stderr,"Internal error: Failed to redirect stderr\n");
-	return 1 ;
+	return 25;
       }
 #endif    
 
@@ -219,7 +223,7 @@ int main(int narg,char* arg[])
     execve(argv[0],argv,environ) ;
     perror("Unable to execute program") ;
 
-    return 1 ;
+    return 26;
   }
 
 
