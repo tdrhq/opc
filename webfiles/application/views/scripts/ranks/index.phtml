@@ -1,15 +1,6 @@
 <?
-
-if (webconfig::$enable_gravatars) { 
-	Zend_Loader::loadClass ("GravatarModel");
-	$grav = new GravatarModel ();
-}
-
 echo "<table class='styled' >\n" ; 
 echo " <tr class='styled'>";
-if (webconfig::$enable_gravatars) {
-	echo "<th class='styled'></th>";
-}
 echo "	<th class='styled'>User</th>
 	<th class='styled'>Score</th>
  </tr>\n";
@@ -21,9 +12,6 @@ foreach( $this->ranks as $entry) {
   $class = ($even ? "styleda" : "styled") ;
   echo " <tr class='$class'>\n";
 
-	if (webconfig::$enable_gravatars) {
-		echo " <td class='styled'><img src='" . $grav->getGravatar ($entry['team']) . "' alt='gravatar' /> </td>";
-	}
   echo "  <td class='styled'><a href='$baseurl/users/{$entry['team']}'>{$entry['team']}</a></td>\n";
   echo "  <td class='styled'>{$entry['score']}</td>\n";
   echo " </tr>\n";
