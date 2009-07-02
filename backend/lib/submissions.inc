@@ -140,6 +140,7 @@ class Submission {
    * query.
    */
   function __construct($obj) { 
+	if (empty($obj)) throw new Exception ("shit");
 	$this->id = $obj->id; 
 	$this->team = $this->user = $obj->team ;
 	$this->problemid = $obj->problemid ; 
@@ -153,6 +154,7 @@ class Submission {
   }
 
   function commitChanges() { 
+	  if (empty($this->id)) throw Exception ("Bad");
 	  $db = contestDB::get_zend_db(); 
 	  $data = array(
 		  "team" => $this->getUser() ,
@@ -224,7 +226,7 @@ class SubmissionTable {
 	   * TODO: the following line is Postgres dependent.
 	   */
 	  return self::get_submission(
-		  $db->lastSequenceId(SubmissionTable::serial ));
+		  $db->lastInsertId());
 
   }
 
@@ -238,9 +240,11 @@ class SubmissionTable {
 	  $id = (int) $id ; 
 	  $db = contestDB::get_zend_db() ;
 	  $res = $db->select()->from(SubmissionTable::tablename)
-		  ->where('id = ?', $id)->query() ;
+		  ->where("id = ?", $id)->query() ;
 
-	  return new Submission($res->fetch())  ;
+	  $obj = $res->fetch ();
+	  if (empty($obj)) throw new Exception("Attempted to find a bad submission ($id)");
+	  return new Submission($obj)  ;
   }
 
   public static function get_submission_xml_file($id) { 
