@@ -345,7 +345,8 @@ class ProblemTable {
 
 	$res = $db->select()
 	  ->where("owner = ?", $owner)
-	  ->from(ProblemTable::tablename)->query() ;
+	  ->from(ProblemTable::tablename)
+	  ->order('rowid')->query() ;
 
 	return $res->fetchAll(); 
   }
