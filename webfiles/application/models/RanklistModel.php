@@ -38,7 +38,7 @@ class RanklistModel
 		
 		$res = $db -> select() -> from(array("s" => "submissionqueue"))
                              ->join(array("t" => "teaminfo"), 's.team = t.teamname')->
-					       where ("s.score > 0")->where('t.isadmin is null or t.isadmin = false') ; 
+					       where ("s.score > 0")->where('t.isadmin is null or t.isadmin = \'false\'') ; 
 
 		if (!empty($user) ) 
 			$res->where("team = ?", $user) ;
