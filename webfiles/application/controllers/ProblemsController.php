@@ -49,6 +49,15 @@ class ProblemsController extends Zend_Controller_Action {
 							  . $this->_request->get("probid")
 									    . ".html")) ;
 
+
+		if (function_exists("tidy_parse_string") && $this->_request->get("tidy") != "false") {
+			/* tidy to XHTML strict */
+			$opt = array("output-xhtml" => true,
+				     "clean" => true,
+				     "doctype" => "strict",
+				     "show-body-only" => true);
+			$this->view->content_html = tidy_parse_string($this->view->content_html, $opt);
+		}
 		if ($this->_request->get("plain") == "true") {
 			$this->_helper->layout->disableLayout ();
 			$this->_helper->viewRenderer->setNoRender ();
