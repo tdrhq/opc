@@ -53,10 +53,12 @@ class ProblemsController extends Zend_Controller_Action {
 		if (function_exists("tidy_parse_string") && $this->_request->get("tidy") != "false") {
 			/* tidy to XHTML strict */
 			$opt = array("output-xhtml" => true,
+				     "add-xml-decl" => true,
 				     "clean" => true,
 				     "doctype" => "strict",
 				     "show-body-only" => true);
 			$this->view->content_html = tidy_parse_string($this->view->content_html, $opt);
+			tidy_clean_repair ($this->view->content_html);
 		}
 		if ($this->_request->get("plain") == "true") {
 			$this->_helper->layout->disableLayout ();
