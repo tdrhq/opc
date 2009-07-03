@@ -19,8 +19,20 @@ class ProblemsController extends Zend_Controller_Action {
         }
 
 	function indexAction () {
+		/* build query */
+		$db = contestDB::get_zend_db();
 		$this->view->title = "Problems" ;
-		$this->view->problems = ProblemTable::get_problem_list(webconfig::$contest_id, 0, 100);
+
+                $curuser = Zend_Auth::getInstance()->getIdentity();
+                if (empty($curuser)) {
+			$this->view->problems = ProblemTable::get_problem_list(webconfig::$contest_id, 0, 100);
+			return;
+                }
+
+		/* case 2: build a complex query */
+		$query = "select distinct p.rowid as rowid,p.id as id,p.nickname as nickname,s.state as state from problemdata  as p left join (select * from submissionqueue where team = ? and state='Accepted') as s on p.id = s.problemid group by p.rowid,p.id,p.nickname,s.state order by rowid;";
+		
+		$this->view->problems = $db->fetchAll ($query, $curuser);
 	}
 	
 	function viewAction () { 

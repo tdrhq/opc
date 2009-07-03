@@ -1,16 +1,23 @@
+<?
+$isuser = Zend_Auth::getInstance()->hasIdentity();
+?>
 <table class='styled'>
   <tr class='styled'>
     <th class='styled' align='right'>#</th>
     <th class='styled'>ID</th>
     <th class='styled'>Name</th>
+    <? if ($isuser) echo "<th class='styled'>State</th>"; ?>
   </tr>
 
 <?
    $class = "styled";
 $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl() ; 
 foreach ( $this->problems as $pro ) { 
-  echo "  <tr class='$class'><td class='$class' align='right'>{$pro->rowid}</td><td class='$class'><a href='$baseurl/problems/{$pro->id}'>{$pro->id}</a></td><td class='$class'><a href='$baseurl/problems/{$pro->id}'>{$pro->nickname}</a></td></tr>\n";
+  echo "  <tr class='$class'><td class='$class' align='right'>{$pro->rowid}</td><td class='$class'><a href='$baseurl/problems/{$pro->id}'>{$pro->id}</a></td><td class='$class'><a href='$baseurl/problems/{$pro->id}'>{$pro->nickname}</a></td>";
 
+  if ($isuser) 
+    echo "<td class='$class'>{$pro->state}</td>";
+  echo "</tr>\n";
   if ($class == "styled") $class = "styleda";
   else $class = "styled";
 }
