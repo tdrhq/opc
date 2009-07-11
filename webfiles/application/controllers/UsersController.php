@@ -17,7 +17,7 @@ class UsersController extends Zend_Controller_Action {
 		$userm = new UserModel ; 
 		$user = $userm->getRow($_user) ;
 
-		$this->view->username = $_user;
+		$this->view->username = $user->_username;
 		$this->view->inst = $userm->getInstitute($user) ;
 		$this->view->name = $userm->getMember($user, 0)->name ;
 	}
