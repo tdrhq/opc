@@ -16,7 +16,7 @@ create table problemdata (
 
 create index problem_rowid_idx on problemdata (rowid);
 
-create table teaminfo (
+create table users (
 uid integer unique primary key default nextval('users_uid_seq'),
 teamname text unique,
 isadmin boolean,
@@ -24,8 +24,8 @@ pwd text);
 
 create table submissionqueue (
  id integer unique primary key default nextval('submissionqueue_id'),
- uid integer references teaminfo(uid),
- team text references teaminfo(teamname),
+ uid integer references users(uid),
+ team text references users(teamname),
  problemid text references problemdata(id),
  owner text, 
  lang text,

@@ -13,14 +13,15 @@ create table problemdata (
 
 create index problem_rowid_idx on problemdata (rowid);
 
-create table teaminfo (
+create table users (
 teamname varchar(100) unique primary key,
 isadmin boolean,
 pwd text) ENGINE=InnoDB;
 
 create table submissionqueue (
  id integer unique primary key auto_increment,
- team varchar(100) references teaminfo(teamname),
+ uid integer references users(uid),
+ team varchar(100) references users(teamname),
  problemid varchar(100) references problemdata(id),
  owner text, 
  lang text,

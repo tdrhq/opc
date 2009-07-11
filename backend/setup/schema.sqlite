@@ -14,7 +14,7 @@ create table problemdata (
 
 create index problem_id_idx on problemdata (id);
 
-create table teaminfo (
+create table users (
 uid integer primary key,
 teamname text unique,
 isadmin boolean,
