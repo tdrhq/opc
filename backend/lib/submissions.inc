@@ -402,7 +402,7 @@ class SubmissionTable {
 	$db = contestDB::get_zend_db() ; 
 	$query = $db->select()->from(self::tablename, array("res" => "COUNT(*)"));
  
-	if ( !empty($team) ) $query = $query->where('team = ?', $team) ;
+	if ( !empty($team) && is_numeric($team)) $query = $query->where('uid = ?', new Zend_Db_Expr($team)) ;
 	if ( !empty($problemid) ) $query = $query->where('problemid = ?', 
 													 $problemid);
 	if ( !empty($counted) ) $query = $query->where('notcounted = ?',
