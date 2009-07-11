@@ -100,6 +100,7 @@ class UploadSubmission {
 		$obj -> hash = isset($hash) ? $hash : "" ; 
 		$obj->owner = $owner ;
 		$obj->state = "waiting" ;
+		$obj->uid = $_user->uid;
 		$obj->commitChanges() ;
 		return $obj->id ;
 	}

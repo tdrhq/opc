@@ -15,8 +15,14 @@ class Submission {
 
   /**
    * The user/team who owns this submission.
+   * @deprated
    */
   public $user; 
+
+  /**
+   * The user uid who owns this submission
+   */
+  public $uid;
 
   /**
    * The user/team who owns the submission. Should always be same as
@@ -158,6 +164,7 @@ class Submission {
 	  $db = contestDB::get_zend_db(); 
 	  $data = array(
 		  "team" => $this->getUser() ,
+	 	  "uid" => new Zend_Expr($this->uid),
 		  "problemid" => $this->getProblemId() ,
 		  "lang" => $this->getLang(), 
 		  "state" => $this->state,
