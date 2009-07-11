@@ -54,7 +54,7 @@ class User {
 	$this->uid = $obj->uid;
 	$this->_username = $obj->username; 
 	$this->_isadmin = $obj->isadmin ;
-	$this->_password = $obj->pwd; 
+	$this->_password = $obj->password; 
   }
 
   /**
@@ -102,7 +102,7 @@ class User {
   public function setPassword($password) { 
 	$db = contestDB::get_zend_db() ;
 	$user = $db->quote($this->getUsername());
-	$db->update(self::$tablename, array("pwd" => "$password"), "username =$user");
+	$db->update(self::$tablename, array("password" => "$password"), "username =$user");
   }
 
   /**
@@ -161,7 +161,7 @@ class User {
   static function create($user, $password) { 
 	  $db = contestDB::get_zend_db() ; 
 	  $res = $db->insert( self::$tablename,
-						 array("username" => $user, "pwd" => $password) );
+						 array("username" => $user, "password" => $password) );
 	  if (empty($res) or $res == 0 ) { 
 		  return false ; 
 	  }
