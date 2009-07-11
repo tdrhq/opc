@@ -16,7 +16,7 @@ create index problem_id_idx on problemdata (id);
 
 create table users (
 uid integer primary key,
-teamname text unique,
+username text unique,
 isadmin boolean,
 pwd text) ;
 

@@ -18,7 +18,7 @@ create index problem_rowid_idx on problemdata (rowid);
 
 create table users (
 uid integer unique primary key default nextval('users_uid_seq'),
-teamname text unique,
+username text unique,
 isadmin boolean,
 pwd text);
 

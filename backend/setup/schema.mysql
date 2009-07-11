@@ -14,7 +14,8 @@ create table problemdata (
 create index problem_rowid_idx on problemdata (rowid);
 
 create table users (
-teamname varchar(100) unique primary key,
+uid integer primary key,
+username varchar(100) unique,
 isadmin boolean,
 pwd text) ENGINE=InnoDB;
 
