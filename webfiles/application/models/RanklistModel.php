@@ -37,11 +37,13 @@ class RanklistModel
 		if ( empty($owner) ) $owner = webconfig::$contest_id ; 
 		
 		$res = $db -> select() -> from(array("s" => "submissionqueue"))
-                             ->join(array("t" => "users"), 's.team = t.username')->
+                             ->join(array("t" => "users"), 's.uid = t.uid')->
 					       where ("s.score > 0")->where('t.isadmin is null or t.isadmin = \'false\'') ; 
 
-		if (!empty($user) ) 
-			$res->where("team = ?", $user) ;
+		if (!empty($user) && is_numeric($user)) 
+			$res->where("s.uid = ?", $user) ;
+		else if (!empty($user)) 
+			$res->where("t.username = ?", $user);
 		
 		if ( !empty($prob) ) 
 			$res->where("problemid = ?", $prob) ;
