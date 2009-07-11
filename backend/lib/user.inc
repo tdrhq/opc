@@ -45,14 +45,14 @@ class User {
 
   function __construct($user) { 
 	$db = contestDB::get_zend_db() ;
-	$s = $db->select()->from(User::$tablename)->where('teamname = ?', $user);
+	$s = $db->select()->from(User::$tablename)->where('username = ?', $user);
 	$obj = $s->query()->fetch() ;
 
 	if ( empty($obj) ) { 
 	  throw new Exception("User does not exist") ;
 	}
 	$this->uid = $obj->uid;
-	$this->_username = $obj->teamname; 
+	$this->_username = $obj->username; 
 	$this->_isadmin = $obj->isadmin ;
 	$this->_password = $obj->pwd; 
   }
@@ -102,7 +102,7 @@ class User {
   public function setPassword($password) { 
 	$db = contestDB::get_zend_db() ;
 	$user = $db->quote($this->getUsername());
-	$db->update(self::$tablename, array("pwd" => "$password"), "teamname =$user");
+	$db->update(self::$tablename, array("pwd" => "$password"), "username =$user");
   }
 
   /**
@@ -161,7 +161,7 @@ class User {
   static function create($user, $password) { 
 	  $db = contestDB::get_zend_db() ; 
 	  $res = $db->insert( self::$tablename,
-						 array("teamname" => $user, "pwd" => $password) );
+						 array("username" => $user, "pwd" => $password) );
 	  if (empty($res) or $res == 0 ) { 
 		  return false ; 
 	  }

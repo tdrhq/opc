@@ -124,7 +124,7 @@ class Contest
 		if (empty($this->roster)) return true;
 		
 		$db = contestDB::get_zend_db() ;
-		$res = $db->select()->from($this->roster)->where('teamname = ?',
+		$res = $db->select()->from($this->roster)->where('username = ?',
 								 $user)->query()->fetchAll(); 
 		return !empty($res);
 	}
