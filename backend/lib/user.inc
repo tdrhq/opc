@@ -159,6 +159,8 @@ class User {
    * @return true if user was created successfully, else it will return false.
    */
   static function create($user, $password) { 
+	  if (is_numeric($user))
+		throw new Exception ("Username cannot be numeric");
 	  $db = contestDB::get_zend_db() ; 
 	  $res = $db->insert( self::$tablename,
 						 array("username" => $user, "password" => $password) );
