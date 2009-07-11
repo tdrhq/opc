@@ -107,7 +107,7 @@ class Submission {
   public function getPathToCode() { 
 	if (!empty($this->pathtocode ) ) 
 	  return config::getFilename($this->pathtocode) ; 
-	return config::getFilename("data/uploads/{$this->user}.{$this->problemid}.{$this->id}") ;
+	return config::getFilename("data/uploads/{$this->uid}.{$this->problemid}.{$this->id}") ;
   }
 
   public function getLang() { 
