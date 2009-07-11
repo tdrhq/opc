@@ -35,7 +35,7 @@ if ( $offset + $limit >= $count )
 
 echo "<table class='styled' width='500'>";
 echo "<tr class='styled'><th class='styled' align='center'>ID</th><th class='styled' align='center'>Problem ID</th><th class='styled' align='center'>Submission<br /> Time</th>
-<th class='styled' align='center'>Team<br /> Name</th>
+<th class='styled' align='center'>User</th>
 <th class='styled' align='center'> Language </th>
 
 <th class='styled' align='center'>Score</th><th class='styled' align='center'>Status</th></tr>";
@@ -65,7 +65,7 @@ foreach ( $ar as $x ) {
   echo " <td class='styled' align='center'> <a href='$baseurl/problems/{$x->problemid}'>" . $x->problemid . "</a></td>\n ";
   echo "<td class='styled' align='center'> " . $ts . "</td>\n";
   
-  echo " <td class='styled' align='center'> <a href='$baseurl/users/{$x->team}'>$x->team</a> </td>\n" ;
+  echo " <td class='styled' align='center'> <a href='$baseurl/users/{$x->team}'>$x->username</a> </td>\n" ;
   if ( $x -> lang == "cpp" ) $flang = "C++" ;
   elseif ( $x->lang == "c" ) $flang = "C" ; 
   elseif ($x->lang == "gcj" ) $flang = "Java" ; 
