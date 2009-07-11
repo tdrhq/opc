@@ -46,7 +46,7 @@ if ( empty($mee) ) $isadmin = false ;
 
 $rowcount=0;
 foreach ( $ar as $x ) {
-  $access = (  Zend_Auth::getInstance()->getIdentity() == $x->team) ;
+  $access = (  Zend_Auth::getInstance()->getIdentity() == $x->uid) ;
   if ( $isadmin ) $access = true ;
   
   echo "<tr class='styled";
@@ -65,7 +65,7 @@ foreach ( $ar as $x ) {
   echo " <td class='styled' align='center'> <a href='$baseurl/problems/{$x->problemid}'>" . $x->problemid . "</a></td>\n ";
   echo "<td class='styled' align='center'> " . $ts . "</td>\n";
   
-  echo " <td class='styled' align='center'> <a href='$baseurl/users/{$x->team}'>$x->username</a> </td>\n" ;
+  echo " <td class='styled' align='center'> <a href='$baseurl/users/{$x->uid}'>$x->username</a> </td>\n" ;
   if ( $x -> lang == "cpp" ) $flang = "C++" ;
   elseif ( $x->lang == "c" ) $flang = "C" ; 
   elseif ($x->lang == "gcj" ) $flang = "Java" ; 
