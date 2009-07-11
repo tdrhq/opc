@@ -45,7 +45,13 @@ class User {
 
   function __construct($user) { 
 	$db = contestDB::get_zend_db() ;
-	$s = $db->select()->from(User::$tablename)->where('username = ?', $user);
+	$s = $db->select()->from(User::$tablename);
+
+	if (is_numeric($user))
+		$s = $s->where('uid = ?', $user);
+	else
+		$s = $s->where('username = ?', $user);
+
 	$obj = $s->query()->fetch() ;
 
 	if ( empty($obj) ) { 
