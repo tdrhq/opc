@@ -1,6 +1,10 @@
 <?= $this->doctype('XHTML1_STRICT') ?>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <?= $this->render ("head.phtml") ?>
+<?
+ $user = Zend_Auth::getInstance()->getIdentity();
+ echo "<!-- user: $user -->\n";
+?>
 <body><div id="wrapper">
 
 <?= $this->render ("menu.phtml") ?>
