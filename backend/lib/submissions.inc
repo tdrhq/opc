@@ -14,7 +14,7 @@ class Submission {
   public $id ; 
 
   /**
-   * The user/team who owns this submission.
+   * The user who owns this submission.
    * @deprated
    */
   public $user; 
@@ -148,7 +148,7 @@ class Submission {
   function __construct($obj) { 
 	if (empty($obj)) throw new Exception ("shit");
 	$this->id = $obj->id; 
-	$this->team = $this->user = $obj->team ;
+	$this->team = $this->user = $obj->uid ;
 	$this->problemid = $obj->problemid ; 
 	$this->lang = $obj->lang ; 
 	$this->state = $obj->state; 
@@ -163,7 +163,6 @@ class Submission {
 	  if (empty($this->id)) throw Exception ("Bad");
 	  $db = contestDB::get_zend_db(); 
 	  $data = array(
-		  "team" => $this->getUser() ,
 	 	  "uid" => new Zend_Db_Expr($this->uid),
 		  "problemid" => $this->getProblemId() ,
 		  "lang" => $this->getLang(), 
@@ -212,7 +211,7 @@ class SubmissionTable {
    *
    * @return (class Submission) A submission class.
    */
-  public static function add_to_queue ( $user,
+  public static function add_to_queue ( $uid,
 					$problemid,
 					$lang) {
 
@@ -220,8 +219,11 @@ class SubmissionTable {
 	  
 	  $isadm = User::factory($user)->isAdmin();
 
+	  if (!is_numeric($uid)) 
+		throw new Exception ("uid must be numeric");
+
 	  $data = array() ;
-	  if ( $user ) $data['team'] = $user; 
+	  if ( $user ) $data['uid'] = new Zend_Db_Expr ($uid); 
 	  if ( $problemid) $data['problemid'] = $problemid; 
 	  if ( $lang) $data['lang'] = $lang; 
 	  $data['state'] = 'processing' ; 
@@ -350,12 +352,12 @@ class SubmissionTable {
    * @param $hash The hash of the file to search for.
    * @return TRUE if and only if the hash was found.
    */
-  public static function exists_submission_by_hash($team,$probid,$hash) {
+  public static function exists_submission_by_hash($uid,$probid,$hash) {
 	  $db = contestDB::get_zend_db();
 	  $res = $db->select()->from(SubmissionTable::tablename)->
 		  where('hash = ?', $hash);
 	  if (!empty($team))
-		  $res = $res->where('team = ?', $team)
+		  $res = $res->where('team = ?', new Zend_Db_Expr($team))
 			  ->where('problemid=?', $probid);
 	  $res = $res->query()->fetch ();
 	  return (!empty($res));
@@ -391,7 +393,7 @@ class SubmissionTable {
 
   /**
    * Get a count of number of objects that matches the given criteria.
-   * @param $team team to match.
+   * @param $uid user id to match.
    * @param $problemid problemid to match.
    * @param $counted if $counted is true, then only problems that have
    *        "noncounted" field to true are matched.
