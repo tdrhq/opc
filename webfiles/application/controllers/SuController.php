@@ -7,7 +7,7 @@ class SuAuthAdapter implements Zend_Auth_Adapter_Interface {
 
                 if ( !empty($user) ) {
                         $this->result = new Zend_Auth_Result(
-                                Zend_Auth_Result::SUCCESS, $username);
+                                Zend_Auth_Result::SUCCESS, $user->uid);
                         return ;
                 }
                 $this->result = new Zend_Auth_Result(Zend_Auth_Result::FAILURE,
