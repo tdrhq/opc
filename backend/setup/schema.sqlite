@@ -18,7 +18,7 @@ create table users (
 uid integer primary key,
 username text unique,
 isadmin boolean,
-pwd text) ;
+password text) ;
 
 create table submissionqueue (
  id integer primary key,

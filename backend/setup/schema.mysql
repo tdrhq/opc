@@ -17,7 +17,7 @@ create table users (
 uid integer primary key,
 username varchar(100) unique,
 isadmin boolean,
-pwd text) ENGINE=InnoDB;
+password text) ENGINE=InnoDB;
 
 create table submissionqueue (
  id integer unique primary key auto_increment,

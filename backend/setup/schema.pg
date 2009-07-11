@@ -20,7 +20,7 @@ create table users (
 uid integer unique primary key default nextval('users_uid_seq'),
 username text unique,
 isadmin boolean,
-pwd text);
+password text);
 
 create table submissionqueue (
  id integer unique primary key default nextval('submissionqueue_id'),
