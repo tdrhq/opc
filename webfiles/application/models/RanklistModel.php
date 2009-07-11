@@ -61,29 +61,29 @@ class RanklistModel
 
 		
 		foreach( $all as $entry) { 
-			if ( !array_key_exists($entry->team, $ret) ){ 
-				$ret[$entry->team] = array(
-							   "team"=>$entry->team
+			if ( !array_key_exists($entry->username, $ret) ){ 
+				$ret[$entry->username] = array(
+							   "team"=>$entry->username
 					) ;
 			}
 
 			$prob = $entry->problemid; 
-			if ( !isset($ret[$entry->team][$prob])) {
-				$ret[$entry->team][$prob] = array("score" => 0,
+			if ( !isset($ret[$entry->username][$prob])) {
+				$ret[$entry->username][$prob] = array("score" => 0,
 								  "time" =>0);
 
 			}
 
-			if ( $entry->score == $ret[$entry->team][$prob]['score']) { 
-				$ret[$entry->team][$prob]['time'] = min(
-					$ret[$entry->team][$prob]['time'],
+			if ( $entry->score == $ret[$entry->username][$prob]['score']) { 
+				$ret[$entry->username][$prob]['time'] = min(
+					$ret[$entry->username][$prob]['time'],
 					$entry->time);
 			}
 
-			else if ( $entry->score > $ret[$entry->team][$prob]['score']) {
-				$ret[$entry->team][$prob]['score'] = 
+			else if ( $entry->score > $ret[$entry->username][$prob]['score']) {
+				$ret[$entry->username][$prob]['score'] = 
 					$entry->score ; 
-				$ret[$entry->team][$prob]['time'] = $entry->time ;
+				$ret[$entry->username][$prob]['time'] = $entry->time ;
 			}
 			
 		}
