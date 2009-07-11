@@ -164,7 +164,7 @@ class Submission {
 	  $db = contestDB::get_zend_db(); 
 	  $data = array(
 		  "team" => $this->getUser() ,
-	 	  "uid" => new Zend_Expr($this->uid),
+	 	  "uid" => new Zend_Db_Expr($this->uid),
 		  "problemid" => $this->getProblemId() ,
 		  "lang" => $this->getLang(), 
 		  "state" => $this->state,
