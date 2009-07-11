@@ -374,10 +374,11 @@ class SubmissionTable {
   public static function get_queue ($offset, $limit, $user='', $owner=NULL) {
 	$db = contestDB::get_zend_db() ;
 	
-	$query = $db->select() -> from(self::tablename) 
+	$query = $db->select() -> from(self::tablename)->join("users", "submissionqueue.uid = users.uid") 
 	  ->limit($limit, $offset) ; 
 
-	if ( !empty($user) ) $query = $query->where('team = ?', $user) ;
+	if ( !empty($user) && !is_numeric($user)) $query = $query->where('username = ?', $user) ;
+        if (!empty($user) && is_numeric($user)) $query = $query->where('submissionqueue.uid = ?', new Zend_Db_Expr ($user));
 	if ( !empty($owner)) $query = $query->where('owner = ?', $owner);
 
 	$res = $query->order("id DESC")->query() ;
