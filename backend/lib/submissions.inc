@@ -397,12 +397,12 @@ class SubmissionTable {
    *        "noncounted" field to true are matched.
    * @return integer signifying the number of elements.
    */
-  public static function get_count($team=NULL,$problemid=NULL,$counted=NULL) { 
+  public static function get_count($uid=NULL,$problemid=NULL,$counted=NULL) { 
 
 	$db = contestDB::get_zend_db() ; 
 	$query = $db->select()->from(self::tablename, array("res" => "COUNT(*)"));
  
-	if ( !empty($team) && is_numeric($team)) $query = $query->where('uid = ?', new Zend_Db_Expr($team)) ;
+	if ( !empty($uid) && is_numeric($uid)) $query = $query->where('uid = ?', new Zend_Db_Expr($uid)) ;
 	if ( !empty($problemid) ) $query = $query->where('problemid = ?', 
 													 $problemid);
 	if ( !empty($counted) ) $query = $query->where('notcounted = ?',
