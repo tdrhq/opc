@@ -217,7 +217,7 @@ class SubmissionTable {
 
 	  $db = contestDB::get_zend_db() ; 
 	  
-	  $isadm = User::factory($user)->isAdmin();
+	  $isadm = User::factory($uid)->isAdmin();
 
 	  if (!is_numeric($uid)) 
 		throw new Exception ("uid must be numeric");
