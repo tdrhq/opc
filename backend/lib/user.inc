@@ -8,7 +8,7 @@ require_once "lib/db.inc" ;
  */
 class User { 
 
-  static  $tablename = "teaminfo" ;
+  static  $tablename = "users" ;
 
   /**
    * uid
