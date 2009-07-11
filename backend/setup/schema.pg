@@ -2,6 +2,7 @@ begin;
 
 create sequence submissionqueue_id;
 create sequence problem_id;
+create sequence users_uid_seq;
 
 create table problemdata ( 
   id text unique primary key ,
@@ -16,12 +17,14 @@ create table problemdata (
 create index problem_rowid_idx on problemdata (rowid);
 
 create table teaminfo (
-teamname text unique primary key,
+uid integer unique primary key default nextval('users_uid_seq'),
+teamname text unique,
 isadmin boolean,
 pwd text);
 
 create table submissionqueue (
  id integer unique primary key default nextval('submissionqueue_id'),
+ uid integer references teaminfo(uid),
  team text references teaminfo(teamname),
  problemid text references problemdata(id),
  owner text, 
