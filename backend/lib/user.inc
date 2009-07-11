@@ -11,7 +11,13 @@ class User {
   static  $tablename = "teaminfo" ;
 
   /**
+   * uid
+   */
+  public $uid;
+
+  /**
    * The username.
+   * @deprecated 
    */
   public $_username ;
 
@@ -45,6 +51,7 @@ class User {
 	if ( empty($obj) ) { 
 	  throw new Exception("User does not exist") ;
 	}
+	$this->uid = $obj->uid;
 	$this->_username = $obj->teamname; 
 	$this->_isadmin = $obj->isadmin ;
 	$this->_password = $obj->pwd; 
