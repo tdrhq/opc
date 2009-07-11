@@ -12,6 +12,8 @@ require_once "lib/user.inc" ;
 class UserModel { 
 	public function createRow($user)  
 	{
+		if (is_numeric($user)) 
+			throw new Exception ("Username cannot be numeric.");
 		User::create($user, "") ;
 		$ret = User::factory($user) ;
 		return $ret ; 
