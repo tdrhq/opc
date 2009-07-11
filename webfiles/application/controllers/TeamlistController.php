@@ -9,7 +9,7 @@ class TeamlistController extends Zend_Controller_Action {
 		/* duh, do it untidyly */
 		$db = contestDB::get_zend_db() ;
 		$res = $db->select()->where("isadmin != ?", false)->
-			order("teamname"); 
+			order("username"); 
 
 	}
 }

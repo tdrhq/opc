@@ -24,10 +24,10 @@ class UserModel {
 	public function getUserList()
 	{
 		$db = contestDB::get_zend_db() ;
-		$res = $db->select()->from("teaminfo")->query()->fetchAll() ;
+		$res = $db->select()->from("users")->query()->fetchAll() ;
 		$ret = array() ;
 		foreach( $res as $elem) {
-			array_push($ret, $elem->teamname);
+			array_push($ret, $elem->username);
 		}
 		return $ret;
 	}
