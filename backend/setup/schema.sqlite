@@ -15,12 +15,14 @@ create table problemdata (
 create index problem_id_idx on problemdata (id);
 
 create table teaminfo (
-teamname text unique primary key,
+uid integer primary key,
+teamname text unique,
 isadmin boolean,
 pwd text) ;
 
 create table submissionqueue (
  id integer primary key,
+ uid integer,
  team text,
  problemid text,
  owner text, 
