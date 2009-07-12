@@ -20,7 +20,7 @@ class Mailer
 }
 
 /* mailer self test */
-if ($argc == 2) {
+if (!empty($argc) && $argc == 2) {
 	require_once dirname(__FILE__) . "/../config.inc";
 	require_once "Zend/Loader.php";
 	$mail = Mailer::get_mailer();
