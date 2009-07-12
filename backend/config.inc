@@ -205,7 +205,16 @@ class config {
 			 "c" => "C (gcc 4.1)",
 			 "gcj" => "Java (gcj 4.1)",
 			 );
-					  
+
+  /** Mailer system */
+
+  static $mailer_smtp_server = ""; /**< leave empty to use Sendmail */
+  static $mailer_smtp_zend_config = array ('auth' => 'login',
+				    'username' => '',
+				    'password' => '');
+  static $mailer_admin_email = "";
+  static $mailer_admin_name = "";
+
   static function get_installation_dir() { 
 	return realpath( dirname(__FILE__) ) ;
   }
