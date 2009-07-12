@@ -2,7 +2,7 @@
 
 class Mailer 
 {
-  static get_mailer () 
+  static function get_mailer () 
   {
     Zend_Loader::loadClass ("Zend_Mail");
     Zend_Loader::loadClass ("Zend_Mail_Transport_Smtp");
@@ -19,5 +19,14 @@ class Mailer
   }
 }
 
-    
+/* mailer self test */
+if ($argc == 2) {
+	require_once dirname(__FILE__) . "/../config.inc";
+	require_once "Zend/Loader.php";
+	$mail = Mailer::get_mailer();
+	$mail->setBodyText ("This is a test email");
+	$mail->addTo ($argv[1]);
+	$mail->setSubject ("Test Email");
+	$mail->send();
+}    
 
