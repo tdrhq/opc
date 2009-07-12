@@ -247,6 +247,7 @@ class ProfileController extends Zend_Controller_Action {
 		$userm = new UserModel ; 
 
 		$user = $userm->getRow($this->user) ;
+		$this->user = $user->_username;
 		$this->institute = $userm->getInstitute($user) ; 
 		$this->country = $userm->getCountry($user) ;
 		$this->timezone = $userm->getTimezone($user) ;
