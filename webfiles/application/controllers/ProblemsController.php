@@ -30,7 +30,7 @@ class ProblemsController extends Zend_Controller_Action {
                 }
 
 		/* case 2: build a complex query */
-		$query = "select distinct p.rowid as rowid,p.id as id,p.nickname as nickname,s.state as state from problemdata  as p left join (select * from submissionqueue where team = ? and state='Accepted') as s on p.id = s.problemid where p.owner=? group by p.rowid,p.id,p.nickname,s.state order by rowid;";
+		$query = "select distinct p.rowid as rowid,p.id as id,p.nickname as nickname,s.state as state from problemdata  as p left join (select * from submissionqueue where uid = ? and state='Accepted') as s on p.id = s.problemid where p.owner=? group by p.rowid,p.id,p.nickname,s.state order by rowid;";
 		
 		$this->view->problems = $db->fetchAll ($query, array($curuser, webconfig::$contest_id));
 	}
