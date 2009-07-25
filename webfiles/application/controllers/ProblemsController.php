@@ -13,7 +13,7 @@ class ProblemsController extends Zend_Controller_Action {
 
 		Zend_Loader::loadClass("ContestModel");
                 $this->contestmodel = new ContestModel;
-                $this->state  = $this->contestmodel->getContestState(webconfig::$contest_id);
+                $this->state  = $this->contestmodel->getContestState(webconfig::getContestId());
                 if ( $this->state == "before" )
                         $this->_forward("before", "error", NULL, array());
         }
@@ -25,21 +25,21 @@ class ProblemsController extends Zend_Controller_Action {
 
                 $curuser = Zend_Auth::getInstance()->getIdentity();
                 if (empty($curuser)) {
-			$this->view->problems = ProblemTable::get_problem_list(webconfig::$contest_id, 0, 100);
+			$this->view->problems = ProblemTable::get_problem_list(webconfig::getContestId(), 0, 100);
 			return;
                 }
 
 		/* case 2: build a complex query */
 		$query = "select distinct p.rowid as rowid,p.id as id,p.nickname as nickname,s.state as state from problemdata  as p left join (select * from submissionqueue where uid = ? and state='Accepted') as s on p.id = s.problemid where p.owner=? group by p.rowid,p.id,p.nickname,s.state order by rowid;";
 		
-		$this->view->problems = $db->fetchAll ($query, array($curuser, webconfig::$contest_id));
+		$this->view->problems = $db->fetchAll ($query, array($curuser, webconfig::getContestId()));
 	}
 	
 	function viewAction () { 
 		$this->view->problem_code = $this->_request->get("probid") ;
 		$prob = ProblemTable::get_problem ("{$this->view->problem_code}") ;
 
-		if (empty($prob) || $prob->owner != webconfig::$contest_id ) { 
+		if (empty($prob) || $prob->owner != webconfig::getContestId()) { 
 			$this->_redirect("/");
 		}
 

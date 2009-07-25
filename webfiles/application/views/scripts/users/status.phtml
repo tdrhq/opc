@@ -2,7 +2,7 @@
 <? 
 Zend_Loader::loadClass("RanklistModel");
 $ranklist = new RanklistModel () ; 
-$ranks = $ranklist->getRanks($this->username, NULL, webconfig::$contest_id); 
+$ranks = $ranklist->getRanks($this->username, NULL, webconfig::getContestId()); 
 
 if ( empty($ranks) ) {
 	echo "<p><em>$this->username hasn't solved any problem yet. This page will contain a list of problems that have been solved.</em></p>";

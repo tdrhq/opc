@@ -3,7 +3,7 @@ include_once "lib/problems.inc";
 
 Zend_Loader::loadClass("ContestModel");
 $contestm = new ContestModel ;
-$contest_status = $contestm->getContestState(webconfig::$contest_id) ;
+$contest_status = $contestm->getContestState(webconfig::getContestId()) ;
 
 ?>
 

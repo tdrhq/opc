@@ -22,7 +22,7 @@ class QueueController extends Zend_Controller_Action {
 			}
 		}
 		$this->view->queue_status = SubmissionTable::get_queue(
-			$offset, $limit, $user, webconfig::$contest_id);
+			$offset, $limit, $user, webconfig::getContestId());
 		$this->view->queue_size = SubmissionTable::get_count($user) ;
 		$this->view->offset = $offset; 
 		$this->view->limit = $limit ;

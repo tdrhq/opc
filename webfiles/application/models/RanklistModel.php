@@ -34,7 +34,7 @@ class RanklistModel
 	}
 	public function getRanksHelper($user, $prob, $owner) {
 		$db = contestDB::get_zend_db() ; 
-		if ( empty($owner) ) $owner = webconfig::$contest_id ; 
+		if ( empty($owner) ) $owner = webconfig::$getContestId (); 
 		
 		$res = $db -> select() -> from(array("s" => "submissionqueue"))
                              ->join(array("t" => "users"), 's.uid = t.uid')->

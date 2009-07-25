@@ -7,7 +7,7 @@ class SubmitController extends Zend_Controller_Action {
 	public function preDispatch() 
 	{
 		$this->contestmodel = new ContestModel; 
-		$this->state  = $this->contestmodel->getContestState(webconfig::$contest_id);
+		$this->state  = $this->contestmodel->getContestState(webconfig::getContestId());
 		if ( $this->state != "ongoing" ){
 			$user = User::factory(Zend_Auth::getInstance()->getIdentity());
 			if (!$user || !$user->isAdmin())  
@@ -20,7 +20,7 @@ class SubmitController extends Zend_Controller_Action {
 	}
 	public function indexAction () { 
 		$this->view->title = "Submit a solution" ;
-		$this->view->problems = ProblemTable::get_problem_list(webconfig::$contest_id, 0, 100) ;
+		$this->view->problems = ProblemTable::get_problem_list(webconfig::getContestId(), 0, 100) ;
 		$this->view->problem_code = $this->_request->get("probid") ;
 	}
 

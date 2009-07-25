@@ -7,7 +7,7 @@ class PagesController extends Zend_Controller_Action
 	public function indexAction() 
 	{
 		$page = $this->getRequest()->get("page") ;
-		$contest = Contest::factory(webconfig::$contest_id);
+		$contest = Contest::factory(webconfig::getContestId());
 
 		if (!$contest) return; 
 

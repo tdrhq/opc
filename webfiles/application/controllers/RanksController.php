@@ -13,7 +13,7 @@ class RanksController extends Zend_Controller_Action {
 		$this->view->prob = $prob ;
 		Zend_Loader::loadClass("RanklistModel") ;
 		$ranklist = new RanklistModel ; 
-		$this->view->ranks = $ranklist->getRanks($user, $prob, webconfig::$contest_id);
+		$this->view->ranks = $ranklist->getRanks($user, $prob, webconfig::getContestId());
 	}
 
 	public function userAction() { 

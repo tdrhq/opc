@@ -1,7 +1,7 @@
 <?
 $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();
-if ( webconfig::$contest_id != 'general' )  {
-	$name = Contest::factory(webconfig::$contest_id)->getFriendlyName();
+if ( webconfig::getContestId() != 'general' )  {
+	$name = Contest::factory(webconfig::getContestId())->getFriendlyName();
 	echo "<p>You are currently logged into the following contest: <b>" . $name . "</b>. To go back to mainsite, you must <a href='$baseurl/contests/general'>leave this contest by clicking here</a>. You can return to this contest later.</p>";
 } else { 
 	/* how about a list of contests then? */

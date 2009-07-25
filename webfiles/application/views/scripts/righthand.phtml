@@ -25,8 +25,8 @@ echo "   <table id='announces'><tr><td>" ;
 	 echo "<p style='font-size:smaller;'>";
 	Zend_Loader::loadClass("ContestModel");
 	$contestm = new ContestModel() ;
-	$state = $contestm->getContestState(webconfig::$contest_id); 
-	$contest = $contestm->getRow(webconfig::$contest_id);
+	$state = $contestm->getContestState(webconfig::getContestId()); 
+	$contest = $contestm->getRow(webconfig::getContestId());
 	
 	 if (strtotime("+1 Year") < $contest->getContestEndTime()) {
 	   echo "<!-- contest does not end anytime soon -->\n";
