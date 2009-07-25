@@ -40,7 +40,8 @@ class ProblemsController extends Zend_Controller_Action {
 		$prob = ProblemTable::get_problem ("{$this->view->problem_code}") ;
 
 		if (empty($prob) || $prob->owner != webconfig::getContestId()) { 
-			$this->_redirect("/");
+			$this->_forward ("404", "error");
+			return;
 		}
 
 		$this->view->prob = $prob; 

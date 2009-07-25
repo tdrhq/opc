@@ -264,6 +264,8 @@ class ProblemTable {
 	  return NULL ;
 	}
 
+	if (empty($obj)) return NULL;
+
 	/* fill in all the details. */
 	$prob -> id = $id ;
 	$prob -> rowid = $obj->rowid;
