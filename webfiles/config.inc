@@ -80,6 +80,13 @@ class webconfig {
 	{
 		return Contest::factory (self::getContestId());
 	}
+
+	static function getContestRelativeBaseUrl ()
+	{
+		$contestid = self::getContestId ();
+		if ($contestid == self::$contest_id) return "/";
+		else return "/contests/$contestid/";
+	}
 }
 
 webconfig::$backend_location = realpath(dirname(__FILE__) . "/../backend/") ;
