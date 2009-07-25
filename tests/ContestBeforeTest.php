@@ -53,4 +53,11 @@ class ContestBeforeTest extends OpcTest
 		$this->assertAction ("before");
 	}
 
+	public function testCannotAccessSubmitForm ()
+	{
+		$this->dispatch ("/submit");
+		$this->assertController("error");
+		$this->assertAction ("before");
+	}
+
 }
