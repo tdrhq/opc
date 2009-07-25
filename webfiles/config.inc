@@ -70,6 +70,20 @@ class webconfig {
 	static $static_baseurl = "";
 
 	static $enable_gravatars = false;
+	
+	static function getContestId ()
+	{
+		$session = new Zend_Session_Namespace(webconfig::$session_namespace);
+		if (isset ($session->contestid)) return $session->contestid;
+		else return webconfig::$contest_id;
+	}
+
+	static function getContestName ()
+	{
+		$session = new Zend_Session_Namespace (webconfig::$session_namespace);
+		if (isset ($session->contestname)) return $session->contestname;
+		else return webconfig::$contest_name;
+	}
 }
 
 webconfig::$backend_location = realpath(dirname(__FILE__) . "/../backend/") ;
