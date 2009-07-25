@@ -45,7 +45,7 @@ class ProfileController extends Zend_Controller_Action {
 		$auth = Zend_Auth::getInstance() ; 
 		if ( $auth->hasIdentity()) { 
 			if ( $this->user != $auth->getIdentity()) {
-				$this->_redirect("/error/illegal") ;
+				$this->_forward("illegal", "error") ;
 				return ;
 			}
 		} else { 
@@ -226,7 +226,7 @@ class ProfileController extends Zend_Controller_Action {
 		$this->saveXML () ;
 
 		$this->copyToView() ;
-		$this->_redirect("/profile/success") ;
+		$this->_redirect(webconfig::getContestRelativeBaseUrl () . "/profile/success") ;
 	}
 
 	public function successAction() { 
@@ -239,7 +239,7 @@ class ProfileController extends Zend_Controller_Action {
 		/* fill in the existing details */
 		$auth = Zend_Auth::getInstance() ;
 		if (!$auth->hasIdentity()) { 
-			$this->_redirect("/") ;
+			$this->_forward ("illegal", "error") ;
 			return ;
 		}
 		$this->user = $auth->getIdentity() ;
@@ -283,7 +283,7 @@ class ProfileController extends Zend_Controller_Action {
 		
 		$this->copyToView() ;
 		User::factory($this->user)->setPassword($this->password);
-		$this->_redirect("/profile/profile-update-success");
+		$this->_redirect(webconfig::getContestRelativeBaseUrl () . "/profile/profile-update-success");
 	}
 	public function profileUpdateSuccessAction() 
 	{

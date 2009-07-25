@@ -10,7 +10,7 @@ class UsersController extends Zend_Controller_Action {
 		}
 		
 		if ( empty($_user) ) {
-			$this->_redirect("/") ;
+			$this->_redirect(webconfig::getContestRelativeBaseUrl()) ;
 		}
 		/* fillin information from User XML data */
 		Zend_Loader::loadClass("UserModel") ;

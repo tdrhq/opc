@@ -27,17 +27,17 @@ class SubmitController extends Zend_Controller_Action {
 	public function uploadAction() { 
 
 		if ( !$this->_request->isPost()) 
-			$this->_redirect("/") ;
+			$this->_redirect(webconfig::getContestRelativeBaseUrl()) ;
 		
 		$auth = Zend_Auth::getInstance() ; 
-		if ( !$auth->hasIdentity()) $this->_redirect("auth/login") ;
+		if ( !$auth->hasIdentity()) $this->_redirect(webconfig::getContestRelativeBaseUrl() . "auth/login") ;
 		
 		$lang = $this->_request->get("lang") ;
 		$prob = $this->_request->get("probid") ;
 		$source = $_FILES['source']['tmp_name'] ; 
 
 		if ( empty($lang) or empty($prob) or empty($source) ) { 
-			$this->_redirect("/error/illegal") ;
+			$this->_redirect(webconfig::getContestRelativeBaseUrl() . "/error/illegal") ;
 			return ;
 		}
 		
@@ -56,7 +56,7 @@ class SubmitController extends Zend_Controller_Action {
 		} else if ( $id < 0 ) { 
 			$this->view->message = "Unknown error" ; 
 		} else { 
-			$this->_redirect("/submit/success/$id") ;
+			$this->_redirect(webconfig::getContestRelativeBaseUrl () . "/submit/success/$id") ;
 		}
 
 		throw new Exception("shouldn't be here\n");

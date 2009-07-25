@@ -12,11 +12,11 @@ class AuthController  extends Zend_Controller_Action
 	}
 	function indexAction()
 	{
-		$this->_redirect('/');
+		$this->_redirect(webconfig::getContestRelativeBaseUrl());
 	}
 
 	function loginAction() {
-		$this->view->login_redirect = "/" ;
+		$this->view->login_redirect = webconfig::getContestRelativeBaseUrl();
 		$this->view->message = "" ; 
 		if ($this->_request->isPost()) {
 			// collect the data from the user
@@ -53,6 +53,6 @@ class AuthController  extends Zend_Controller_Action
 		$this->log->info(Zend_Auth::getInstance()->getIdentity() 
 				 . " has logged off."); 
 		Zend_Auth::getInstance()->clearIdentity() ;
-		$this->_redirect ("/") ;
+		$this->_redirect (webconfig::getContestRelativeBaseUrl()) ;
 	}
 }
