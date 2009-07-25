@@ -73,7 +73,8 @@ class webconfig {
 
 	static function getContestName ()
 	{
-	  
+		$contest = Contest::factory (self::getContestId());
+		return $contest->getFriendlyName();	  
 	}
 
 	static function getContest()
