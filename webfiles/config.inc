@@ -84,6 +84,11 @@ class webconfig {
 		if (isset ($session->contestname)) return $session->contestname;
 		else return webconfig::$contest_name;
 	}
+
+	static function getContest()
+	{
+		return Contest::factory (self::getContestId());
+	}
 }
 
 webconfig::$backend_location = realpath(dirname(__FILE__) . "/../backend/") ;
