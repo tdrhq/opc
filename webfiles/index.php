@@ -63,7 +63,6 @@ class App {
 			}
 			webconfig::$contest_id = $session->contestid ; 
 			webconfig::$contest_name = $contest->getFriendlyName() ;
-			webconfig::$enable_queue_privacy = $contest->isQueuePrivate();
 		}
 		
 		if (Zend_Auth::getInstance()->hasIdentity()) {

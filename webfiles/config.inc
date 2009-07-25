@@ -44,14 +44,6 @@ class webconfig {
 	static $multi_contest     = true;
 
 	/**
-	 * Queue privacy. If this is enabled, a user can't see what other users have submitted, or his
-         * status. Ranklist will not be available.
-	 * WARNING: Do not change this in local_config.inc. Change this in 
-	 * the contest XML data file instead.
-         */
-	static $enable_queue_privacy = false;
-
-	/**
 	 * Logo file, it's your responsibility to make sure it fits the CSS!
 	 * The file should be in the images directory.
 	 */
