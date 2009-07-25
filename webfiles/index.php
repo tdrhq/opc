@@ -8,7 +8,7 @@ set_include_path('.' . PATH_SEPARATOR . './library'
      . PATH_SEPARATOR . './application/models/'
      . PATH_SEPARATOR . get_include_path());
 
-include "Zend/Loader.php";
+require_once "Zend/Loader.php";
 Zend_Loader::loadClass('Zend_Controller_Front');
 Zend_Loader::loadClass('Zend_Db_Table');
 Zend_Loader::loadClass('Zend_Debug');
@@ -128,6 +128,8 @@ $router->addRoute('pages', new Zend_Controller_Router_Route
 
 $router->addRoute('su', new Zend_Controller_Router_Route
 		('su/:user', array('controller' => 'su')));
-$frontController->dispatch();
+
+if (empty ($__zend_test_no_dispatch))
+	$frontController->dispatch();
 
 
