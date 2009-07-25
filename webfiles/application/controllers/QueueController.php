@@ -11,7 +11,7 @@ class QueueController extends Zend_Controller_Action {
 
 		$user = $this->_request->get("user") ;
 
-		if ( webconfig::$enable_queue_privacy ) { 
+		if (webconfig::getContest()->isQueuePrivate()) { 
 			$auth = Zend_Auth::getInstance();
 			if (!$auth->hasIdentity())
 				$this->_forward("login", "error", NULL, array());
