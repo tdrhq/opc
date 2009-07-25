@@ -32,13 +32,13 @@ echo "   <table id='announces'><tr><td>" ;
 	   echo "<!-- contest does not end anytime soon -->\n";
 	 } 
 	 elseif ( $state == "before" ) {
-	   echo webconfig::$contest_name . " starts at: <br/>" . strftime("%a, %d %b %Y %H:%M:%S %z", $contest->getContestTime()) ;
+	   echo webconfig::getContestName() . " starts at: <br/>" . strftime("%a, %d %b %Y %H:%M:%S %z", $contest->getContestTime()) ;
 	 }
 	 elseif ($state == "ongoing") {
-	   echo webconfig::$contest_name . " ends at: <br/>" . strftime("%a, %d %b %Y %H:%M:%S %z", $contest->getContestEndTime()) ; 
+	   echo webconfig::getContestName() . " ends at: <br/>" . strftime("%a, %d %b %Y %H:%M:%S %z", $contest->getContestEndTime()) ; 
 	 }
 	 elseif ($state == "after" ) {
-	   echo webconfig::$contest_name . " has ended.<br />";
+	   echo webconfig::getContestName() . " has ended.<br />";
 	   echo "<!-- End time : " . strftime("%a, %d %b %Y %H:%M:%S %z", $contest->getContestEndTime()) . " -->\n";
 
 	 }
