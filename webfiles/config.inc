@@ -65,16 +65,15 @@ class webconfig {
 	
 	static function getContestId ()
 	{
-		$session = new Zend_Session_Namespace(webconfig::$session_namespace);
-		if (isset ($session->contestid)) return $session->contestid;
-		else return webconfig::$contest_id;
+		$front = Zend_Controller_Front::getInstance();
+		$contestid = $front->getRequest()->get ("contestid");
+		if (!empty($contestid)) return $contestid;
+		else return self::$contest_id;
 	}
 
 	static function getContestName ()
 	{
-		$session = new Zend_Session_Namespace (webconfig::$session_namespace);
-		if (isset ($session->contestname)) return $session->contestname;
-		else return webconfig::$contest_name;
+	  
 	}
 
 	static function getContest()
