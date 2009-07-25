@@ -84,10 +84,9 @@ class webconfig {
 
 	static function getContestRelativeBaseUrl ()
 	{
-		$baseurl = Zend_Controller_Front::getInstance()->getBaseUrl();
 		$contestid = self::getContestId ();
-		if ($contestid == self::$contest_id) return "$baseurl";
-		else return "$baseurl/contests/$contestid";
+		if ($contestid == self::$contest_id) return "/";
+		else return "$baseurl/contests/$contestid/";
 	}
 }
 
