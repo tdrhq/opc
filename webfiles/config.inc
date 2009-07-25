@@ -6,7 +6,6 @@
 
 ob_start() ;
 
-
 /*
  * Set up PHP errors by default. 
  */
@@ -97,7 +96,7 @@ if (is_file ( dirname(__FILE__)  . "/local_config.inc" ))
 
 
 require_once webconfig::$backend_location  . "/config.inc" ;
-
+require_once "lib/contest.inc";
 
 
 /*
