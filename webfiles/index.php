@@ -48,6 +48,17 @@ class App {
 		Zend_Loader::loadClass('Zend_Auth_Storage_Session');
 		$auth->setStorage(new Zend_Auth_Storage_Session(webconfig::$session_namespace));
 		
+		if (Zend_Auth::getInstance()->hasIdentity()) {
+			Zend_Loader::loadClass ('UserModel');
+			$users = new UserModel ();
+			$row = $users->getRow(Zend_Auth::getInstance()->getIdentity());
+			$tz = $users->getTimezone($row);
+			if (!empty($tz)) {
+				date_default_timezone_set ($tz);
+			} else {
+				date_default_timezone_set (webconfig::$default_timezone);
+			}
+		}
 		
 /* decide which contest I'm running on */
 		Zend_Loader::loadClass('Zend_Session_Namespace');
@@ -63,18 +74,6 @@ class App {
 			}
 			webconfig::$contest_id = $session->contestid ; 
 			webconfig::$contest_name = $contest->getFriendlyName() ;
-		}
-		
-		if (Zend_Auth::getInstance()->hasIdentity()) {
-			Zend_Loader::loadClass ('UserModel');
-			$users = new UserModel ();
-			$row = $users->getRow(Zend_Auth::getInstance()->getIdentity());
-			$tz = $users->getTimezone($row);
-			if (!empty($tz)) {
-				date_default_timezone_set ($tz);
-			} else {
-				date_default_timezone_set (webconfig::$default_timezone);
-			}
 		}
 		
 		webconfig::$static_baseurl = dirname ($_SERVER['SCRIPT_NAME']);
