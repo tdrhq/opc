@@ -85,9 +85,6 @@ class App {
 		$frontController = Zend_Controller_Front::getInstance();
 		$frontController->setControllerDirectory('./application/controllers');
 		
-		Zend_Loader::loadClass ("Zend_Controller_Plugin_ErrorHandler");
-		$frontController->registerPlugin (new Zend_Controller_Plugin_ErrorHandler());
-		
 		$router = $frontController->getRouter(); // returns a rewrite router by default
 		$router->addRoute(
 			'problems',
@@ -139,6 +136,7 @@ if (empty ($__zend_test_no_dispatch)) {
 	$app = new App ();
 	$app->bootstrap();
 	Zend_Controller_Front::getInstance()->dispatch();
-}
 
-
+	Zend_Loader::loadClass ("Zend_Controller_Plugin_ErrorHandler");
+	Zend_Controller_Front::getInstance()->registerPlugin (new Zend_Controller_Plugin_ErrorHandler());
+} 
