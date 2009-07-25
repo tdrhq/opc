@@ -20,8 +20,6 @@ class ProblemsController extends Zend_Controller_Action {
 
 	function indexAction () {
 		/* build query */
-
-	throw new Exception ("hello");
 		$db = contestDB::get_zend_db();
 		$this->view->title = "Problems" ;
 
