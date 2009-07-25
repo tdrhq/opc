@@ -50,10 +50,10 @@ $dom->formatOutput = TRUE ;
 $root = $dom->createElement("contest") ;
 $dom->appendChild($root) ;
 
-$xsdformat = "%Y-%m-%dT%T";
+$xsdformat = "c"; /* RFC 8601 */
 if (!empty($start_time)) {
 	$unix = strtotime ($start_time);
-	$startTime = $dom->createElement ("contestTime", strftime ($xsdformat, $unix));
+	$startTime = $dom->createElement ("contestTime", date ($xsdformat, $unix));
 	$root->appendChild($startTime);
 
 	if (!empty($duration))
@@ -65,7 +65,7 @@ if (!empty($start_time)) {
 		exit (1);
 	}
 
-	$endTime = $dom->createElement ("contestEndTime", strftime ($xsdformat, $unix));
+	$endTime = $dom->createElement ("contestEndTime", date ($xsdformat, $unix));
 	
 	$root->appendChild ($endTime);
 }
