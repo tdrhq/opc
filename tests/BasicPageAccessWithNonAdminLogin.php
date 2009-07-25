@@ -89,4 +89,12 @@ class BasicPageAccessWithNonAdminLogin extends OpcTest
 		//$this->assertRedirect ();
 		$this->assertEquals (Zend_Auth::getInstance()->hasIdentity(), false);
 	}
+
+	public function testHome ()
+	{
+		$this->dispatch ("/");
+		$this->assertController ("pages");
+		$this->assertAction ("index");
+		$this->assertNotRedirect ();
+	}
 }
