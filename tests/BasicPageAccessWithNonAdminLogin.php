@@ -1,6 +1,6 @@
 <?
 require_once "test_config.inc";
-require_once "OpcTest.php";
+require_once "OpcDataTest.php";
 require_once  "lib/db.inc";
 
 
@@ -19,27 +19,17 @@ class SuAuthAdapter implements Zend_Auth_Adapter_Interface {
 
 }
 
-class BasicPageAccessWithNonAdminLogin extends OpcTest
+class BasicPageAccessWithNonAdminLogin extends OpcDataTest
 {
 	public function setUp ()
 	{
 		global $test_nonadmin_uid;
-		/* create a contest */
-		system ("../backend/admin/addcontest.php  --id Test --name TestContest --start-time '+1 hour' --duration '2 hours' ");	
-		webconfig::$multi_contest = true;
-
 		parent::setUp ();
 		/* "login" */
 		Zend_Loader::loadClass('Zend_Auth');
 		$adapter = new SuAuthAdapter ($test_nonadmin_uid);
 		Zend_Auth::getInstance()->authenticate($adapter);
 	}
-
-	public function tearDown ()
-	{
-		unlink ("../backend/data/contests/Test.xml");
-	}
-
 	public function testContestCanAccessProblems() 
 	{
 		$this->dispatch("/problems/");
@@ -77,7 +67,7 @@ class BasicPageAccessWithNonAdminLogin extends OpcTest
 
 	public function testCanViewProblem ()
 	{
-		$this->dispatch ("/problems/sample");
+		$this->dispatch ("/problems/POINTS");
 		$this->assertController ("problems");
 		$this->assertNotRedirect();
 	}
