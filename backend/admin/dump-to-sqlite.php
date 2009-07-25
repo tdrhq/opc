@@ -24,7 +24,7 @@ foreach ($all as $row) {
 	$db->insert ("problemdata", $row);
 }
 
-$res = $old->query ("select username,isadmin,username as password from users");
+$res = $old->query ("select uid,username,isadmin,username as password from users");
 $all = $res->fetchAll();
 
 foreach ($all as $row) {
