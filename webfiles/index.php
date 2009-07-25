@@ -89,48 +89,37 @@ class App {
 		
 		$router->addRoute ('comtestroute', new Zend_Controller_Router_Route ('contests/:contestid/:controller/:action', array ('controller' => 'index', 'action' => 'index')));
 
-		$router->addRoute(
-			'problems',
-			new Zend_Controller_Router_Route('problems/:probid', array('controller' => 'problems', 'action' => 'view'))
-			);
+		/* for each of the following routes, we need two versions, with
+		 * and without the contests prefix */
+
+		$router->addRoute('problems', new Zend_Controller_Router_Route('problems/:probid', array('controller' => 'problems', 'action' => 'view')));
+		$router->addRoute('problemsc', new Zend_Controller_Router_Route('contests/:contestid/problems/:probid', array('controller' => 'problems', 'action' => 'view')));
 		
 		
-		$router->addRoute(
-			'submit',
-			new Zend_Controller_Router_Route('submit/success/:id', array('controller' => 'submit', 'action' => 'success'))
-			);
+		$router->addRoute('submit', new Zend_Controller_Router_Route('submit/success/:id', array('controller' => 'submit', 'action' => 'success')));
+		$router->addRoute('submitc', new Zend_Controller_Router_Route('contests/:contestid/submit/success/:id', array('controller' => 'submit', 'action' => 'success')));
 		
-/*
- $router->addRoute('submit/upload', new Zend_Controller_Router_Route('submit/upload', array('controller' => 'submit', 'action' => 'upload')) );
- $router->addRoute('submit/success', new Zend_Controller_Router_Route('submit/upload', array('controller' => 'submit', 'action' => 'success')) );
-*/
 		
-		$router->addRoute('results', new Zend_Controller_Router_Route('results/:id', 
-									      array('controller' =>'results', 'action' => 'index'))) ;
+		$router->addRoute('results', new Zend_Controller_Router_Route('results/:id', array('controller' =>'results', 'action' => 'index'))) ;
+		$router->addRoute('resultsc', new Zend_Controller_Router_Route('contests/:contestid/results/:id', array('controller' =>'results', 'action' => 'index'))) ;
 		
 		
 		
-		$router->addRoute('users', new Zend_Controller_Router_Route(
-					  'users/:user',
-					  array('controller' => 'users', 'action' => 'index')));
+		$router->addRoute('users', new Zend_Controller_Router_Route('users/:user', array('controller' => 'users', 'action' => 'index')));
+		$router->addRoute('usersc', new Zend_Controller_Router_Route('contests/:contestid/users/:user', array('controller' => 'users', 'action' => 'index')));
 		
-		$router->addRoute('ranks', new Zend_Controller_Router_Route(
-					  'status/:user',
-					  array('controller' => 'ranks', 'action' => 'user')));
+		$router->addRoute('ranks', new Zend_Controller_Router_Route('status/:user', array('controller' => 'ranks', 'action' => 'user')));
+		$router->addRoute('ranksc', new Zend_Controller_Router_Route('contests/:contestid/status/:user', array('controller' => 'ranks', 'action' => 'user')));
 		
-		$router->addRoute('contests', new Zend_Controller_Router_Route(
-					  'contests/:contest',
-					  array('controller' => 'contests')));
-		$router->addRoute('data', new Zend_Controller_Router_Route(
-					  'data/:file',
-					  array('controller'=>'data', 'action'=>'index')));
+
+		$router->addRoute('data', new Zend_Controller_Router_Route('data/:file', array('controller'=>'data', 'action'=>'index')));
+		$router->addRoute('datac', new Zend_Controller_Router_Route('contests/:contestid/data/:file', array('controller'=>'data', 'action'=>'index')));
+
 		
-		$router->addRoute('pages', new Zend_Controller_Router_Route
-				  ('pages/:page',
-				   array('controller' => 'pages')));
+		$router->addRoute('pages', new Zend_Controller_Router_Route('pages/:page', array('controller' => 'pages')));
+		$router->addRoute('pagesc', new Zend_Controller_Router_Route('contests/:contestid/pages/:page', array('controller' => 'pages')));
 		
-		$router->addRoute('su', new Zend_Controller_Router_Route
-				  ('su/:user', array('controller' => 'su')));
+		$router->addRoute('su', new Zend_Controller_Router_Route ('su/:user', array('controller' => 'su')));
 		
 	} /* function bootstrap */
 } /* class App */
