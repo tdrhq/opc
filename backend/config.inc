@@ -243,7 +243,7 @@ class config {
    * Returns the absolute path of the path specified. If the path is
    * is relative, the the path is completed from the root of the installation.
    */
-  function getFilename($file) { 
+  static function getFilename($file) { 
 	if ( $file == NULL ) return $file ;
 	if (substr($file, 0, 1) != "/" ) 
 	  $file = config::get_installation_dir() . "/" . $file ; 
