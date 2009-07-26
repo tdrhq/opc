@@ -174,7 +174,7 @@ class ProfileController extends Zend_Controller_Action {
 		$this->institute = "" ;
 		$this->country = "" ; 
 		$this->timezone = "Asia/Calcutta"; 
-		$this->log =& new Zend_Log($this->mock) ;
+		$this->log = new Zend_Log($this->mock) ;
 		$this->log->info("New Registration") ;
 
 	}
