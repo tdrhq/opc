@@ -34,7 +34,7 @@ class QueueController extends Zend_Controller_Action {
 		$this->view->paginator = new Zend_Paginator ($adapter);
 
 		$this->view->paginator->setCurrentPageNumber ($this->_getParam ('page'));
-		$this->view->paginator->setDefaultItemCountPerPage (50);
+		$this->view->paginator->setItemCountPerPage (50);
 	}
 	public function mineAction() {
 		$this->_forward("index", "queue", NULL, array("uid" => 
