@@ -9,7 +9,8 @@ class QueueController extends Zend_Controller_Action {
 		if ( empty($offset) ) $offset = 0 ; 
 		if ( empty($limit) ) $limit = 100 ;
 
-		$user = $this->_request->get("user") ;
+		$user = $this->_request->get("user");
+		$uid = $this->_request->get ("uid");
 
 		if (webconfig::getContest()->isQueuePrivate()) { 
 			$auth = Zend_Auth::getInstance();
@@ -27,6 +28,7 @@ class QueueController extends Zend_Controller_Action {
 		$db = contestDB::get_zend_db();
 		$query = $db->select ()->from('submissionqueue')->join("users", "submissionqueue.uid = users.uid")->where ("owner = ?", webconfig::getContestId())->order("id desc");
 		if (!empty($user)) $query = $query->where ("users.username = ?", $user);
+		if (!empty($uid)) $query = $query->where ("users.uid = ?", $uid);
 
 		$adapter = new Zend_Paginator_Adapter_DbSelect ($query);
 		$this->view->paginator = new Zend_Paginator ($adapter);
@@ -35,7 +37,7 @@ class QueueController extends Zend_Controller_Action {
 		$this->view->paginator->setDefaultItemCountPerPage (50);
 	}
 	public function mineAction() {
-		$this->_forward("index", "queue", NULL, array("user" => 
+		$this->_forward("index", "queue", NULL, array("uid" => 
 							      Zend_Auth::getInstance()->getIdentity()));
 	}
 }
