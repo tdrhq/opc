@@ -1,8 +1,8 @@
 
 #Uncomment the following lines for RewriteEngine.
-RewriteEngine on
-RewriteBase /
-RewriteRule !(public/.*) index.php 
+#RewriteEngine on
+#RewriteBase / # or full path like /~arnold/opc/
+#RewriteRule !(public/.*) index.php 
 
 
 
