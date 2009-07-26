@@ -223,7 +223,7 @@ class SubmissionTable {
 		throw new Exception ("uid must be numeric");
 
 	  $data = array() ;
-	  if ( $user ) $data['uid'] = new Zend_Db_Expr ($uid); 
+	  if ( $uid ) $data['uid'] = new Zend_Db_Expr ($uid); 
 	  if ( $problemid) $data['problemid'] = $problemid; 
 	  if ( $lang) $data['lang'] = $lang; 
 	  $data['state'] = 'processing' ; 
