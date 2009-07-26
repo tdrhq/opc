@@ -1,6 +1,6 @@
 <?
 
-require_once "../config.inc" ;
+require_once dirname(__FILE__) . "/../config.inc" ;
 require_once "lib/db.inc" ;
 require_once "lib/submissions.inc";
 require_once "lib/problems.inc";
