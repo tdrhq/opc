@@ -77,7 +77,7 @@ class App {
 		}
 		
 		if (empty(webconfig::$static_baseurl)) {
-			webconfig::$static_baseurl = $_SERVER['SCRIPT_NAME'];
+			webconfig::$static_baseurl = dirname($_SERVER['SCRIPT_NAME']);
 			if (webconfig::$static_baseurl == "/")
 				webconfig::$static_baseurl = "";
 		}
