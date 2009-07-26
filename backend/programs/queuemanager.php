@@ -13,6 +13,14 @@ include_once "lib/submissions.inc" ;
 require_once "HookAgent.php" ;
 
 include_once dirname(__FILE__) . "/compiler/common.inc" ;
+
+/* options */
+for ($i = 1; $i < $argc; $i++) {
+	if ($argv[$i] == "--exit-on-done") {
+		$exit_on_done = true;
+	}
+}
+
 /**
  * State of submission Constants.
  */
@@ -97,6 +105,7 @@ class ContestQueueManager {
    * @returns void
    */ 
   function start_queue () {
+	global $exit_on_done;
 	fprintf(STDOUT,"The queue has started.\n");
 	while ( !file_exists("stop_queue_manager")  ) {
 
@@ -106,6 +115,7 @@ class ContestQueueManager {
 		throw new Exception("Too many elements");
 	  }
 	  if ( empty($ar))  {
+		if (!empty($exit_on_done)) exit(0);
 		$ms = config::$queue_inactive_sleep_time * 1000000 ; 
 		usleep(mt_rand($ms/2,$ms)) ;
 		//sleep(1);
