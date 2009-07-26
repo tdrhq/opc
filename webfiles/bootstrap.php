@@ -4,6 +4,7 @@
 error_reporting(E_ALL|E_STRICT);
 require_once "./config.inc" ; 
 
+date_default_timezone_set (webconfig::$default_timezone);
 set_include_path('.' . PATH_SEPARATOR . './library'
      . PATH_SEPARATOR . './application/models/'
      . PATH_SEPARATOR . get_include_path());
