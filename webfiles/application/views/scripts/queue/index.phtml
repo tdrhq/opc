@@ -1,38 +1,12 @@
 <?
 $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl() ;
 
-$ar = $this->queue_status ; 
-
-$count = $this->queue_size ; 
-$offset = $this->offset ; 
-$limit = $this->limit ; 
 $user = $this->user; 
 
 $thispage = $this->url(array("action" => "index") ) ;
 
-if ( $offset <= 0 ) 
-  echo "&lt; Prev" ;
- else 
-   echo "<a href='" . $this->escape("$thispage?offset=" . ($offset-$limit). 
-	 "&limit=$limit") . "' >&lt;Prev</a>" ; 
-echo ' | ' ;
-$upperbnd = ceil ( $count / $limit ) ; 
-for( $i = 0 ; $i * $limit <= $count ; $i ++ )  { 
-  if ( $i*$limit ==  $offset ) 
-	echo " " . ($upperbnd - $i ) . " " ;
-  else
-	echo " <a href='$thispage?offset=" . $i*$limit . 
-	  "&amp;limit=$limit'>" . ($upperbnd - $i) ."</a> " ; 
- }
-echo " | ";
-if ( $offset + $limit >= $count ) 
-  echo "Next&gt;" ;
- else
-   echo "<a href='$thispage?offset=" . ($offset+$limit). 
-	 "&amp;limit=$limit&amp;team=$user' >Next &gt;</a>" ; 
 
-
-
+echo $this->paginationControl ($this->paginator, 'Sliding', "pagination.phtml");
 echo "<table class='styled' width='500'>";
 echo "<tr class='styled'><th class='styled' align='center'>ID</th><th class='styled' align='center'>Problem ID</th><th class='styled' align='center'>Submission<br /> Time</th>
 <th class='styled' align='center'>User</th>
@@ -45,7 +19,8 @@ if ( empty($mee) ) $isadmin = false ;
  else $isadmin = $mee -> isAdmin() ;
 
 $rowcount=0;
-foreach ( $ar as $x ) {
+foreach ( $this->paginator as $x ) {
+  //  print_r ($x);
   $access = (  Zend_Auth::getInstance()->getIdentity() == $x->uid) ;
   if ( $isadmin ) $access = true ;
   
@@ -57,7 +32,7 @@ foreach ( $ar as $x ) {
   if ( ! $access ) 
 	echo " <td> " . $x->id ." </td>";
   else 
-	echo "<td> <a href='$baseurl/results/{$x->id}'> $x->id </a></td>";
+	echo "<td> <a href='$baseurl/results/{$x->id}'> {$x->id} </a></td>";
   
   $ts = strftime("%d %b %Y %H:%M:%S %z",strtotime($x -> time ));
 
@@ -87,6 +62,7 @@ foreach ( $ar as $x ) {
 
 echo "</table>";
 
+echo $this->paginationControl ($this->paginator, 'Sliding', "pagination.phtml");
 ?>
 
 

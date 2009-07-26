@@ -21,11 +21,18 @@ class QueueController extends Zend_Controller_Action {
 					$user = $auth->getIdentity();
 			}
 		}
-		$this->view->queue_status = SubmissionTable::get_queue(
-			$offset, $limit, $user, webconfig::getContestId());
-		$this->view->queue_size = SubmissionTable::get_count($user) ;
-		$this->view->offset = $offset; 
-		$this->view->limit = $limit ;
+
+		Zend_Loader::loadClass ("Zend_Paginator");
+		Zend_Loader::loadClass ("Zend_Paginator_Adapter_DbSelect");
+		$db = contestDB::get_zend_db();
+		$query = $db->select ()->from('submissionqueue')->join("users", "submissionqueue.uid = users.uid")->where ("owner = ?", webconfig::getContestId())->order("id desc");
+		if (!empty($user)) $query = $query->where ("uid = ?", $user);
+
+		$adapter = new Zend_Paginator_Adapter_DbSelect ($query);
+		$this->view->paginator = new Zend_Paginator ($adapter);
+
+		$this->view->paginator->setCurrentPageNumber ($this->_getParam ('page'));
+		$this->view->paginator->setDefaultItemCountPerPage (50);
 	}
 	public function mineAction() {
 		$this->_forward("index", "queue", NULL, array("user" => 
