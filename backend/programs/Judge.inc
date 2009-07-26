@@ -65,7 +65,6 @@ class Judge {
 
 	$this -> path_to_code = $_path_to_code;
 	$this -> lang = $_lang;
-	$this -> options = $_options ;
 	$this -> checker = $_checker ;
 	echo "Judge initialized\n" ;
 	$this -> xmlw = new XMLWriter() ;
@@ -103,7 +102,7 @@ class Judge {
 	else 
 	  throw new Exception("Unknown language: $lang\n");
 
-	$this->xmlw -> writeElement("time", date(DATE_STRING ));
+	$this->xmlw -> writeElement("time", date('r'));
 	
 	$ret = $this->compiler_object->compile($this->path_to_code) ;
 	
@@ -151,7 +150,7 @@ class Judge {
   public function run ($testdata_input,$options,&$response) {
 
 	$this->xmlw -> startElement("exec") ;
-	$this->xmlw -> writeElement("time", date(DATE_STRING));
+	$this->xmlw -> writeElement("time", date('r'));
 	//	echo $this ->compiler_object->get_exec_string();
 	// throw new Exception("Not compiled");
 	
@@ -214,7 +213,7 @@ class Judge {
    */
   public function verify($output) {
 	$this->xmlw -> startElement("check");
-	$this->xmlw -> writeElement("time", date(DATE_STRING));
+	$this->xmlw -> writeElement("time", date('r'));
 	$ret = runandgetoutputerr ( 
 				 $this->checker . " " 
 				 . $this->temp_output . " " 
@@ -230,7 +229,7 @@ class Judge {
 	$this->xmlw->writeElement("stdout", $sOutput);
 	$ar = explode(" ", $sOutput, 2);
 	$this->checker_score = (int) trim($ar[0]); 
-	$this->checker_state = trim($ar[1]);
+	$this->checker_state = trim(empty($ar[1])?"":$ar[1]);
 	if ( !empty($this->checker_state)){
 	  $this->xmlw->writeElement("message", $this->checker_state . 
 				    "for score: "
@@ -251,7 +250,7 @@ class Judge {
   
   public function __destruct() {
 	/* cleanup temps */
-	if ( DEBUG == 1 ) echo "Cleaning up Judge files\n";
+	if (defined('DEBUG')) echo "Cleaning up Judge files\n";
 	else unlink ($this->temp_output) ;
    }
 
@@ -277,7 +276,7 @@ class Judge {
 	/* typically we would like to ensure this is a valid call
 	 * but lets forget that for now.
 	 */
-	$this->xmlw->writeElement("time",date(DATE_STRING));
+	$this->xmlw->writeElement("time",date('r'));
 	$this->xmlw->endElement();
   }
 }

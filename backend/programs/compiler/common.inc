@@ -17,8 +17,7 @@ function  runandgetoutput($cmd, &$output) {
  * @param[out] $err string(reference) - the input
  */
 function runandgetoutputerr( $cmd, &$output, &$err ) {
-  
-  if ( DEBUG==1 ) echo "\ncommand called: $cmd \n";
+  if (defined('DEBUG')) echo "\ncommand called: $cmd \n";
   $descriptorspec = array(
 						  0 => array("pipe", "r"),
 						  1 => array("pipe", "w"),  
@@ -45,4 +44,4 @@ function runandgetoutputerr( $cmd, &$output, &$err ) {
   return $ret ;
 }
 
-define(DATE_STRING,'r');
+

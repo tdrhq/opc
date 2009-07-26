@@ -13,7 +13,7 @@ function safeSystem ($string) {
 	system ($string, $ret);
 	if ($ret != 0) {
 		echo "$string: failed\n";
-		exit (1);
+//		exit (1);
 	}
 }
 class OpcDataTest extends OpcTest {

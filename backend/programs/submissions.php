@@ -74,7 +74,7 @@ if ($argc < 2) {
   exit(1) ;
  }
 
-if ( $argv[2] == "--debug" ) {
+if ($argc > 2 &&  $argv[2] == "--debug" ) {
   define(DEBUG,1);
 }
 
@@ -128,7 +128,10 @@ class SafeException extends Exception {
 
 try  {
 	SubmissionTable::set_state($info->id, "Compiling");
-	if ( ! $j -> compile($prob->compileOptions[$info->lang]) ) {
+	
+	$compileOptions = "";
+	if (!empty ($prob->compileOptions[$info->lang])) $compileOptions = $prob->compileOptions[$info->lang];
+	if ( ! $j -> compile($compileOptions) ) {
 		SubmissionTable::set_state( $info->id, "Compile Error") ;
 		throw new SafeException ;
 	}
@@ -222,11 +225,6 @@ catch(SafeException $e) {
 	 * that the state has been set to what it should be
 	 */
 }
-catch(Exception $e) { /* this is bad */
-	echo "Execution failed with message: " . $e->getMessage() ;
-	exit(1); // will finally block be called again? not an issue
-	// even if it is.
-} 
 
 
 /*
