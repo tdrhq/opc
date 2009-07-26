@@ -1,7 +1,7 @@
 
 #Uncomment the following lines for RewriteEngine.
 #RewriteEngine on
-#RewriteBase / # or full path like /~arnold/opc/
+#RewriteBase / 
 #RewriteRule !(public/.*) bootstrap.php 
 
 
