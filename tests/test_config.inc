@@ -17,6 +17,14 @@ $test_non_general_contest_problem = "zco-2008-1b";
 $test_submissions = array (array (6601, 100), 
 	array(6696, 64), /* WA, with ICO style grading tested */
 	array(6697, 100)); /* TODO: I need a case where OPC style submission would've given a different score */
+
+
+$test_uploads = array (
+
+	array (262, 'POINTS', 'cpp', '../tests/points.cpp', 'general', 100),
+array ('263', 'POINTS', 'cpp', '../tests/points.cpp', 'general', 100)
+
+);
 	
 
 

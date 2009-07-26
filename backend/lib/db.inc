@@ -12,17 +12,19 @@ require_once "Zend/Db.php" ;
  */
 class contestDB {
 
+  static  $db;
   /**
    * Get a Zend_Db object. 
    */
   static function get_zend_db() { 
-	$ret = Zend_Db::factory(config::$DB_Adapter, 
+	if (!empty(self::$db)) return self::$db;
+	self::$db = Zend_Db::factory(config::$DB_Adapter, 
 							array('host' => config::$DB_Hostname,
 								  'username' => config::$DB_User, 
 								  'password' => config::$DB_Password,
 								  'dbname' => config::$DB_Name)) ;
-	$ret-> setFetchMode(Zend_Db::FETCH_OBJ);
-	return $ret ; 
+	self::$db-> setFetchMode(Zend_Db::FETCH_OBJ);
+	return self::$db ; 
   }
 } ; 
 

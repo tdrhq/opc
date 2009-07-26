@@ -8,6 +8,7 @@ require_once "zend-test-index.php";
 
 /* Test that Zend Test is working! */
 require_once "OpcTest.php";
+require_once "lib/db.inc";
 
 function safeSystem ($string) {
 	system ($string, $ret);
@@ -19,6 +20,7 @@ function safeSystem ($string) {
 class OpcDataTest extends OpcTest {
 	public function setUp ()
 	{
+		$this->assertFalse (contestDB::get_zend_db()->isConnected());
 		safeSystem ("if [ -d ../backend/data ] ; then rm -rf ../backend/data-old && mv -fT ../backend/data ../backend/data-old; else true; fi");
 		safeSystem ("cp -r ../tests/data ../backend/data");
 		parent::setUp ();
@@ -29,6 +31,7 @@ class OpcDataTest extends OpcTest {
 
 	public function tearDown ()
 	{
+		contestDB::get_zend_db ()->closeConnection();
 		safeSystem ("rm -rf ../backend/data");
 		safeSystem ("if [ -d ../backend/data-old ] ; then mv -fT ../backend/data-old ../backend/data; else true; fi");
 	} 
