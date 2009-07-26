@@ -14,6 +14,8 @@ for ($i = 1; $i < $argc; $i++) {
 		$duration = $argv[++$i];
 	else if ($argv[$i] == "--end-time")
 		$end_time = $argv[++$i];
+	else if ($argv[$i] == "--enable-queue-privacy")
+		$enable_queue_privacy = true;
 	else if ($argv[$i] == "--help") {
 		display_help ();
 		exit (1);
@@ -74,6 +76,11 @@ if (!empty($start_time)) {
 if (empty($name)) $name = "Unnamed contest";
 $e = $dom->createElement ("name", $name);
 $root->appendChild ($e);
+
+if (!empty($enable_queue_privacy)) {
+	$e = $dom->createElement ("enable-queue-privacy", "true");
+	$root->appendChild ($e);
+}	
 
 $frontend = $dom->createElement ("frontend");
 $root->appendChild ($frontend);
