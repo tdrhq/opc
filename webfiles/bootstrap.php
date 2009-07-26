@@ -76,9 +76,11 @@ class App {
 			webconfig::$contest_name = $contest->getFriendlyName() ;
 		}
 		
-		webconfig::$static_baseurl = dirname ($_SERVER['SCRIPT_NAME']);
-		if (webconfig::$static_baseurl == "/")
-			webconfig::$static_baseurl = "";
+		if (empty(webconfig::$static_baseurl)) {
+			webconfig::$static_baseurl = $_SERVER['SCRIPT_NAME'];
+			if (webconfig::$static_baseurl == "/")
+				webconfig::$static_baseurl = "";
+		}
 		
 /* setup the controller and routes */
 		$frontController = Zend_Controller_Front::getInstance();
