@@ -68,7 +68,7 @@ class CompilerGenericGNU {
   }
 
   public function __destruct() {
-	if (DEBUG==1) echo "Cleaning up compiler\n";
+	if (defined('DEBUG')) echo "Cleaning up compiler\n";
 	else unlink($this->output_exec); 
   }
 

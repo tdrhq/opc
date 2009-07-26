@@ -15,4 +15,8 @@ class OpcTest extends Zend_Test_PHPUnit_ControllerTestCase {
 		$this->bootstrap = array ($bootstrap, 'bootstrap');
 		parent::setUp ();
 	}
+
+	public function testDummy ()
+	{
+	}
 }

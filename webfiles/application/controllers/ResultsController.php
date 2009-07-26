@@ -17,9 +17,10 @@ class ResultsController extends Zend_Controller_Action {
 			->isAdmin() ;
 
 		if ( empty($this->view->sub) or $this->view->user != 
-		     $this->view->sub->team 
+		     $this->view->sub->uid 
 		     and !$this->view->admin  ) { 
-			$this->_redirect(webconfig::getContestRelativeBaseUrl () . "error/illegal") ;
+			$this->_forward("illegal", "error") ;
+			return;
 		}
 
 		if ($download == "true") { 

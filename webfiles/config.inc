@@ -85,7 +85,7 @@ class webconfig {
 	{
 		$contestid = self::getContestId ();
 		if ($contestid == self::$contest_id) return "/";
-		else return "$baseurl/contests/$contestid/";
+		else return "/contests/$contestid/";
 	}
 }
 

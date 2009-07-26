@@ -14,6 +14,8 @@ for ($i = 1; $i < $argc; $i++) {
 		$duration = $argv[++$i];
 	else if ($argv[$i] == "--end-time")
 		$end_time = $argv[++$i];
+	else if ($argv[$i] == "--enable-queue-privacy")
+		$enable_queue_privacy = true;
 	else if ($argv[$i] == "--help") {
 		display_help ();
 		exit (1);
@@ -50,10 +52,10 @@ $dom->formatOutput = TRUE ;
 $root = $dom->createElement("contest") ;
 $dom->appendChild($root) ;
 
-$xsdformat = "%Y-%m-%dT%T";
+$xsdformat = "c"; /* RFC 8601 */
 if (!empty($start_time)) {
 	$unix = strtotime ($start_time);
-	$startTime = $dom->createElement ("contestTime", strftime ($xsdformat, $unix));
+	$startTime = $dom->createElement ("contestTime", date ($xsdformat, $unix));
 	$root->appendChild($startTime);
 
 	if (!empty($duration))
@@ -65,7 +67,7 @@ if (!empty($start_time)) {
 		exit (1);
 	}
 
-	$endTime = $dom->createElement ("contestEndTime", strftime ($xsdformat, $unix));
+	$endTime = $dom->createElement ("contestEndTime", date ($xsdformat, $unix));
 	
 	$root->appendChild ($endTime);
 }
@@ -74,6 +76,11 @@ if (!empty($start_time)) {
 if (empty($name)) $name = "Unnamed contest";
 $e = $dom->createElement ("name", $name);
 $root->appendChild ($e);
+
+if (!empty($enable_queue_privacy)) {
+	$e = $dom->createElement ("enable-queue-privacy", "true");
+	$root->appendChild ($e);
+}	
 
 $frontend = $dom->createElement ("frontend");
 $root->appendChild ($frontend);
