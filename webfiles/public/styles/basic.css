@@ -10,7 +10,7 @@ min-width:900px;
 margin-right:0px;
 margin-top:0px;
 margin-left:0px;
-background:#eee;
+background:#fafafa;
 }
 
 img { 
@@ -52,7 +52,7 @@ margin-right:0px;
 margin-top:0px;
 margin-right:0px;
 height:65px;
-background:#EEE;
+background:#fafafa;
 z-index:1;
 font-size: smaller ;
 }
@@ -251,8 +251,8 @@ padding: 10px;
 
 
 #maincontent a{
-color:#59A8EB;
-font-weight:bold;
+color:#4444a0;
+font-weight:none;
 text-decoration:none;
 margin-right:0px;
 }
@@ -260,9 +260,9 @@ margin-right:0px;
 border:none;
 }
 #maincontent a:hover{
-font-weight:bold;
+font-weight:none;
 color:#88F;
-text-decoration:none;
+text-decoration:underline;
 }
 
 .registerform  input{ 
@@ -296,9 +296,9 @@ font-variant:small-caps;
 }
 
 #maincontent  input[disabled]{
-background:#eee;
+background:#fafafa;
 border:#d2d2d2 solid 1px;
-color:#eee;
+color:#fafafa;
 }
 
 .infotitle{ 
@@ -321,11 +321,11 @@ color:#333;
 width: 100%;
 }
 tr.styled{
-background:#ddd;
+background:#eee;
 
 }
 tr.styleda{
-background:#eee;
+background:#fafafa;
 }
 th.styled{ 
 background:#fff;
