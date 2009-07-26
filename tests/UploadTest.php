@@ -33,7 +33,25 @@ include "../backend/programs/submissions.php";
 		print_r ($row);
 		$this->assertEquals ($b, $row->score);
 	}
-	
+
+	/**
+	 * @dataProvider provider
+	 */
+
+	public function testUploadHashWorks ($user, $prob, $lang, $source, $owner, $score)
+	{
+		config::$enable_hash_test = true;
+                $a = UploadSubmission::upload ($user, $prob, $lang, $source, $owner);
+                $b = UploadSubmission::upload ($user, $prob, $lang, $source, $owner);
+
+		$user = User::factory ($user);
+
+		if (!$user->isAdmin())
+			$this->assertEquals (-1, $b);
+		else
+			$this->assertGreaterThan (0, $b);
+		
+	}	
 	public function provider ()
 	{
 		global $test_uploads;
