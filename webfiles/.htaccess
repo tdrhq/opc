@@ -2,7 +2,7 @@
 #Uncomment the following lines for RewriteEngine.
 #RewriteEngine on
 #RewriteBase / 
-#RewriteRule !(public/.*) bootstrap.php 
+#RewriteRule !(public/.*|index.php) bootstrap.php 
 
 
 
