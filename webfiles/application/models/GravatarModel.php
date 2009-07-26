@@ -3,8 +3,9 @@
 function getgravatar ($user) 
 { 
 	Zend_Loader::loadClass("UserModel");
-	$user = UserModel::getRow ($user);
-	$email = UserModel::getMember ($user, 0)->email;
+	$userm = new UserModel();
+	$user = $userm->getRow ($user);
+	$email = $userm->getMember ($user, 0)->email;
 
 	$grav_url = "http://www.gravatar.com/avatar.php?gravatar_id=".md5( strtolower($email) ).
 		'&size=40';
