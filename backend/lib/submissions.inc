@@ -148,7 +148,7 @@ class Submission {
   function __construct($obj) { 
 	if (empty($obj)) throw new Exception ("shit");
 	$this->id = $obj->id; 
-	$this->team = $this->user = $obj->uid ;
+	$this->team = $this->user = $this->uid = $obj->uid ;
 	$this->problemid = $obj->problemid ; 
 	$this->lang = $obj->lang ; 
 	$this->state = $obj->state; 

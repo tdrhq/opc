@@ -23,17 +23,16 @@ class BasicPageAccessWithNonAdminLogin extends OpcDataTest
 {
 	public function setUp ()
 	{
-		global $test_nonadmin_uid;
+		global $test_nonadmin_uid1;
 		parent::setUp ();
 		/* "login" */
 		Zend_Loader::loadClass('Zend_Auth');
-		$adapter = new SuAuthAdapter ($test_nonadmin_uid);
+		$adapter = new SuAuthAdapter ($test_nonadmin_uid1);
 		Zend_Auth::getInstance()->authenticate($adapter);
 	}
 	public function testContestCanAccessProblems() 
 	{
 		$this->dispatch("/problems/");
-		echo $this->response->getBody();
 		$this->assertController ("problems");
 		$this->assertNotRedirect ();
 	}
@@ -75,7 +74,6 @@ class BasicPageAccessWithNonAdminLogin extends OpcDataTest
 	public function testCanLogout ()
 	{
 		$this->dispatch ("/auth/logout");
-		echo $this->response->getBody();
 		//$this->assertRedirect ();
 		$this->assertEquals (Zend_Auth::getInstance()->hasIdentity(), false);
 	}
@@ -86,5 +84,24 @@ class BasicPageAccessWithNonAdminLogin extends OpcDataTest
 		$this->assertController ("pages");
 		$this->assertAction ("index");
 		$this->assertNotRedirect ();
+	}
+
+	public function testMyOwnSubmission ()
+	{
+		print_r ($_SESSION);
+		global $submission_owned_by_uid1;
+		$this->dispatch ("/results/{$submission_owned_by_uid1}");
+		$this->assertController ("results");
+		$this->assertNotRedirect();
+		$this->assertAction("index");
+	}
+
+	public function testSomebodyElsesSubmission ()
+	{
+		global $submission_owned_by_uid2;
+		$this->dispatch ("/results/{$submission_owned_by_uid2}");
+		$this->assertNotRedirect();
+		$this->assertController ("error");
+		$this->assertAction ("illegal");
 	}
 }
