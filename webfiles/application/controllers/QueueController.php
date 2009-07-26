@@ -26,7 +26,7 @@ class QueueController extends Zend_Controller_Action {
 		Zend_Loader::loadClass ("Zend_Paginator_Adapter_DbSelect");
 		$db = contestDB::get_zend_db();
 		$query = $db->select ()->from('submissionqueue')->join("users", "submissionqueue.uid = users.uid")->where ("owner = ?", webconfig::getContestId())->order("id desc");
-		if (!empty($user)) $query = $query->where ("uid = ?", $user);
+		if (!empty($user)) $query = $query->where ("users.uid = ?", $user);
 
 		$adapter = new Zend_Paginator_Adapter_DbSelect ($query);
 		$this->view->paginator = new Zend_Paginator ($adapter);
