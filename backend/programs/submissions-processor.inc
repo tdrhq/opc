@@ -6,51 +6,6 @@ require_once "lib/submissions.inc";
 require_once "lib/problems.inc";
 require_once dirname(__FILE__) . "/Judge.inc";
 
-/**
- * Change a db array into a PHP array
- * @param $dbarr String representing the DB array
- * @return A PHP array
- * @see http://in.php.net/pgsql User comments.
- */
-function pgToPhpArray($dbarr) {
-  // Take off the first and last characters (the braces)
-  $arr = substr($dbarr, 1, strlen($dbarr) - 2);
-  
-  // Pick out array entries by carefully parsing.  This is necessary in order
-  // to cope with double quotes and commas, etc.
-  $elements = array();
-  $i = $j = 0;       
-  $in_quotes = false;
-  while ($i < strlen($arr)) {
-	// If current char is a double quote and it's not escaped, then
-	// enter quoted bit
-	$char = substr($arr, $i, 1);
-	if ($char == '"' && ($i == 0 || substr($arr, $i - 1, 1) != '\\'))
-	  $in_quotes = !$in_quotes;
-	elseif ($char == ',' && !$in_quotes) {
-	  // Add text so far to the array
-	  $elements[] = substr($arr, $j, $i - $j);
-	  $j = $i + 1;
-	}
-	$i++;
-  }
-  // Add final text to the array
-  $elements[] = substr($arr, $j);
-  
-  // Do one further loop over the elements array to remote double quoting
-  // and escaping of double quotes and backslashes
-  for ($i = 0; $i < sizeof($elements); $i++) {
-	$v = $elements[$i];
-	if (strpos($v, '"') === 0) {
-	  $v = substr($v, 1, strlen($v) - 2);
-	  $v = str_replace('\\"', '"', $v);
-	  $v = str_replace('\\\\', '\\', $v);
-	  $elements[$i] = $v;
-	}
-  }
-  
-  return $elements;
-}
 
 class SafeException extends Exception {
 };
@@ -70,20 +25,14 @@ class SubmissionProcessor
      */
     $prob = ProblemTable::get_problem($info -> problemid );
     
-    if ( is_array ($prob->scoreweights ) )
-      $scoreweights = $prob->scoreweights ; 
-    else 
-      $scoreweights = pgToPhpArray($prob->scoreweights) ;
+    assert (is_array ($prob->scoreweights));
+    $scoreweights = $prob->scoreweights; 
     
-    if ( is_array($prob->inputpaths ) ) 
-      $inputpaths = $prob->inputpaths ; 
-    else 
-      $inputpaths   = pgToPhpArray($prob->inputpaths);
+    assert (is_array($prob->inputpaths)); 
+    $inputpaths = $prob->inputpaths; 
     
-    if ( is_array($prob->outputpaths )) 
-      $outputpaths = $prob->outputpaths ; 
-    else
-      $outputpaths  = pgToPhpArray($prob->outputpaths);
+    assert (is_array($prob->outputpaths));
+    $outputpaths = $prob->outputpaths; 
     
     /*
      * The judge object
