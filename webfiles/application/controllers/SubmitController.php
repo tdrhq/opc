@@ -56,7 +56,7 @@ class SubmitController extends Zend_Controller_Action {
 		} else if ( $id < 0 ) { 
 			$this->view->message = "Unknown error" ; 
 		} else { 
-			$this->_redirect(webconfig::getContestRelativeBaseUrl () . "/submit/success/$id") ;
+			$this->_redirect(webconfig::getContestRelativeBaseUrl () . "submit/success/$id") ;
 		}
 
 		throw new Exception("shouldn't be here\n");
