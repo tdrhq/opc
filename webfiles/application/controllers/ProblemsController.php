@@ -48,7 +48,7 @@ class ProblemsController extends Zend_Controller_Action {
 
 		$this->view->content_html = file_get_contents(get_file_name("data/problems/"  
 							  . $this->_request->get("probid")
-									    . ".html")) ;
+									    . "/index.html")) ;
 
 
 		if (function_exists("tidy_parse_string") && $this->_request->get("tidy") != "false") {
