@@ -110,11 +110,10 @@ function uncompress_archive ($file, $probid) {
 		exit (1);
 	}
 	
-	if (!is_file ("$probid/problem.html")) {
-		echo "ERROR: problem.html problem description missing in archive.\n";
+	if (!is_file ("$probid/index.html")) {
+		echo "ERROR: index.html problem description missing in archive.\n";
 		exit (1);
 	}
-	copy ("$probid/problem.html", "$probid.html");
 
 	chdir ($oldpwd);
 }
@@ -190,8 +189,8 @@ if (!empty($archive)) {
 	uncompress_archive ($archive, $id);
 }
 
-if ( !is_file(get_file_name("data/problems/$id.html") ) ){ 
-  echo "data/problems/$id.html does not exist. Aborting right now.\n" ;
+if ( !is_file(get_file_name("data/problems/$id/index.html") ) ){ 
+  echo "data/problems/$id/index.html does not exist. Aborting right now.\n" ;
   exit(1) ;
  }
 
@@ -308,7 +307,7 @@ $db->query($sql ) ;
 
 
 echo "Done, copy your problem statement to " . config::$problems_directory 
-. "/$id.{html|pdf|ps}. Note that html file should contain only the body "
+. "/$id/index.{html|pdf|ps}. Note that html file should contain only the body "
 . "part!\n";
 
 
