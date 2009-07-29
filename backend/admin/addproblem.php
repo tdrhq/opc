@@ -281,7 +281,8 @@ $root->appendChild($element) ;
 
 file_put_contents(get_file_name("data/problems/" . $id . ".xml" ),
 				  $dom->saveXML());
-chmod(get_file_name("data/problems/$id.xml"), 0755) ;
+chmod(get_file_name("data/problems/$id/.xml"), 0755) ;
+chmod(get_file_name("data/problemd/$id"), 0755);
 
 echo "-----LOG-----\n" ;
 echo $dom->saveXML();

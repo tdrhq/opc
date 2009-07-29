@@ -4,6 +4,30 @@ require_once "lib/problems.inc" ;
 
 class ProblemsController extends Zend_Controller_Action { 
 	var $content_html = "" ; 
+
+	function fixImages ()
+	{
+		$dom = new DomDocument ();
+		$dom->loadHTML ($this->view->content_html);
+		$xp = new DOMXPath ($dom);
+		
+		$url = Zend_Controller_Front::getInstance()->getBaseUrl () . webconfig::getContestRelativeBaseUrl();
+		$url .= "problems/" . $this->_request->get("probid");
+
+		$res = $xp->query ("//img/@src");
+		foreach ($res as $node) {
+			$oldImage = $node->nodeValue;
+
+			/* is this a complete path? */
+			if (substr ($oldImage, 0, 5) == "http:" || substr ($oldImage, 0, 6) == "https:" || $oldImage[0] == '/')
+				continue;
+			
+			$node->nodeValue = "$url/$oldImage";
+		}
+
+		$this->view->content_html = $dom->saveHTML();
+	}
+
         public function preDispatch()
         {
                 $curuser = Zend_Auth::getInstance()->getIdentity();
@@ -61,6 +85,9 @@ class ProblemsController extends Zend_Controller_Action {
 			$this->view->content_html = tidy_parse_string($this->view->content_html, $opt);
 			tidy_clean_repair ($this->view->content_html);
 		}
+
+		$this->fixImages ();
+
 		if ($this->_request->get("plain") == "true") {
 			$this->_helper->layout->disableLayout ();
 			$this->_helper->viewRenderer->setNoRender ();
