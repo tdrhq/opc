@@ -27,6 +27,62 @@ class ProblemsController extends Zend_Controller_Action {
 
 		$this->view->content_html = $dom->saveHTML();
 	}
+	public function getContentType($ext) 
+	{
+		$ext = strtolower($ext);
+		if ($ext == "htm" or $ext == "html") return "text/html"; 
+		if ($ext == "txt" ) return "text/plain" ;
+		if ($ext == "jpg" or $ext == "jpeg" ) return "image/jpeg" ;
+		if ($ext == "gif") return "image/gif";
+		if ($ext == "tiff") return "image/tiff";
+		if ($ext == "bmp") return "image/bmp";
+		if ($ext == "png") return "image/png";
+		if ($ext == "mpg" or $ext == "mpeg") return "image/mpeg";
+		if ($ext == "pdf" ) return "application/pdf" ;
+		return NULL; /* unknown */
+	}
+
+	public function fileAction() 
+	{
+		if (!$this->validateProblemAccess ()) return;
+		$prob = $this->_request->get("probid");
+
+		$this->_helper->layout->disableLayout();
+		$this->_helper->viewRenderer->setNoRender();
+
+		$file = $this->_request->get("file") ;
+		
+		if (strstr ($file, "/") || strstr ($file, "\\")) {
+			$this->_forward ("illegal", "error");
+			return;
+		}
+			
+		$details = pathinfo ($file);
+		$contentType = $this->getContentType($details['extension']);
+
+		if (empty($contentType)) {
+			$this->_forward ("illegal", "error");
+			return;
+		}
+
+		$finalFile = config::getFilename("data/problems/$prob/$file") ;
+		if ( is_file($finalFile) ) { 
+			$response = $this->getResponse();
+			$response->setHeader('Cache-Control', 'public', true)
+				->setHeader('Content-Description', 'File Transfer', true)
+				->setHeader('Content-Type', $contentType, true)
+				->setHeader('Content-Transfer-Encoding', 'binary', true)
+				->setBody(file_get_contents($finalFile)); 
+
+			return ;
+		}
+
+		echo "File ($finalFile, $contentType) not found";
+
+		/* else send a 404 error */
+		$response = $this->getResponse() ;
+		$response->setHttpResponseCode(404);
+	}
 
         public function preDispatch()
         {
@@ -58,35 +114,43 @@ class ProblemsController extends Zend_Controller_Action {
 		
 		$this->view->problems = $db->fetchAll ($query, array($curuser, webconfig::getContestId()));
 	}
-	
-	function viewAction () { 
+
+	function validateProblemAccess ()
+	{
 		$this->view->problem_code = $this->_request->get("probid") ;
-		$prob = ProblemTable::get_problem ("{$this->view->problem_code}") ;
+		$this->view->prob = $prob = ProblemTable::get_problem ("{$this->view->problem_code}") ;
 
 		if (empty($prob) || $prob->owner != webconfig::getContestId()) { 
 			$this->_forward ("404", "error");
-			return;
+			return false;
 		}
+		
+		return true;
+	}
 
-		$this->view->prob = $prob; 
+	function viewAction () { 
+		if (!$this->validateProblemAccess ()) return;
+
+		$prob = $this->view->prob;
 
 		$this->view->content_html = file_get_contents(get_file_name("data/problems/"  
 							  . $this->_request->get("probid")
 									    . "/index.html")) ;
 
+		$this->fixImages ();
 
 		if (function_exists("tidy_parse_string") && $this->_request->get("tidy") != "false") {
 			/* tidy to XHTML strict */
 			$opt = array("output-xhtml" => true,
 				     "add-xml-decl" => true,
-				     "clean" => true,
 				     "doctype" => "strict",
 				     "show-body-only" => true);
-			$this->view->content_html = tidy_parse_string($this->view->content_html, $opt);
-			tidy_clean_repair ($this->view->content_html);
+			$tidy = tidy_parse_string($this->view->content_html, $opt);
+			tidy_clean_repair ($tidy);
+
+			$this->view->content_html = tidy_get_output ($tidy);
 		}
 
-		$this->fixImages ();
 
 		if ($this->_request->get("plain") == "true") {
 			$this->_helper->layout->disableLayout ();

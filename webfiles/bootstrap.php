@@ -114,8 +114,8 @@ class App {
 		$router->addRoute('ranksc', new Zend_Controller_Router_Route('contests/:contestid/status/:user', array('controller' => 'ranks', 'action' => 'user')));
 		
 
-		$router->addRoute('data', new Zend_Controller_Router_Route('data/:file', array('controller'=>'data', 'action'=>'index')));
-		$router->addRoute('datac', new Zend_Controller_Router_Route('contests/:contestid/data/:file', array('controller'=>'data', 'action'=>'index')));
+		$router->addRoute('data', new Zend_Controller_Router_Route('problems/:probid/:file', array('controller'=>'problems', 'action'=>'file')));
+		$router->addRoute('datac', new Zend_Controller_Router_Route('contests/:contestid/problems/:probid/:file', array('controller'=>'problems', 'action'=>'file')));
 
 		
 		$router->addRoute('pages', new Zend_Controller_Router_Route('pages/:page', array('controller' => 'pages')));
