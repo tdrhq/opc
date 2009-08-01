@@ -66,7 +66,6 @@ class Judge {
 	$this -> path_to_code = $_path_to_code;
 	$this -> lang = $_lang;
 	$this -> checker = $_checker ;
-	echo "Judge initialized\n" ;
 	$this -> xmlw = new XMLWriter() ;
 	$this -> xmlw->openMemory();
 	$this -> xmlw->setIndent(true);
