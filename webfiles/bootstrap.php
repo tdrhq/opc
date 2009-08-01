@@ -2,12 +2,12 @@
 
 
 error_reporting(E_ALL|E_STRICT);
-require_once "./config.inc" ; 
-
+set_include_path(dirname (__FILE__) . PATH_SEPARATOR . dirname (__FILE__) . '/application/models/'
+		 . PATH_SEPARATOR . get_include_path());
+require_once (dirname (__FILE__) . "/config.inc"); 
+				
 date_default_timezone_set (webconfig::$default_timezone);
-set_include_path('.' . PATH_SEPARATOR . './library'
-     . PATH_SEPARATOR . './application/models/'
-     . PATH_SEPARATOR . get_include_path());
+
 
 require_once "Zend/Loader.php";
 Zend_Loader::loadClass('Zend_Controller_Front');
@@ -85,11 +85,12 @@ class App {
 		
 /* setup the controller and routes */
 		$frontController = Zend_Controller_Front::getInstance();
-		$frontController->setControllerDirectory('./application/controllers');
+		$frontController->setControllerDirectory(dirname (__FILE__) . '/application/controllers');
 		
 		$router = $frontController->getRouter(); // returns a rewrite router by default
 		
 		$router->addRoute ('comtestroute', new Zend_Controller_Router_Route ('contests/:contestid/:controller/:action', array ('controller' => 'index', 'action' => 'index')));
+
 
 		/* for each of the following routes, we need two versions, with
 		 * and without the contests prefix */
