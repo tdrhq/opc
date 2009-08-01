@@ -7,7 +7,7 @@ class AuthController  extends Zend_Controller_Action
 		Zend_Loader::loadClass("Zend_Log_Writer_Stream") ;
 		Zend_Loader::loadClass("Zend_Log");
 		$this->mock = new Zend_Log_Writer_Stream ("/tmp/opc-login-log") ;
-		$this->log =& new Zend_Log($this->mock) ;
+		$this->log = new Zend_Log($this->mock) ;
 
 	}
 	function indexAction()

@@ -5,7 +5,7 @@ require_once  "lib/db.inc";
 
 
 
-class ContestAfterTest extends OpcTest
+class ContestAfterTest extends OpcDataTest
 {
 	var $contest, $problem;
 	public function setUp ()
@@ -18,7 +18,7 @@ class ContestAfterTest extends OpcTest
 		$this->problem = $test_non_general_contest_problem;
 
 		/* create a contest */
-		system ("../backend/admin/addcontest.php  --id {$this->contest} --name TestContest --start-time '-10 minutes' --duration '9 minutes' ");	
+		system ("../backend/admin/addcontest.php  --id {$this->contest} --name TestContest --start-time '-10 minutes' --duration '9 minutes' >/dev/null");	
 		webconfig::$multi_contest = true;
 
 		parent::setUp ();
@@ -29,7 +29,6 @@ class ContestAfterTest extends OpcTest
 		/* no exceptions, right? */
 		
 		$this->dispatch("/contests/{$this->contest}/problems/");
-		echo $this->response->getBody();
 		$this->assertNotRedirect ();
 		$this->assertController ("problems");
 		$this->assertAction ("index");

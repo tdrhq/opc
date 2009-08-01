@@ -3,7 +3,7 @@
 require_once "OpcTest.php";
 require_once  "lib/db.inc";
 
-class AllowRegisterTest extends OpcTest
+class AllowRegisterTest extends OpcDataTest
 {
 	public function setUp ()
 	{

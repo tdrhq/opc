@@ -3,13 +3,12 @@ require_once "test_config.inc";
 require_once "OpcTest.php";
 require_once  "lib/db.inc";
 
-
-
-class ContestBeforeTest extends OpcTest
+class ContestBeforeTest extends OpcDataTest
 {
 	var $contest, $problem;
 	public function setUp ()
 	{
+		parent::setUp ();
 		global $test_nonadmin_uid1;
 		global $test_non_general_contest;
 		global $test_non_general_contest_problem;
@@ -18,10 +17,9 @@ class ContestBeforeTest extends OpcTest
 		$this->problem = $test_non_general_contest_problem;
 
 		/* create a contest */
-		system ("../backend/admin/addcontest.php  --id {$this->contest} --name TestContest --start-time '+1 hour' --duration '2 hours' ");	
+		system ("../backend/admin/addcontest.php  --id {$this->contest} --name TestContest --start-time '+1 hour' --duration '2 hours' >/dev/null");	
 		webconfig::$multi_contest = true;
 
-		parent::setUp ();
 	}
 
 	public function testContestCannotAccess() 
@@ -29,7 +27,6 @@ class ContestBeforeTest extends OpcTest
 		/* no exceptions, right? */
 		
 		$this->dispatch("/contests/{$this->contest}/problems/");
-		echo $this->response->getBody();
 		$this->assertNotRedirect ();
 		$this->assertController ("error");
 		$this->assertAction ("before");
