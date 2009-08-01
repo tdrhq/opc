@@ -8,13 +8,15 @@ class ProblemsController extends Zend_Controller_Action {
 	function fixImages ()
 	{
 		$dom = new DomDocument ();
-		$dom->loadHTML ($this->view->content_html);
+		$dom->loadXML ($this->view->content_html, LIBXML_DTDLOAD | LIBXML_DTDVALID | LIBXML_NOXMLDECL);
 		$xp = new DOMXPath ($dom);
-		
+		$xp->registerNamespace(
+			'html','http://www.w3.org/1999/xhtml' );
+
 		$url = Zend_Controller_Front::getInstance()->getBaseUrl () . webconfig::getContestRelativeBaseUrl();
 		$url .= "problems/" . $this->_request->get("probid");
 
-		$res = $xp->query ("//img/@src");
+		$res = $xp->query ("//html:img/@src");
 		foreach ($res as $node) {
 			$oldImage = $node->nodeValue;
 
@@ -25,7 +27,7 @@ class ProblemsController extends Zend_Controller_Action {
 			$node->nodeValue = "$url/$oldImage";
 		}
 
-		$this->view->content_html = $dom->saveHTML();
+		$this->view->content_html = $dom->saveXML();
 	}
 	public function getContentType($ext) 
 	{
@@ -137,20 +139,19 @@ class ProblemsController extends Zend_Controller_Action {
 							  . $this->_request->get("probid")
 									    . "/index.html")) ;
 
-		$this->fixImages ();
 
 		if (function_exists("tidy_parse_string") && $this->_request->get("tidy") != "false") {
 			/* tidy to XHTML strict */
 			$opt = array("output-xhtml" => true,
 				     "add-xml-decl" => true,
-				     "doctype" => "strict",
-				     "show-body-only" => true);
+				     "doctype" => "strict");
 			$tidy = tidy_parse_string($this->view->content_html, $opt);
 			tidy_clean_repair ($tidy);
 
 			$this->view->content_html = tidy_get_output ($tidy);
 		}
 
+		$this->fixImages ();
 
 		if ($this->_request->get("plain") == "true") {
 			$this->_helper->layout->disableLayout ();
