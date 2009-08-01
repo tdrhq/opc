@@ -13,7 +13,7 @@ class SafeException extends Exception {
 
 class SubmissionProcessor 
 {
-  static function process ($sub_id)
+  static function process ($sub_id, $debug = false)
   {
     /*
      *  Information about the submission
@@ -66,11 +66,11 @@ class SubmissionProcessor
 	$j ->start_test_case("" . $i , "Test Case #$i for " .
 			     $scoreweights[$i] . " points" );
 	
-	echo "Running on " . $inputpaths[$i] . " \n" ;
+	if ($debug) echo "Running on " . $inputpaths[$i] . " \n" ;
 	$ret = $j -> run ($inputpaths[$i],$prob->getResourceLimitString(), $response);
 	
 	if ( ! $ret ) {
-	  echo "Runtime Error\n";
+	  if ($debug) echo "Runtime Error\n";
 	  if ( $response != "TLE" ) {  
 	    if ( $prob->grading_style == "opc") 
 	      SubmissionTable::set_state(
@@ -95,7 +95,7 @@ class SubmissionProcessor
 	  
 	}
 	
-	echo "Verifying\n";
+	if ($debug) echo "Verifying\n";
 	$ret = $j -> verify($outputpaths[$i]);
 	
 	if ( ! $ret ){
@@ -103,7 +103,7 @@ class SubmissionProcessor
 	    SubmissionTable::set_state($info->id,"Wrong Answer");
 	  if (empty($ioi_result)) $ioi_result = "Wrong Answer" ; 
 	  $j -> end_test_case() ;
-	  echo "Wrong answer and/or other error\n";
+	  if ($debug) echo "Wrong answer and/or other error\n";
 	  if ( $prob->grading_style == "opc" ) 
 	    throw new SafeException () ;
 	  else if ( $prob->grading_style == "ioi" )  { 
@@ -114,12 +114,12 @@ class SubmissionProcessor
 	}
 	
 	
-	echo "Verified\n";
+	if ($debug) echo "Verified\n";
 	
 	if ( $prob->doesCheckerOutputScore ) {
 	  $cur_score += $j->checker_score;
-	  echo "Score: $j->checker_score\n";
-	  echo "State: $j->checker_state\n";
+	  if ($debug) echo "Score: $j->checker_score\n";
+	  if ($debug) echo "State: $j->checker_state\n";
 	  if ( $prob->grading_style == "ioi" && 
 	       empty($ioi_result) && !empty($j->checker_state)
 	       && $j->checker_state != "Accepted") {
