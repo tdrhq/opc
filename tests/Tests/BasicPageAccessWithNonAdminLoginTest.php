@@ -76,7 +76,6 @@ class BasicPageAccessWithNonAdminLogin extends OpcDataTest
 
 	public function testMyOwnSubmission ()
 	{
-		print_r ($_SESSION);
 		global $submission_owned_by_uid1;
 		$this->dispatch ("/results/{$submission_owned_by_uid1}");
 		$this->assertController ("results");

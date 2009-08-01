@@ -18,7 +18,6 @@ class PreTest extends OpcDataTest
 		$db = contestDB::get_zend_db ();
 		$res = $db->select()->from("submissionqueue")->where("id=$a")->query();
 		$row = $res->fetch();
-		print_r ($row);
 		$this->assertEquals ($b, $row->score);
 	}
 	

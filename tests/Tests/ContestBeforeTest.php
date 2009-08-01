@@ -17,7 +17,7 @@ class ContestBeforeTest extends OpcDataTest
 		$this->problem = $test_non_general_contest_problem;
 
 		/* create a contest */
-		system ("../backend/admin/addcontest.php  --id {$this->contest} --name TestContest --start-time '+1 hour' --duration '2 hours' >/dev/null");	
+		system ("../backend/admin/addcontest.php  --id {$this->contest} --name TestContest --start-time '+1 hour' --duration '2 hours' --quiet");	
 		webconfig::$multi_contest = true;
 
 	}

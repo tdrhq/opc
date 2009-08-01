@@ -22,7 +22,7 @@ class BasicPageAccessWithNonAdminLoginWithContestPrefix extends OpcDataTest
 
 		webconfig::$multi_contest = true;
 		parent::setUp ();
-		system ("../backend/admin/addcontest.php  --id {$this->contest} --name TestContest --start-time '-1 hour' --duration '2 hours' ");	
+		system ("../backend/admin/addcontest.php  --id {$this->contest} --name TestContest --start-time '-1 hour' --duration '2 hours' --quiet");	
 		/* "login" */
 		Zend_Loader::loadClass('Zend_Auth');
 		$adapter = new SuAuthAdapter ($test_nonadmin_uid);
@@ -32,7 +32,6 @@ class BasicPageAccessWithNonAdminLoginWithContestPrefix extends OpcDataTest
 	public function testContestCanAccessProblems() 
 	{
 		$this->dispatch("/contests/{$this->contest}/problems/");
-		echo $this->response->getBody();
 		$this->assertController ("problems");
 		$this->assertNotRedirect ();
 	}
@@ -75,7 +74,6 @@ class BasicPageAccessWithNonAdminLoginWithContestPrefix extends OpcDataTest
 	public function testCanLogout ()
 	{
 		$this->dispatch ("/contests/{$this->contest}/auth/logout");
-		echo $this->response->getBody();
 		//$this->assertRedirect ();
 		$this->assertEquals (Zend_Auth::getInstance()->hasIdentity(), false);
 	}
