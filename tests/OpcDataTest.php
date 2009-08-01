@@ -1,13 +1,8 @@
 <?
+require_once "OpcTest.php";
 
-chdir ("../webfiles");
-require_once "../backend/config.inc";
-require_once "Zend/Loader.php";
-Zend_Loader::loadClass ("Zend_Test_PHPUnit_ControllerTestCase");
-require_once "zend-test-index.php";
 
 /* Test that Zend Test is working! */
-require_once "OpcTest.php";
 require_once "lib/db.inc";
 
 function safeSystem ($string) {

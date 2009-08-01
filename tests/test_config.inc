@@ -8,6 +8,8 @@ $test_admin_uid = 262; /* arnstein */
 $submission_owned_by_uid1 = 6290;
 $submission_owned_by_uid2 = 6269; 
 
+/* a problem in the general contest */
+$general_contest_problem = 'POINTS';
 /* a non-general contest */
 
 $test_non_general_contest = "zco1";
@@ -25,6 +27,8 @@ $test_uploads = array (
 array ('263', 'POINTS', 'cpp', '../tests/points.cpp', 'general', 100)
 
 );
+
+
 	
 
 

@@ -12,11 +12,11 @@ class ProblemsControllerTest extends OpcTest
 
 	public function testBasicProblemDescription ()
 	{
+		global $general_contest_problem;
 		/* tricky, I don't know which problem to use at this point */
 		$db = contestDB::get_zend_db();
-		$res = $db->query("select id from problemdata where owner='general' limit 1");
 		$obj = $res->fetchObject();
-		$this->dispatch ("/problems/{$obj->id}");
+		$this->dispatch ("/problems/$general_contest_problem");
 
 		$this->assertNotRedirect();
 		$this->assertController ("problems");

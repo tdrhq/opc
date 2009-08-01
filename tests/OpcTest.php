@@ -1,10 +1,14 @@
 <?
 
-chdir ("../webfiles");
 require_once "../backend/config.inc";
 require_once "Zend/Loader.php";
-Zend_Loader::loadClass ("Zend_Test_PHPUnit_ControllerTestCase");
-require_once "zend-test-index.php";
+require "Zend/Test/PHPUnit/ControllerTestCase.php";
+
+$testdir = getcwd();
+chdir ("../webfiles");
+require "zend-test-index.php";
+chdir ("../tests");
+echo "$testdir\n";
 
 /* Test that Zend Test is working! */
 

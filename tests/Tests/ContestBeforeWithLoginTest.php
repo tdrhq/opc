@@ -2,22 +2,7 @@
 require_once "test_config.inc";
 require_once "OpcTest.php";
 require_once  "lib/db.inc";
-
-
-/* taken from SuController code */
-class SuAuthAdapter implements Zend_Auth_Adapter_Interface {
-        public function __construct($uid) {
-
-                        $this->result = new Zend_Auth_Result(
-                                Zend_Auth_Result::SUCCESS, $uid);
-                        return ;
-        }
-
-        public function authenticate() {
-                return $this->result ;
-        }
-
-}
+require_once "SuAuthAdapter.php";
 
 require_once "ContestBeforeTest.php";
 
