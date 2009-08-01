@@ -16,6 +16,8 @@ for ($i = 1; $i < $argc; $i++) {
 		$end_time = $argv[++$i];
 	else if ($argv[$i] == "--enable-queue-privacy")
 		$enable_queue_privacy = true;
+	else if ($argv[$i] == "--quiet")
+		$quiet = true;
 	else if ($argv[$i] == "--help") {
 		display_help ();
 		exit (1);
@@ -95,10 +97,11 @@ $home->setAttribute ("href", "general/home.html");
 file_put_contents (get_file_name ("data/contests/$id.xml"), $dom->saveXML ());
 chmod(get_file_name("data/contests/$id.xml"), 0755) ;
 
-echo "-----LOG-----\n" ;
-echo $dom->saveXML();
+if (empty($quiet)) {
+	echo "-----LOG-----\n" ;
+	echo $dom->saveXML();
 
-echo "\nJust verify that the timestamps have been correctly parsed.\n";
-
+	echo "\nJust verify that the timestamps have been correctly parsed.\n";
+}
 
 
