@@ -8,7 +8,7 @@ class ProblemsController extends Zend_Controller_Action {
 	function fixImages ()
 	{
 		$dom = new DomDocument ();
-		$dom->loadXML ($this->view->content_html, LIBXML_DTDLOAD | LIBXML_DTDVALID | LIBXML_NOXMLDECL);
+		$dom->loadXML ($this->view->content_html, LIBXML_DTDLOAD | LIBXML_NOXMLDECL);
 		$xp = new DOMXPath ($dom);
 		$xp->registerNamespace(
 			'html','http://www.w3.org/1999/xhtml' );
@@ -89,7 +89,8 @@ class ProblemsController extends Zend_Controller_Action {
         public function preDispatch()
         {
                 $curuser = Zend_Auth::getInstance()->getIdentity();
-                if ( !empty($curuser) && User::factory($curuser)->isAdmin()) {
+		$user = User::factory ($curuser);
+                if (!empty($curuser) && !empty ($user) && $user->isAdmin()) {
                         return; /* no other tests needed for admin */
                 }
 
