@@ -28,15 +28,17 @@ if ($argc < 2) {
   exit(1) ;
  }
 
+
 if ($argc > 2 &&  $argv[2] == "--debug" ) {
-  define(DEBUG,1);
-}
+	$debug = true;
+} else
+	$debug = false;  
 
 /*
  * Submission ID
  */
 $sub_id = $argv[1] ; 
-SubmissionProcessor::process ($sub_id);
+SubmissionProcessor::process ($sub_id, $debug);
 
 
 
