@@ -31,6 +31,7 @@ if ($argc < 2) {
 
 if ($argc > 2 &&  $argv[2] == "--debug" ) {
 	$debug = true;
+	define (DEBUG, 1);
 } else
 	$debug = false;  
 

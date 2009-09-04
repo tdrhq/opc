@@ -13,7 +13,7 @@ class SafeException extends Exception {
 
 class SubmissionProcessor 
 {
-  static function process ($sub_id, $debug = false)
+  static function process ($sub_id, $debug)
   {
     /*
      *  Information about the submission
