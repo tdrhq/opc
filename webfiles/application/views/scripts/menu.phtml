@@ -7,10 +7,7 @@ $base_url = substr ($base_url, 0, strlen($base_url)-1);
 $static_baseurl = webconfig::$static_baseurl;
 ?>
 
-<div id="header">
-
-  <a class="cmilogo" href="<? echo webconfig::$logo_href; ?>"><img alt="logo" src="<? echo "$static_baseurl/public/images/" . webconfig::$logo ?>" /></a>
-
+<h1 id="logo"><a href="<? echo webconfig::$logo_href; ?>"><img alt="logo" src="<? echo "$static_baseurl/public/images/" . webconfig::$logo ?>" /></a></h1>
 
 <?php
 $main_menu =array();
@@ -36,12 +33,12 @@ if ( Zend_Auth::getInstance()->hasIdentity() ) {
 
 $i = 0;
 
-echo '<div class="topmenu">' ; 
+echo '<div id="header-links">' ; 
 foreach ($main_menu As $option) {
     if($i==0){
         $ii=1;
     }else{
-	  echo " <span style='font-size: smaller'>|</span> " ;
+	  echo " | " ;
         $ii = ($i%4)+2;
     }
 ?><a  href='<? echo "$base_url/$main_pages[$i]"?>'   > 
@@ -51,12 +48,10 @@ foreach ($main_menu As $option) {
     ++$i;
 }
 
-echo "</div> <!-- topmenu --> "; 
-echo "</div> <!-- header --> ";
+echo "</div> <!-- header-links --> "; 
 ?>
 
-<div id="headerbar">
-<div id="sublinks">
+<ul class="header-main-menu">
 <?php 
  
   $contest_menu=array();
@@ -95,17 +90,16 @@ array_push($contest_pages, "info/?form=teamlist");
 $i = 0;
 foreach ($contest_menu as $option) {
   
-  echo "<a href='" . $base_url . "/$contest_pages[$i]'>$option</a>\n";
+  echo "<li><a href='" . $base_url . "/$contest_pages[$i]'>$option</a></li>\n";
   ++$i;
   
   //    echo "<a class=\"main_menu_item\" href=\"$base_url/$contest_pages[$i]\">$option</a></li>\n";
   
 }
 if ( Zend_Auth::getInstance()->hasIdentity() ) 
-	echo "<a href='$base_url/auth/logout'>Logout</a>\n";
+	echo "<li><a href='$base_url/auth/logout'>Logout</a></li>\n";
 
-echo "</div> <!-- sublinks --> \n</div> <!--subheader-->\n ";
-//$option = $contest_menu[$i]; //Why do we need this?
+echo "</ul> <!-- sublinks --> \n\n ";
 
 
 if ( !empty($this->login_message) )  

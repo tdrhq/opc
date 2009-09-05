@@ -1,9 +1,9 @@
 <?
    $base_url = Zend_Controller_Front::getInstance()->getBaseUrl() ; 
 
-echo "   <table id='announces'><tr><td>" ;
 
    if ( ! Zend_Auth::getInstance()->hasIdentity() )  { 
+	echo "<h1>Login</h1>";
 	echo "<form method='post' action='$base_url/auth/login' >
       <div>
         <input type='hidden' name='redirectto' value='" . (empty($this->login_redirect) ? Zend_Controller_Front::getInstance()->getRequest()->getPathInfo() : $this->login_redirect) . "'/>
@@ -19,10 +19,15 @@ echo "   <table id='announces'><tr><td>" ;
 ";
 	   }
    else { 
+	echo "<h1> Hello " . User::factory(Zend_Auth::getInstance()->getIdentity())->getUsername () . "!</h1>
+    <ul class='sidemenu'> 
+      <li><a href=\"{$this->url(array('action'=>'update', 'controller'=>'profile'))}\">Update Profile</a></li>
+      <li><a href=\"{$this->url(array('action'=>'logout', 'controller'=>'auth'))}\">Logout</a></li>
+    </ul>";
 
-	   echo "<p style='font-size:smaller;'>Current Server Time: <br /> ". 
+	   echo "<p'>Current Server Time: <br /> ". 
 	   date(DATE_RFC1123) . "</p>"; 
-	 echo "<p style='font-size:smaller;'>";
+	 echo "<p>";
 	Zend_Loader::loadClass("ContestModel");
 	$contestm = new ContestModel() ;
 	$state = $contestm->getContestState(webconfig::getContestId()); 
@@ -48,12 +53,9 @@ echo "   <table id='announces'><tr><td>" ;
 
    }
 
-echo "    </td></tr>\n" ;
+echo "\n" ;
 
 /* lets load any widgets */
 foreach (webconfig::$widgets as $widget) { 
-  echo "<tr><td>\n";
   echo $this->render($widget) ;
-  echo "</td></tr>\n";
 }
-echo "  </table> <!-- announces -->\n";
