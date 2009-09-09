@@ -14,7 +14,8 @@ class PreTest extends OpcDataTest
 	{	
 		$cwd = realpath(getcwd());
 		SubmissionTable::set_score($a, 23);
-		SubmissionProcessor::process ($a);
+		$sp = new SubmissionProcessor();
+		$sp->process ($a);
 		$db = contestDB::get_zend_db ();
 		$res = $db->select()->from("submissionqueue")->where("id=$a")->query();
 		$row = $res->fetch();

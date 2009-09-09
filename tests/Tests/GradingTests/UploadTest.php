@@ -25,7 +25,8 @@ class UploadTest extends OpcDataTest
 		$b = $score;
 
 		ob_start ();
-		SubmissionProcessor::process ($a);
+		$sp = new SubmissionProcessor();
+		$sp->process ($a);
 		ob_end_clean ();
 		$db = contestDB::get_zend_db ();
 		$res = $db->select()->from("submissionqueue")->where("id=$a")->query();

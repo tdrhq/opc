@@ -59,7 +59,8 @@ if ($argc > 2 &&  $argv[2] == "--debug" ) {
  * Submission ID
  */
 $sub_id = $argv[1] ; 
-SubmissionProcessor::process ($sub_id, $debug);
+$sp = new SubmissionProcessor;
+$sp->process ($sub_id, $debug);
 
 
 
