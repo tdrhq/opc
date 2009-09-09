@@ -35,6 +35,7 @@ class UploadTest extends OpcDataTest
 		$this->assertEquals ($result, $row->state);
 		$sub = SubmissionTable::get_submission ($a);
 		$this->assertNotEquals ($sub, NULL);
+		$this->assertTrue ($sub->validateResultXML ());
 	}
 
 	/**

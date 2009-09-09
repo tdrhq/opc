@@ -13,6 +13,10 @@ class PreTest extends OpcDataTest
 	public function testSubmission ($a, $b, $c)
 	{	
 		$cwd = realpath(getcwd());
+		$sub = SubmissionTable::get_submission ($a);
+		if (is_file ($sub->getXmlFile()))
+		    $oldResult = file_get_contents ($sub->getXmlFile ());
+		else $oldResult = "";
 		SubmissionTable::set_score($a, 23);
 		$sp = new SubmissionProcessor();
 		$sp->process ($a);
@@ -21,6 +25,11 @@ class PreTest extends OpcDataTest
 		$row = $res->fetch();
 		$this->assertEquals ($b, $row->score);
 		$this->assertEquals ($c, $row->state);
+
+		$sub = SubmissionTable::get_submission ($a);
+		$this->assertNotEquals ($oldResult,
+			file_get_contents ($sub->getXmlFile ()));
+		$sub->validateResultXML ();
 	}
 	
 	public function provider ()

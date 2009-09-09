@@ -170,7 +170,7 @@ class Submission
 	}
 	public function getXmlFile() 
 	{ 
-		return config::getFilename("data/uploads/{$this->id}.xml");
+		return config::getFilename("data/results/{$this->id}.xml");
 	}
 	/**
 	 * construct this object from another object which looks like the database
@@ -213,6 +213,14 @@ class Submission
 		$where = array("id = {$this->id}" );
 		
 		$db->update(SubmissionTable::tablename, $data, $where);
+	}
+
+	function validateResultXML ()
+	{
+		$xml = get_file_name ("data/results/{$this->id}.xml");
+		$dom = new DomDocument;
+		$dom->load ($xml);
+		return $dom->relaxNGValidate (get_file_name ("schema/result.rng"));
 	}
 	
 }

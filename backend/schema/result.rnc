@@ -2,6 +2,7 @@ element judge {
 	element compiler {
 		element time {text}?
 		element status {text}?
+		element error {text}? &
 		element warnings {text}?
 	}
 
@@ -11,11 +12,12 @@ element judge {
 		element exec {
 			element time {text}
 			element status {text}
+			element description {text}?
 			element stdout {text}? &
 			element stderr {text}?
 			element runtime {text}
 		}
-	
+		element time{text}?
 		element check {
 			element time {text}
 			element status {text}
@@ -24,7 +26,7 @@ element judge {
 			element message {text}?
 			element score {text}?
 			element result{text}?
-		}	
+		}?	
 		element time {text}?
 	}*	
 	element time {text}?

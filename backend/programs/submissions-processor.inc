@@ -90,7 +90,6 @@ class SubmissionProcessor
 		if (!$j->compile($compileOptions)) {
 			SubmissionTable::set_state($this->sub->id, "Compile Error") ;
 			SubmissionTable::set_score ($this->sub->id, 0);
-			return 0;	
 		}
 		else {
 			for ($i = 0 ; $i < $this->prob->numcases; $i++){
@@ -107,16 +106,18 @@ class SubmissionProcessor
 				} 
 				$j->end_test_case ();
 			}
+			SubmissionTable::set_score($this->sub->id, $scorer->getScore());
+			SubmissionTable::set_state($this->sub->id, $scorer->getResponse());
+
 		}
 		
-		SubmissionTable::set_score($this->sub->id, $scorer->getScore());
-		SubmissionTable::set_state($this->sub->id, $scorer->getResponse());
-		$res = config::$results_directory . "/" .$this->sub->id . ".xml" ;
+		$res = get_file_name ("data/results/{$this->sub->id}.xml") ;
 		$xml = $j -> end();
 		
 		if (!file_put_contents($res, $xml->flush(), LOCK_EX )) {
 			// No write permissions perhaps?
 			echo "Unable to write to XML results file\n";
+			assert (false);
 			exit(1);
 		}
 		chmod($res,0644);
