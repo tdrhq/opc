@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element name="judge" xmlns="http://relaxng.org/ns/structure/1.0">
+  <element name="compiler">
+    <optional>
+      <element name="time">
+        <text/>
+      </element>
+    </optional>
+    <optional>
+      <element name="status">
+        <text/>
+      </element>
+    </optional>
+    <optional>
+      <element name="warnings">
+        <text/>
+      </element>
+    </optional>
+  </element>
+  <zeroOrMore>
+    <element name="testcase">
+      <element name="identifier">
+        <text/>
+      </element>
+      <element name="message">
+        <text/>
+      </element>
+      <element name="exec">
+        <interleave>
+          <element name="time">
+            <text/>
+          </element>
+          <element name="status">
+            <text/>
+          </element>
+          <optional>
+            <element name="stdout">
+              <text/>
+            </element>
+          </optional>
+          <optional>
+            <element name="stderr">
+              <text/>
+            </element>
+          </optional>
+          <element name="runtime">
+            <text/>
+          </element>
+        </interleave>
+      </element>
+      <element name="check">
+        <interleave>
+          <element name="time">
+            <text/>
+          </element>
+          <element name="status">
+            <text/>
+          </element>
+          <optional>
+            <element name="stdout">
+              <text/>
+            </element>
+          </optional>
+          <optional>
+            <element name="stderr">
+              <text/>
+            </element>
+          </optional>
+          <optional>
+            <element name="message">
+              <text/>
+            </element>
+          </optional>
+          <optional>
+            <element name="score">
+              <text/>
+            </element>
+          </optional>
+          <optional>
+            <element name="result">
+              <text/>
+            </element>
+          </optional>
+        </interleave>
+      </element>
+      <optional>
+        <element name="time">
+          <text/>
+        </element>
+      </optional>
+    </element>
+  </zeroOrMore>
+  <optional>
+    <element name="time">
+      <text/>
+    </element>
+  </optional>
+</element>

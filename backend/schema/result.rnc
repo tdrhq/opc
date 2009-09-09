@@ -1,0 +1,31 @@
+element judge {
+	element compiler {
+		element time {text}?
+		element status {text}?
+		element warnings {text}?
+	}
+
+	element testcase {
+		element identifier {text}
+		element message {text}
+		element exec {
+			element time {text}
+			element status {text}
+			element stdout {text}? &
+			element stderr {text}?
+			element runtime {text}
+		}
+	
+		element check {
+			element time {text}
+			element status {text}
+			element stdout {text}? &
+			element stderr {text}?
+			element message {text}?
+			element score {text}?
+			element result{text}?
+		}	
+		element time {text}?
+	}*	
+	element time {text}?
+}	
