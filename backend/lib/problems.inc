@@ -407,5 +407,21 @@ class ProblemTable
 		$res = $res->query();
 		return $res->fetchAll(); 
 	}
+
+	/**
+	 * Validate the problem XML file.
+	 *
+	 * @param void
+	 * 
+	 * @return TRUE if the file validates against the schema, FALSE o/w
+	 */
+	public function fsckProblem ($id)
+	{
+		$xml = get_file_name("data/problems/" . $prob->id . ".xml");
+		$dom = new DomDocument;
+		$dom->load ($xml);
+		return $dom->relaxNGValidate (get_file_name ("schema/problem.rnc"));
+	}
 }
+
 
