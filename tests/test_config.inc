@@ -16,8 +16,13 @@ $test_non_general_contest = "zco1";
 $test_non_general_contest_problem = "zco-2008-1b"; 
 
 /* known submissions with their known scores */
-$test_submissions = array (array (6601, 100, "Accepted"), 
-	array(6696, 64, "Wrong Answer"), /* WA, with ICO style grading tested */
+$test_submissions = array (array (6601, 100, "Accepted"),
+	array(6648, 0, "Compile Error"), /* OPC style */ 
+	array(6693, 0, "Compile Error"), /* IOI style  */
+	array(5124, 20, "Wrong Answer"), /* OPC style */
+	array(6696, 64, "Wrong Answer"), /* ICO style */
+	array(6387, 70, "Time Limit Exceeded"), /* IOI style */
+	array(6145, 20, "Time Limit Exceeded"), /* OPC style */
 	array(6697, 100, "Accepted")); /* TODO: I need a case where OPC style submission would've given a different score */
 
 
