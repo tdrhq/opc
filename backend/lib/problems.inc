@@ -417,10 +417,10 @@ class ProblemTable
 	 */
 	public function fsckProblem ($id)
 	{
-		$xml = get_file_name("data/problems/" . $prob->id . ".xml");
+		$xml = get_file_name("data/problems/" . $id . ".xml");
 		$dom = new DomDocument;
 		$dom->load ($xml);
-		return $dom->relaxNGValidate (get_file_name ("schema/problem.rnc"));
+		return $dom->relaxNGValidate (get_file_name ("schema/problem.rng"));
 	}
 }
 
