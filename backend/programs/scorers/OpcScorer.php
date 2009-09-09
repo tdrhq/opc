@@ -30,7 +30,7 @@ class OpcScorer extends AbstractScorer
 	public function processCaseRun ($response)
 	{
 		if ($response == NULL) return true; /* we're good! */
-		$this->response = $this->formateRTE ($response);
+		$this->response = $this->formatRTE ($response);
 		return false;
 	}
 		
