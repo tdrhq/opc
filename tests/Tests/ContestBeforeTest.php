@@ -1,6 +1,6 @@
 <?
 require_once "test_config.inc";
-require_once "OpcTest.php";
+require_once "OpcDataTest.php";
 require_once  "lib/db.inc";
 
 class ContestBeforeTest extends OpcDataTest
