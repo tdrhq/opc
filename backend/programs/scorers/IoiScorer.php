@@ -31,6 +31,7 @@ class IoiScorer extends AbstractScorer
 	{
 		if ($this->response != NULL) 
 			return true; /* not interested in any more messages */
+		if (empty($response)) return true;
 		$this->response = $this->formatRTE ($response);
 		return true;
 	}
