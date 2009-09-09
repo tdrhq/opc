@@ -32,7 +32,7 @@ class Problem
 	 * The global unique id for the problem.
 	 * @private 
 	 */
-	var $id ;
+	var $id;
 	
 	/**
 	 * The global unique rowid for this problem.
@@ -44,7 +44,7 @@ class Problem
 	 * The friendly name for the problem. 
 	 * @private
 	 */
-	var $nickname ;
+	var $nickname;
 	
 	/**
 	 * The state of the problem. 
@@ -52,7 +52,7 @@ class Problem
 	 * OPC 2007 this field has not been used. 
 	 * @private
 	 */
-	var $state ;  
+	var $state;  
 
 	/**
 	 * The owner of the problem. (i.e. the contest to which this belongs to)
@@ -61,7 +61,7 @@ class Problem
 	
 	public function getId() 
 	{
-		return $this->id ; 
+		return $this->id; 
 	}
 	
 	public function getRowId ()
@@ -76,7 +76,7 @@ class Problem
 
 	public function getState() 
 	{ 
-		return $this->state ; 
+		return $this->state; 
 	}
 	
 	public function getContest() 
@@ -96,17 +96,17 @@ class ProblemDetails extends Problem
 	/**
 	 * An integer denoting the number of testcases.
 	 */
-	var $numcases ; 
+	var $numcases; 
 	
 	/**
 	 * An array containg $numcases input data file names.
 	 */
-	var $inputpaths = array() ;
+	var $inputpaths = array();
 	
 	/**
 	 * An array containing $numcases output data filenames. 
 	 */
-	var $outputpaths = array() ;
+	var $outputpaths = array();
 	
 	/**
 	 * An array (or string: pseudo array) containing $numcases per-testcase
@@ -117,7 +117,7 @@ class ProblemDetails extends Problem
 	/**
 	 * Submission limit per user.
 	 */
-	var $submissionlimit ; 
+	var $submissionlimit; 
 	
 	/**
 	 * Resource limit string.
@@ -128,21 +128,21 @@ class ProblemDetails extends Problem
 	 * the backend works, working with this should be avoided. In the future 
 	 * each resource will be given a seperate field.
 	 */
-	var $resourcelimits ; 
+	var $resourcelimits; 
 	
 	/**
 	 * The checker used to verify a submissions output.
 	 * @note This is an internal detail. This data should not reach the end 
 	 * user. 
 	 */
-	var $checker ; 
+	var $checker; 
 	
 	/**
 	 * Miscellaneous details.
 	 * @deprecated This is only for database compatibility. Do not use this 
 	 * field for important data.
 	 */
-	var $misc ;
+	var $misc;
 	
 	/**
 	 * Grading style. The main grading styles can be "opc" (Stop at the
@@ -151,12 +151,12 @@ class ProblemDetails extends Problem
 	 * all testcases, and give partial credit even if a testcase in between 
 	 * fails. 
 	 */
-	var $grading_style ;
+	var $grading_style;
 	
 	/**
 	 * Memory limit for this problem. 
 	 * @private
-	 * @see getMemoryLimit() ;
+	 * @see getMemoryLimit();
 	 */ 
 
 	var $memory_limit; 
@@ -164,21 +164,21 @@ class ProblemDetails extends Problem
 	/**
 	 * Runtime CPU limit for a submission to this problem.
 	 * @private
-	 * @see getRuntimeLimit() ; 
+	 * @see getRuntimeLimit(); 
 	 */
-	var $runtime_limit ; 
+	var $runtime_limit; 
 	
 	/**
 	 * Maximum the program submission can output.
 	 * @private
 	 */
-	var $file_output_size_limit ; 
+	var $file_output_size_limit; 
 	
 	/**
 	 * The resource from where this problem was taken from, for example a
 	 * contest.  Not to be confused with resourcelimits. 
 	 */
-	var $resource ;
+	var $resource;
 	
 	/**
 	 * The author of this problem.
@@ -191,7 +191,7 @@ class ProblemDetails extends Problem
 	 * Compile options. An associative array indicating additional compile
 	 * options on a per language basis.
 	 */
-	var $compileOptions ;
+	var $compileOptions;
 	
 	/**
 	 * Gets the memory limit for this problem
@@ -204,10 +204,10 @@ class ProblemDetails extends Problem
 	function getMemoryLimit() 
 	{ 
 		if (!empty($this->memory_limit)) 
-			return $this->memory_limit ;
+			return $this->memory_limit;
 		else { 
 			/** @todo Parse $resourcelimits */
-			return "0M" ;
+			return "0M";
 		}
 	}
 	
@@ -218,7 +218,7 @@ class ProblemDetails extends Problem
 	function getRuntimeLimit() 
 	{ 
 		if (!empty($this->runtime_limit))
-			return (float)$this->runtime_limit ; 
+			return (float)$this->runtime_limit; 
 		else { 
 			/** @todo Parse $resourcelimits */
 			return 0.0;
@@ -234,10 +234,10 @@ class ProblemDetails extends Problem
 	function getFileOutputSizeLimit() 
 	{ 
 		if (!empty($this->file_output_size_limit)) 
-			return $this->file_output_size_limit ; 
+			return $this->file_output_size_limit; 
 		else { 
 			/** @todo Parse $resourcelimits */
-			return "0M" ; 
+			return "0M"; 
 		}
 	}
 	
@@ -264,7 +264,7 @@ class ProblemDetails extends Problem
 	
 	static function factory($probid) 
 	{ 
-		return ProblemTable::get_problem($probid) ;
+		return ProblemTable::get_problem($probid);
 	}
 	
 	function getSubmissionLimit() 
@@ -281,7 +281,7 @@ class ProblemDetails extends Problem
  */
 class ProblemTable 
 {
-	const tablename='problemdata' ;
+	const tablename='problemdata';
 	
 	/**
 	 * Gets a problem the problem's database in a compact object.
@@ -292,90 +292,90 @@ class ProblemTable
 	public static function get_problem ($id) 
 	{ 
 		
-		$db = contestDB::get_zend_db() ; 
+		$db = contestDB::get_zend_db(); 
 		
 		$res = $db->select()->from(ProblemTable::tablename) 
-			->where('id = ?', $id) ->query() ;
+			->where('id = ?', $id) ->query();
 		
 		
-		$prob = new ProblemDetails ;
+		$prob = new ProblemDetails;
 		
 		try { 
-			$obj = $res->fetch() ;
+			$obj = $res->fetch();
 		} catch (Exception $e )  { 
-			return NULL ;
+			return NULL;
 		}
 		
 		if (empty($obj)) return NULL;
 		
 		/* fill in all the details. */
-		$prob -> id = $id ;
+		$prob -> id = $id;
 		$prob -> rowid = $obj->rowid;
-		$prob -> numcases = $obj->numcases ; 
+		$prob -> numcases = $obj->numcases; 
 		$prob -> inputpaths = NULL;
 		$prob -> outputpaths = NULL;
 		$prob -> scoreweights = NULL;
-		$prob -> submissionlimit = $obj->submissionlimit ; 
-		$prob -> resourcelimits = $obj->resourcelimits ;
+		$prob -> submissionlimit = $obj->submissionlimit; 
+		$prob -> resourcelimits = $obj->resourcelimits;
 		$prob -> checker = NULL;
 		$prob -> owner = $obj->owner;
-		$prob -> grading_style = config::$default_grading_style ;
+		$prob -> grading_style = config::$default_grading_style;
 		$prob -> compileOptions = array ();
 		/* override any information if found in problem XML file. */
 		$xml = get_file_name("data/problems/" . $prob->id . ".xml");
-		if ( empty($xml) || !is_file($xml) ) return $prob ; 
+		if ( empty($xml) || !is_file($xml) ) return $prob; 
 		
-		$data = new SimpleXMLElement($xml, 0, true) ;
+		$data = new SimpleXMLElement($xml, 0, true);
 		
 		foreach ( $data as $key=>$value ) { 
 			if ( $key == "resourcelimits_string" ) {
-				$prob->resourcelimits = (string) $value ;
+				$prob->resourcelimits = (string) $value;
 			} else if ( $key == "checker" ) { 
-				$prob->checker = config::getFilename((string)$value) ;
+				$prob->checker = config::getFilename((string)$value);
 			} else if ( $key == "misc" ) { 
-				$prob->misc = (string)$value ;
+				$prob->misc = (string)$value;
 			} else if ( $key == "grading-style" ) { 
-				$prob->grading_style = (string) $value ;
+				$prob->grading_style = (string) $value;
 			} else if ( $key == "resource" ) {
-				$prob->resource = (string) $value ;
+				$prob->resource = (string) $value;
 			} else if ( $key == "author" ) {
-				$prob->author = (string) $value ;
+				$prob->author = (string) $value;
 			} else if ( $key == "checker-outputs-score" ) {
 				$prob->doesCheckerOutputScore = ($value == "true" || $value == "yes");
 			}else if ( $key == "resourcelimits" ) { 
 				foreach($value as $key2 => $value2 ) {
 					if ( $key2 == "memory" ) 
-						$prob -> memory_limit = (string) $value2 ; 
+						$prob -> memory_limit = (string) $value2; 
 					else if ( $key2 == "runtime" ) 
-						$prob -> runtime_limit = (float) $value2 ; 
+						$prob -> runtime_limit = (float) $value2; 
 					else if ( $key2 == "stack" ) {
 						/** @todo */
 					}  else if ( $key2 == "file" or $key2 == "output" 
 						     and !empty($value2)) { 
-						$prob -> file_output_size_limit = (string)$value2 ;
+						$prob -> file_output_size_limit = (string)$value2;
 					}
 				}
 			} 
 			else if ( $key == "compile-options" ) { 
 				$attr = $value->attributes();
-				$prob->compileOptions[ "{$attr['lang']}" ] = (string) $value ; 
+				$prob->compileOptions[ "{$attr['lang']}" ] = (string) $value; 
 			}
 			else if ( $key == "test" ) { 
 				if ( ! is_array( $prob->inputpaths ))  { 
-					$prob->numcases = 0 ;
-					$prob->inputpaths = array() ;
-					$prob->outputpaths = array() ;
-					$prob->scoreweights = array() ;
+					$prob->numcases = 0;
+					$prob->inputpaths = array();
+					$prob->outputpaths = array();
+					$prob->scoreweights = array();
 				}
 				
-				$prob->numcases ++ ;
-				array_push($prob->inputpaths, get_file_name($value->inputpath)) ;
-				array_push($prob->outputpaths, get_file_name($value->outputpath)) ;
-				array_push($prob->scoreweights, (string) ($value->score)) ;
+				$prob->numcases ++;
+				array_push($prob->inputpaths, get_file_name($value->inputpath));
+				array_push($prob->outputpaths, get_file_name($value->outputpath));
+				array_push($prob->scoreweights, (string) ($value->score));
 			} 
 		}
 		
-		return $prob ;
+		return $prob;
 	}
 	
 	/**
