@@ -32,7 +32,7 @@ class Submission
 	/**
 	 * The submission id.
 	 */
-	public $id ; 
+	public $id; 
 	
 	/**
 	 * The user who owns this submission.
@@ -50,7 +50,7 @@ class Submission
 	 * $user. 
 	 * @deprecated Use $user instead.
 	 */
-	public $team ; 
+	public $team; 
 	
 	/**
 	 * The problem id this submission was submitted against.
@@ -60,7 +60,7 @@ class Submission
 	/**
 	 * The programming language of this submission. 
 	 */
-	public $lang ; 
+	public $lang; 
 	
 	/**
 	 * The state of this submission. 
@@ -80,14 +80,14 @@ class Submission
 	 * @warning Changes to this variable will not be recorded when using
 	 * commitChanges()
 	 */
-	public $time ;
+	public $time;
 	
 	/**
 	 * The path to the result file.
 	 * @deprecated This is now redundant since the pathtoresult can be computed
 	 * from the id of the code. @see getPathToResult() 
 	 */
-	public $pathtoresult ; 
+	public $pathtoresult; 
 	
 	/**
 	 * A boolean value indicating whether this submission is counted toward the
@@ -95,14 +95,14 @@ class Submission
 	 * used to invalidate a users submission, without affecting his score or
 	 * submission counters.
 	 */
-	public $notcounted ; 
+	public $notcounted; 
 	
 	/**
 	 * A md5sum hash of the code. Note that this is allowed to be empty, it may
 	 * be used if the frontend wants to prevent multiple submissions to the
 	 * same problem.
 	 */
-	public $hash ;
+	public $hash;
 	
 	/**
 	 * The owner (contest/realm) of the submission 
@@ -130,14 +130,14 @@ class Submission
 
 	public function getPathToCode() 
 	{ 
-		if (!empty($this->pathtocode ) ) 
-			return config::getFilename($this->pathtocode) ; 
-		return config::getFilename("data/uploads/{$this->uid}.{$this->problemid}.{$this->id}") ;
+		if (!empty($this->pathtocode)) 
+			return config::getFilename($this->pathtocode); 
+		return config::getFilename("data/uploads/{$this->uid}.{$this->problemid}.{$this->id}");
 	}
 
 	public function getLang() 
 	{ 
-		return $this->lang ; 
+		return $this->lang; 
 	}
 
 	public function getScore() 
@@ -152,7 +152,7 @@ class Submission
 	
 	public function getPathToResult() 
 	{ 
-		return config::getFilename("data/results/{$this->id}.xml") ;
+		return config::getFilename("data/results/{$this->id}.xml");
 	}
 	
 	public function getIsCounted() 
@@ -162,15 +162,15 @@ class Submission
 	
 	public function getHash() 
 	{ 
-		return $this->hash ; 
+		return $this->hash; 
 	}
 	public function getOwner() 
 	{ 
-		return $this->owner ;
+		return $this->owner;
 	}
 	public function getXmlFile() 
 	{ 
-		return config::getFilename("data/uploads/{$this->id}.xml") ;
+		return config::getFilename("data/uploads/{$this->id}.xml");
 	}
 	/**
 	 * construct this object from another object which looks like the database
@@ -182,18 +182,19 @@ class Submission
 	{ 
 		if (empty($obj)) throw new Exception ("shit");
 		$this->id = $obj->id; 
-		$this->team = $this->user = $this->uid = $obj->uid ;
-		$this->problemid = $obj->problemid ; 
-		$this->lang = $obj->lang ; 
+		$this->team = $this->user = $this->uid = $obj->uid;
+		$this->problemid = $obj->problemid; 
+		$this->lang = $obj->lang; 
 		$this->state = $obj->state; 
-		$this->score = $obj->score ;
-		$this->pathtoresult = $this->getPathToResult() ; 
-		$this->pathtocode = $this->getPathToCode() ;
+		$this->score = $obj->score;
+		$this->pathtoresult = $this->getPathToResult(); 
+		$this->pathtocode = $this->getPathToCode();
 		$this->notcounted = $obj->notcounted; 
-		$this->hash = $obj->hash ; 
+		$this->hash = $obj->hash; 
 	}
 	
-	function commitChanges() { 
+	function commitChanges() 
+	{ 
 		if (empty($this->id)) throw Exception ("Bad");
 		$db = contestDB::get_zend_db(); 
 		$data = array(
@@ -202,16 +203,16 @@ class Submission
 			"lang" => $this->getLang(), 
 			"state" => $this->state,
 			"score" => new Zend_Db_Expr ($this->score), 
-			"hash" => "{$this->hash}" ) ;
-		if ( $this->notcounted ) 
-			$data["notcounted"] = true ;
+			"hash" => "{$this->hash}");
+		if ($this->notcounted) 
+			$data["notcounted"] = true;
 		
-		if ( $this->getOwner() ) 
+		if ($this->getOwner()) 
 			$data['owner'] = $this->getOwner(); 
 		
-		$where = array("id = {$this->id}"  );
+		$where = array("id = {$this->id}" );
 		
-		$db->update(SubmissionTable::tablename, $data, $where) ;
+		$db->update(SubmissionTable::tablename, $data, $where);
 	}
 	
 }
@@ -229,14 +230,14 @@ class SubmissionTable
 	/**
 	 * The tablename used for all submission accesses.
 	 */
-	const tablename='submissionqueue' ;
+	const tablename='submissionqueue';
 	
 	/**
 	 * This is the id of the postgresql serial that allows us to keep track
 	 * of the current submission id. 
 	 * @see add_to_queue() 
 	 */
-	const serial   ='submissionqueue_id' ; 
+	const serial   ='submissionqueue_id'; 
 	
 	/**
 	 * Add a submission to queue
@@ -247,27 +248,22 @@ class SubmissionTable
 	 *
 	 * @return (class Submission) A submission class.
 	 */
-	public static function add_to_queue ( $uid,
-					      $problemid,
-					      $lang) 
+	public static function add_to_queue ($uid, $problemid, $lang) 
 	{
-		
-		$db = contestDB::get_zend_db() ; 
-		
+		$db = contestDB::get_zend_db(); 
 		$isadm = User::factory($uid)->isAdmin();
 		
 		if (!is_numeric($uid)) 
 			throw new Exception ("uid must be numeric");
 		
-		$data = array() ;
-		if ( $uid ) $data['uid'] = new Zend_Db_Expr ($uid); 
-		if ( $problemid) $data['problemid'] = $problemid; 
-		if ( $lang) $data['lang'] = $lang; 
-		$data['state'] = 'processing' ; 
-		$data['score'] = 0 ;
+		$data = array();
+		if ($uid) $data['uid'] = new Zend_Db_Expr ($uid); 
+		if ($problemid) $data['problemid'] = $problemid; 
+		if ($lang) $data['lang'] = $lang; 
+		$data['state'] = 'processing'; 
+		$data['score'] = 0;
 		
-		$res = $db->insert(SubmissionTable::tablename, $data) ;
-		
+		$res = $db->insert(SubmissionTable::tablename, $data);
 		
 		$id = $db->lastInsertId();
 		if (empty($id)) {
@@ -275,7 +271,6 @@ class SubmissionTable
 			$id = $db->lastSequenceId("submissionqueue_id");
 		}
 		return self::get_submission($id);
-		
 	}
 	
 	/**
@@ -284,48 +279,51 @@ class SubmissionTable
 	 * @param $id The numeric submission ID
 	 * @return  Returns and object with the data
 	 */
-	public static function get_submission( $id) {
-		$id = (int) $id ; 
-		$db = contestDB::get_zend_db() ;
-		$res = $db->select()->from(SubmissionTable::tablename)
-			->where("id = ?", $id)->query() ;
+	public static function get_submission($id) 
+	{
+		$id = (int) $id; 
+		$db = contestDB::get_zend_db();
+		$res = $db->select()
+			->from(SubmissionTable::tablename)
+			->where("id = ?", $id)->query();
 		
 		$obj = $res->fetch ();
 		if (empty($obj)) throw new Exception("Attempted to find a bad submission ($id)");
-		return new Submission($obj)  ;
+		return new Submission($obj) ;
 	}
 	
-	public static function get_submission_xml_file($id) { 
-		return realpath(get_file_name("data/uploads/$id.xml") );
+	public static function get_submission_xml_file($id) 
+	{ 
+		return realpath(get_file_name("data/uploads/$id.xml"));
 	}
+
 	/**
 	 * Get a list of waiting submissions, in a way decided ``nice''
 	 * for the queue-manager
 	 *
 	 * @param $limit (integer) number of elements to get
 	 */
-	
-	public static function get_waiting_queue($limit) {
+	public static function get_waiting_queue($limit) 
+	{
 		$db = contestDB::get_zend_db ();  
-		$stmt = $db->select()->from(SubmissionTable::tablename, 'id')
+		$stmt = $db->select()
+			->from(SubmissionTable::tablename, 'id')
 			->where ("state='waiting'");
 		if ($limit != 0) $stmt = $stmt->limit ($limit);
 		$stmt->order ('id asc');
 		$res = $stmt->query ();
-		
-		
-		if ( ! $res  )
-			throw new Exception("Unable to get waiting queue" ) ;
+
+		if (! $res )
+			throw new Exception("Unable to get waiting queue");
 		
 		$arr = $res->fetchAll ();
 		$ret = array ();
-		foreach ($arr as $item) {
+		foreach ($arr as $item) 
+		{
 			array_push ($ret, $item->id);
 		}
 		return $ret;
 	}
-	
-	
 	
 	/**
 	 * Set the submission state. A submission state is typical of the form
@@ -339,9 +337,9 @@ class SubmissionTable
 	 * @return TRUE if the state was changed. FALSE on error and/or the previous
 	 *        state was not $oldstate.
 	 */
-	public static function set_state( $id, $state, $oldstate = NULL) {
+	public static function set_state($id, $state, $oldstate = NULL) 
+	{
 		$db = contestDB::get_zend_db ();
-		
 		/* WARNING TODO: $state isn't quoted */
 		$id = $db->quote ($id, 'INTEGER');
 		$where = array ("id=$id");
@@ -357,7 +355,8 @@ class SubmissionTable
 	 * @param $id the id
 	 * @return the state
 	 */
-	public static function get_state($id) { 
+	public static function get_state($id) 
+	{ 
 		$db = contestDB::get_zend_db ();
 		$res = $db->select()->from(SubmissionTable::tablename)->query();
 		$obj = $res->fetch();
@@ -372,13 +371,12 @@ class SubmissionTable
 	 * @param $id integer the submission id
 	 * @param $score integer the new score
 	 */
-	public static function set_score ($id, $score) {
+	public static function set_score ($id, $score) 
+	{
 		$db = contestDB::get_zend_db ();
 		$id = $db->quote($id, 'INTEGER');
 		
-		return $db->update (SubmissionTable::tablename, 
-				    array('score' => $db->quote ($score, 'INTEGER')),
-				    array("id=$id"));
+		return $db->update (SubmissionTable::tablename, array('score' => $db->quote ($score, 'INTEGER')), array("id=$id"));
 	}
 	
 	/**
@@ -389,10 +387,12 @@ class SubmissionTable
 	 * @param $hash The hash of the file to search for.
 	 * @return TRUE if and only if the hash was found.
 	 */
-	public static function exists_submission_by_hash($uid,$probid,$hash) {
+	public static function exists_submission_by_hash($uid,$probid,$hash) 
+	{
 		$db = contestDB::get_zend_db();
-		$res = $db->select()->from(SubmissionTable::tablename)->
-			where('hash = ?', $hash);
+		$res = $db->select()
+			->from(SubmissionTable::tablename)
+			->where('hash = ?', $hash);
 		if (!empty($team))
 			$res = $res->where('team = ?', new Zend_Db_Expr($team))
 				->where('problemid=?', $probid);
@@ -410,22 +410,27 @@ class SubmissionTable
 	 *        if !empty($user). Default value is "".
 	 * @return list of submission objects.
 	 */
-	public static function get_queue ($offset, $limit, $user='', $owner=NULL) {
-		$db = contestDB::get_zend_db() ;
+	public static function get_queue ($offset, $limit, $user='', $owner=NULL) 
+	{
+		$db = contestDB::get_zend_db();
+		$query = $db->select() 
+			->from(self::tablename)
+			->join("users", "submissionqueue.uid = users.uid") 
+			->limit($limit, $offset); 
 		
-		$query = $db->select() -> from(self::tablename)->join("users", "submissionqueue.uid = users.uid") 
-			->limit($limit, $offset) ; 
+		if (!empty($user) && !is_numeric($user)) 
+			$query = $query->where('username = ?', $user);
+		if (!empty($user) && is_numeric($user)) 
+			$query = $query->where('submissionqueue.uid = ?', new Zend_Db_Expr ($user));
+		if (!empty($owner)) 
+			$query = $query->where('owner = ?', $owner);
 		
-		if ( !empty($user) && !is_numeric($user)) $query = $query->where('username = ?', $user) ;
-		if (!empty($user) && is_numeric($user)) $query = $query->where('submissionqueue.uid = ?', new Zend_Db_Expr ($user));
-		if ( !empty($owner)) $query = $query->where('owner = ?', $owner);
+		$res = $query->order("id DESC")->query();
 		
-		$res = $query->order("id DESC")->query() ;
+		if (empty($res))
+			throw new Exception("Unable to get queue");
 		
-		if ( empty($res) )
-			throw new Exception("Unable to get queue" ) ;
-		
-		return $res->fetchAll() ;
+		return $res->fetchAll();
 	}
 	
 	/**
@@ -451,9 +456,9 @@ class SubmissionTable
 		if (!empty($counted))
 			$query = $query->where('notcounted = ?', $counted);
 
-		$ret = $query -> query() ; 
+		$ret = $query -> query(); 
 		$res = $ret->fetch(); 
-		return $res->res ; 
+		return $res->res; 
 	}
 }
 
