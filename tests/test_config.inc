@@ -16,9 +16,9 @@ $test_non_general_contest = "zco1";
 $test_non_general_contest_problem = "zco-2008-1b"; 
 
 /* known submissions with their known scores */
-$test_submissions = array (array (6601, 100), 
-	array(6696, 64), /* WA, with ICO style grading tested */
-	array(6697, 100)); /* TODO: I need a case where OPC style submission would've given a different score */
+$test_submissions = array (array (6601, 100, "Accepted"), 
+	array(6696, 64, "Wrong Answer"), /* WA, with ICO style grading tested */
+	array(6697, 100, "Accepted")); /* TODO: I need a case where OPC style submission would've given a different score */
 
 
 $test_uploads = array (

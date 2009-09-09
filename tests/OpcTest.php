@@ -3,6 +3,7 @@
 require_once "../backend/config.inc";
 require_once "Zend/Loader.php";
 require "Zend/Test/PHPUnit/ControllerTestCase.php";
+require_once "test_config.inc";
 
 $testdir = getcwd();
 chdir ("../webfiles");
