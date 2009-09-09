@@ -14,7 +14,7 @@ class UploadTest extends OpcDataTest
 	/**
 	 * @dataProvider provider
 	 */
-	public function testUpload ($user, $prob, $lang, $source, $owner, $score)
+	public function testUpload ($user, $prob, $lang, $source, $owner, $score, $result)
 	{	
 
 		ob_start ();
@@ -32,6 +32,9 @@ class UploadTest extends OpcDataTest
 		$res = $db->select()->from("submissionqueue")->where("id=$a")->query();
 		$row = $res->fetch();
 		$this->assertEquals ($b, $row->score);
+		$this->assertEquals ($result, $row->state);
+		$sub = SubmissionTable::get_submission ($a);
+		$this->assertNotEquals ($sub, NULL);
 	}
 
 	/**

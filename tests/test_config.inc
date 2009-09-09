@@ -27,8 +27,8 @@ $test_submissions = array (array (6601, 100, "Accepted"),
 
 $test_uploads = array (
 
-	array (262, 'POINTS', 'cpp', '../tests/points.cpp', 'general', 100),
-array ('263', 'POINTS', 'cpp', '../tests/points.cpp', 'general', 100)
+	array (262, 'POINTS', 'cpp', '../tests/points.cpp', 'general', 100, 'Accepted'),
+array ('263', 'POINTS', 'cpp', '../tests/points.cpp', 'general', 100, 'Accepted')
 
 );
 
