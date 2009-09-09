@@ -68,6 +68,7 @@ class SubmissionProcessor
 		assert (is_array($this->prob->scoreweights));
 		assert (is_array($this->prob->inputpaths)); 
 		assert (is_array($this->prob->outputpaths));
+		assert (is_file($this->sub->pathtocode));
 
 		if (empty($this->prob->checker))
 			$j = new Judge ($this->sub->pathtocode,
