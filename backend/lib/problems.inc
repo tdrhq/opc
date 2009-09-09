@@ -302,7 +302,7 @@ class ProblemTable
 		
 		try { 
 			$obj = $res->fetch();
-		} catch (Exception $e )  { 
+		} catch (Exception $e)  { 
 			return NULL;
 		}
 		
@@ -323,45 +323,45 @@ class ProblemTable
 		$prob -> compileOptions = array ();
 		/* override any information if found in problem XML file. */
 		$xml = get_file_name("data/problems/" . $prob->id . ".xml");
-		if ( empty($xml) || !is_file($xml) ) return $prob; 
+		if (empty($xml) || !is_file($xml)) return $prob; 
 		
 		$data = new SimpleXMLElement($xml, 0, true);
 		
-		foreach ( $data as $key=>$value ) { 
-			if ( $key == "resourcelimits_string" ) {
+		foreach ($data as $key=>$value) { 
+			if ($key == "resourcelimits_string") {
 				$prob->resourcelimits = (string) $value;
-			} else if ( $key == "checker" ) { 
+			} else if ($key == "checker") { 
 				$prob->checker = config::getFilename((string)$value);
-			} else if ( $key == "misc" ) { 
+			} else if ($key == "misc") { 
 				$prob->misc = (string)$value;
-			} else if ( $key == "grading-style" ) { 
+			} else if ($key == "grading-style") { 
 				$prob->grading_style = (string) $value;
-			} else if ( $key == "resource" ) {
+			} else if ($key == "resource") {
 				$prob->resource = (string) $value;
-			} else if ( $key == "author" ) {
+			} else if ($key == "author") {
 				$prob->author = (string) $value;
-			} else if ( $key == "checker-outputs-score" ) {
+			} else if ($key == "checker-outputs-score") {
 				$prob->doesCheckerOutputScore = ($value == "true" || $value == "yes");
-			}else if ( $key == "resourcelimits" ) { 
-				foreach($value as $key2 => $value2 ) {
-					if ( $key2 == "memory" ) 
+			}else if ($key == "resourcelimits") { 
+				foreach($value as $key2 => $value2) {
+					if ($key2 == "memory") 
 						$prob -> memory_limit = (string) $value2; 
-					else if ( $key2 == "runtime" ) 
+					else if ($key2 == "runtime") 
 						$prob -> runtime_limit = (float) $value2; 
-					else if ( $key2 == "stack" ) {
+					else if ($key2 == "stack") {
 						/** @todo */
-					}  else if ( $key2 == "file" or $key2 == "output" 
+					}  else if ($key2 == "file" or $key2 == "output" 
 						     and !empty($value2)) { 
 						$prob -> file_output_size_limit = (string)$value2;
 					}
 				}
 			} 
-			else if ( $key == "compile-options" ) { 
+			else if ($key == "compile-options") { 
 				$attr = $value->attributes();
 				$prob->compileOptions[ "{$attr['lang']}" ] = (string) $value; 
 			}
-			else if ( $key == "test" ) { 
-				if ( ! is_array( $prob->inputpaths ))  { 
+			else if ($key == "test") { 
+				if (!is_array($prob->inputpaths))  { 
 					$prob->numcases = 0;
 					$prob->inputpaths = array();
 					$prob->outputpaths = array();
