@@ -17,11 +17,11 @@ class ContestAfterTest extends OpcDataTest
 		$this->contest = $test_non_general_contest;
 		$this->problem = $test_non_general_contest_problem;
 
+		parent::setUp ();
+		
 		/* create a contest */
 		system ("../backend/admin/addcontest.php  --id {$this->contest} --name TestContest --start-time '-10 minutes' --duration '9 minutes' --quiet");	
 		webconfig::$multi_contest = true;
-
-		parent::setUp ();
 	}
 
 	public function testContestCannotAccess() 
