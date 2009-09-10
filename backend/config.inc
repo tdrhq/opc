@@ -203,7 +203,7 @@ class config {
   static $supported_submission_languages 
 	= array ("cpp" => "C++ (g++)",
 		 "c" => "C (gcc)",
-		 "gcj" => "Java (gcj)",
+		 "gcj" => "Java (gcj, filename should be Main.java)",
 		 "python" => "Python",
 		 "perl" => "Perl"
 		 );
