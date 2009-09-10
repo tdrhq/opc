@@ -231,7 +231,12 @@ int main (int argc, char* argv[])
       argv[0][0] = '/' ; 
     }
     fprintf(stderr, "The exec is at %s relative to %s\n", argv[0], chrootdir);
-    execve(argv[cmd_start_index],argv + cmd_start_index ,environ) ;
+
+    char** commands = new char *[argc - cmd_start_index + 1];
+    for (int i = 0; cmd_start_index + i < argc; i++)
+      commands [i] = argv[cmd_start_index + i];
+    commands [argc - cmd_start_index] = NULL;
+    execve(argv[cmd_start_index], commands, NULL) ;
     perror("Unable to execute program") ;
 
     return 26;
