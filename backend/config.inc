@@ -201,10 +201,12 @@ class config {
    * TYPE: array(string=>string)
    */
   static $supported_submission_languages 
-	= array ("cpp" => "C++ (g++ 4.1)",
-			 "c" => "C (gcc 4.1)",
-			 "gcj" => "Java (gcj 4.1)",
-			 );
+	= array ("cpp" => "C++ (g++)",
+		 "c" => "C (gcc)",
+		 "gcj" => "Java (gcj)",
+		 "python" => "Python",
+		 "perl" => "Perl"
+		 );
 
   /** Mailer system */
 

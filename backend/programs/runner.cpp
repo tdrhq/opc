@@ -39,7 +39,7 @@ void init_default_limits () {
    * should be unecessary. A limit of 4 works fine for C and C++
    * submissions but causes problems on some machines for Java.
    */
-  limits["file"]=6;
+  limits["file"]=16;
   limits["timehard"]=0;
   limits["nproc"] = 1 ; /* dangerous don't change */
 }

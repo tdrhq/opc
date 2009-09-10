@@ -113,11 +113,9 @@ class Judge {
 	elseif ($lang == "gcj" ) 
 	  $this->compiler_object = new CompilerGcj ($param);
 	elseif ($lang == "perl") 
-	  $this->compiler_object = new CompilerGenericInterpreter(
-										  "/usr/bin/perl") ;
-	elseif ( $lang == "python") 
-	  $this->compiler_object = new CompilerGenericInterpreter(
-										  "/usr/bin/env python ");
+	  $this->compiler_object = new CompilerGenericInterpreter("perl") ;
+	elseif ($lang == "python") 
+	  $this->compiler_object = new CompilerGenericInterpreter("python");
 	else 
 	  throw new Exception("Unknown language: $lang\n");
 
