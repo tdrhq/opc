@@ -179,16 +179,13 @@ class Judge {
 
 	chdir( $this->compiler_object->get_exec_dir() );
 
-	$res = runandgetoutputerr(
-				  (empty(config::$chroot_dir)?"":
-				   " CMI_JUDGE_CHROOT_DIR='".config::$chroot_dir."' " )  .
-			config::get_path_to_runner () . " '" 
-			. $this->compiler_object -> get_exec_string() . "' " 
-			. $testdata_input . " " 
-			. $this->temp_output . " "
-			. $options,
-			$output, $err
-			) ;
+	$res = runandgetoutputerr
+	  (config::get_path_to_runner () . 
+	   (empty(config::$chroot_dir) ? "" : "--chroot=" . config::$chroot_dir) .
+	   " $options " .
+	   " --input={$testdata_input} " .
+	   " --output={$this->temp_output} " . 
+	   $this->compiler_object->get_exec_string (), $output, $err);
 
 	chdir ( $olddir) ;
 
