@@ -254,11 +254,11 @@ class ProblemDetails extends Problem
 		$ret = $this->resourcelimits; 
 		
 		if ($this->memory_limit) 
-			$ret .= " mem=" . $this->memory_limit;
+			$ret .= " --mem=" . $this->memory_limit;
 		if ($this->runtime_limit) 
-			$ret .= " time=" . $this->runtime_limit; 
+			$ret .= " --time=" . $this->runtime_limit; 
 		if ($this->file_output_size_limit)
-			$ret .= " fsize=" . $this->file_output_size_limit; 
+			$ret .= " --fsize=" . $this->file_output_size_limit; 
 		return $ret; 
 	}
 	

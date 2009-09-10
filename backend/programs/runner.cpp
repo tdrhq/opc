@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cassert>
 #include <cstdio>
 #include <cstdlib>
 #include <string.h>
@@ -18,6 +19,7 @@
 #include <sys/types.h>
 #include <map>
 #include <fcntl.h>
+#include <getopt.h>
 using namespace std;
 
 
@@ -28,6 +30,11 @@ const int return_internal=1;
 const int return_badstatus=2;
 
 map<string,int> limits;
+char* infile = NULL;
+char* outfile = NULL;
+double timelimit = 1.0;
+char* chrootdir = NULL;
+bool debug = false;
 
 void init_default_limits () {
   limits["stack"]=8*1024*1024;
@@ -43,6 +50,7 @@ void init_default_limits () {
   limits["timehard"]=0;
   limits["nproc"] = 1 ; /* dangerous don't change */
 }
+
 
 int unformatvalue (char* s) {
   char c = '-';
@@ -61,75 +69,77 @@ int unformatvalue (char* s) {
   return val; //not implemented for time!
 }
 
-//Run $1 with input $2 and output to $3 (with memory limit $4 KB and time limit $5 s)
-int main(int narg,char* arg[])
+int parse_args (int argc, char* argv[])
 {
-  init_default_limits();
-  double timelimit = 1 ; 
+  while (1){
+    struct option lopts [] = {
+      {"input", 1, NULL, 0},
+      {"output", 1, NULL, 0},
+      {"stack", 1, NULL, 0},
+      {"mem", 1, NULL, 0},
+      {"fsize", 1, NULL, 0},
+      {"time", 1, NULL, 0},
+      {"open-files", 1, NULL, 0},
+      {"timehard", 1, NULL, 0},
+      {"chroot", 1, NULL, 0},
+      {"debug", 0, NULL, 0}
+    };
 
-  if(narg<4)
-    {
-      fprintf(stderr,"Usage: %s executable input_from output_to [option1=value1] [option2=value2] ... \n",arg[0]);
-      return 1;
+    int index;
+    int c = getopt_long (argc, argv, "", lopts, &index);
+
+    if (c == -1) break;
+    
+    if (c != 0) {
+      fprintf (stderr, "Command line parsing failed.\n");
+      exit (1); /* parsing failed? */
     }
 
-  char* exe = arg[1];
-  char* infile = arg[2];
-  char* outfile= arg[3];
-
-  char *chrootdir = getenv ( "CMI_JUDGE_CHROOT_DIR" ) ;
-  if ( chrootdir && strlen(chrootdir) == 0 ) chrootdir = NULL ;
-
-  
-  for ( int i = 4; i < narg; i++ ){
-
-    char * p = strchr (arg[i], '=' );
-    if( !p ) {
-      fprintf(stderr, "WARNING: %s: bad argument.\n", arg[i]);
-      return 1;
-    } else *p=' ';
-
-    char key[100],val[100]; //possible buffer overflows? Could be issue!
-
-    sscanf(arg[i],"%s %s", key, val);
-    if ( limits.count(key) == 0 ) {
-      fprintf(stderr, "WARNING: %s: Unknown limit parameter.\n", key );
-      continue;
+    if (strcmp (lopts[index].name, "input") == 0)
+      infile = strdup (optarg);
+    else if (strcmp (lopts[index].name, "output") == 0)
+      outfile = strdup (optarg);
+    else if (strcmp (lopts[index].name, "open-files") == 0)
+      limits["files"] = atoi (optarg);
+    else if (strcmp (lopts[index].name, "chroot") == 0)
+      chrootdir = strdup (optarg);
+    else if (strcmp (lopts[index].name, "debug") == 0)
+      debug = true;
+    else if (strcmp (lopts[index].name, "time") == 0) {
+      timelimit = atof (optarg);
+      fprintf(stderr, "Parsed time limit is: %f\n", timelimit) ;
+      if (limits["timehard"] == 0) 
+	limits["timehard"] = int(timelimit + 1); 
     }
-
-    if ( strcmp(key, "time") == 0 )  { 
-      sscanf(val, "%lf", &timelimit) ; 
-      fprintf(stderr, "Parsed time limit is: %lf\n", timelimit) ;
-      if ( limits["timehard"] == 0 ) 
-	limits["timehard"] = int(  timelimit + 1 ) ; 
-
-    } else 
-      limits[key] = unformatvalue(val);
+    else {
+      limits [lopts[index].name] = unformatvalue (optarg);
+    }
   }
-  limits["timehard"] = max(limits["timehard"], 1+int(timelimit) ) ;
 
+  /* return the execute command */
+  return optind;
+}
 
-  char * argv [ 100] ; 
-  istringstream iss (exe) ;
-  string cur ; 
-  int i = 0 ;
-  for(i = 0 ; iss>>cur ; i++ ) {
-    argv[i] = strdup(cur.c_str());
-  }
-  argv[i] = NULL ;
+int main (int argc, char* argv[])
+{
+  init_default_limits ();
+  int cmd_start_index = parse_args (argc, argv);
 
+  /* be safe on the timehard! */
+  limits["timehard"] = max(limits["timehard"], 1 + int(timelimit)) ;
 
-  if ( chrootdir && strncmp(chrootdir, argv[0], strlen(chrootdir)) != 0 ) {
+  if (chrootdir && strncmp(chrootdir, argv[0], strlen(chrootdir)) != 0 ) {
     fprintf(stderr, "The executable file must be on the chrooted "
 	    " drive. For one, keep your temp directory on the chroot "
-	    "partition. I'm disabling chroot for now.\n") ;
+	    "partition. I'm disabling chroot for now.\n");
+    free (chrootdir);
     chrootdir = NULL;
   }
 
   /* close any inherited file descriptors. Can somebody tell me if this
    * is right? */
-  for (int i = 3; i < 20; i++)
-	  close (i);
+  for (int i = 3; i < 200; i++)
+    close (i);
 
   pid_t pid = fork();
   
@@ -206,21 +216,22 @@ int main(int narg,char* arg[])
     fprintf(stderr,"Ready to exec with: Effective uid=%d gid=%d \n",geteuid(),getegid());
 
 
-#ifndef DEBUG    
-    if ( freopen("/dev/null", "w", stderr) == NULL ) 
-      {
-	perror("freopen");
-	fprintf(stderr,"Internal error: Failed to redirect stderr\n");
-	return 25;
-      }
-#endif    
+    if (!debug) 
+      if ( freopen("/dev/null", "w", stderr) == NULL ) 
+	{
+	  perror("freopen");
+	  fprintf(stderr,"Internal error: Failed to redirect stderr\n");
+	  return 25;
+	}
+      else
+	fprintf (stderr, "debug: not redirecting stderr on purpose.\n");
 
     if ( chrootdir) {
       argv[0] = argv[0] + strlen(chrootdir) - 1 ;
       argv[0][0] = '/' ; 
     }
     fprintf(stderr, "The exec is at %s relative to %s\n", argv[0], chrootdir);
-    execve(argv[0],argv,environ) ;
+    execve(argv[cmd_start_index],argv + cmd_start_index ,environ) ;
     perror("Unable to execute program") ;
 
     return 26;
