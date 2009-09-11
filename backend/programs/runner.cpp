@@ -69,6 +69,33 @@ int unformatvalue (char* s) {
   return val; //not implemented for time!
 }
 
+void print_usage ()
+{
+	printf (
+"usage: runner [options] progname progarg1 progarg2 ...\n\
+\n\
+  options:\n\
+     --input=<file>        redirect program input from file\n\
+     --output=<file>       redirect program output to file\n\
+     --mem=<size>          set the runtime memory limit to <size>\n\
+     --stack=<size>        set the runtime stack limit to <size>\n\
+     --time=<seconds>      set the run time limit in seconds (real number)\n\
+     --fsize=<size>        set the limit on amount of data outputted\n\
+     --chroot=<dir>        chroot to the given directory before executing\n\
+     --debug               increase verbosity, do not redirect stderr.\n\
+     --help                display this help page\n\
+\n\
+  <size> is in human readable format (12M, 12k etc., case insensitive.)\n\
+  If no suffix is provided, it is understood to be bytes. 1k is 1024 bytes,\n\
+  and 1M is 1024k.\n\
+\n\
+  This program is a part of the CMI Online Programming Contest Judge.\n\
+  Copyright 2007-2009 Chennai Mathematical Institute. This program\n\
+  is licensed under GNU General Public License, version 2.\n\
+\n\
+");
+}
+
 int parse_args (int argc, char* argv[])
 {
   while (1){
@@ -82,7 +109,9 @@ int parse_args (int argc, char* argv[])
       {"open-files", 1, NULL, 0},
       {"timehard", 1, NULL, 0},
       {"chroot", 1, NULL, 0},
-      {"debug", 0, NULL, 0}
+      {"debug", 0, NULL, 0},
+      {"help", 0, NULL, 0},
+      NULL
     };
 
     int index;
@@ -91,7 +120,7 @@ int parse_args (int argc, char* argv[])
     if (c == -1) break;
     
     if (c != 0) {
-      fprintf (stderr, "Command line parsing failed.\n");
+      print_usage ();
       exit (1); /* parsing failed? */
     }
 
@@ -105,6 +134,10 @@ int parse_args (int argc, char* argv[])
       chrootdir = strdup (optarg);
     else if (strcmp (lopts[index].name, "debug") == 0)
       debug = true;
+    else if (strcmp (lopts[index].name, "help") == 0) {
+      print_usage ();
+      exit (0);
+    }
     else if (strcmp (lopts[index].name, "time") == 0) {
       timelimit = atof (optarg);
       fprintf(stderr, "Parsed time limit is: %f\n", timelimit) ;
@@ -117,6 +150,11 @@ int parse_args (int argc, char* argv[])
   }
 
   /* return the execute command */
+  if (optind == argc) {
+    fprintf (stderr, "No program name given.\n");
+    print_usage ();
+    exit (0);
+  }
   return optind;
 }
 
