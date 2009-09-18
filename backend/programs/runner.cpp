@@ -281,9 +281,28 @@ int main (int argc, char* argv[])
   }
 
 
+  pid_t hardlimit_monitor = fork ();
+  if (hardlimit_monitor == 0) {
+    sleep (6*limits["timehard"]);
+    /* if I reached here, then the main process is still running, upto
+     * some race condition possibilities */
+    fprintf (stderr, "Severe hardlimit (%d) reached. Possibly malicious, or "
+	     "overloaded system.\n", 6*limits["timehard"]);
+    kill (pid, 9);
+    return 0;
+  }
+
   int status; 
   struct rusage usage ;  
+
+  /*
+   * Correctness: Pid dies on its own or, hardlimit_monitor process
+   * kills it. In both cases, this works, except perhaps the Pid
+   * process can be called for kill twice.
+   */
   wait4(pid,&status, 0, &usage); //Wait for child to terminate
+  kill (hardlimit_monitor, 9);
+  waitpid (hardlimit_monitor, NULL, 0);
   
   // lets output the limits.
   fflush(stderr) ; /* ordering of output of child and parent should be right */

@@ -4,7 +4,7 @@
 
 int main ()
 {
-	sleep (5);
+	sleep (60);
 	printf ("OK\n");
 	return 0;
 }
