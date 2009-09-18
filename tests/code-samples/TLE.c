@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <time.h>
 
-#define TIMEOUT 2
+#define TIMEOUT 20
 int main ()
 {
 	time_t s = time (NULL);	

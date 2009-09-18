@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 
 #ifndef MB
 	#define MB 65 /* use gcc -DMB=<val> to change */
@@ -13,6 +14,7 @@ int main()
 
 	if (!ar) {
 		perror ("woo, failed");
+		assert (0);
 		return 0;
 	}
 

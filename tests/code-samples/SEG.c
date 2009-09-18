@@ -1,9 +1,10 @@
 #include <stdio.h>
+#include <time.h>
 
 int main ()
 {
-	int ar [10], i;
+	int *ar = NULL, i;
 	for (i = 0; ; i++)
-		ar [i] = ar[i/3] + ar[i/2]; /* cough, nothing profound */
-	return 1;
+		ar [i] = ar[i >> 1] + 1; /* cough, nothing profound */
+	return ar [time (NULL)]; /* should not optimize this out */
 }
