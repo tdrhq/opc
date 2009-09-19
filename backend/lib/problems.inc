@@ -426,9 +426,6 @@ class ProblemTable
 		/* validate that the HTML file provided can be tidied to XHTML strict */
 		$opt = array("output-xhtml" => true,
                                      "add-xml-decl" => true,
-                                     "bare" => true,
-                                     "clean" => true,
-                                     "quote-ampersand" => true,
                                      "doctype" => "strict");
 
 		$tidy = tidy_parse_string(file_get_contents (
