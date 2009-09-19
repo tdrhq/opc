@@ -27,8 +27,8 @@ $test_submissions = array (array (6601, 100, "Accepted"),
 
 $test_uploads = array (
 
-	array (262, 'POINTS', 'cpp', '../tests/points.cpp', 'general', 100, 'Accepted'),
-        array ('263', 'POINTS', 'cpp', '../tests/points.cpp', 'general', 100, 'Accepted'),
+	array (262, 'POINTS', 'cpp', 'code-samples/points.cpp', 'general', 100, 'Accepted'),
+        array ('263', 'POINTS', 'cpp', 'code-samples/points.cpp', 'general', 100, 'Accepted'),
 	array (262, 'POINTS', 'c', 'code-samples/sleep.c', 'general', 0, 'Runtime Error (KILL)'),
 	array (262, 'POINTS', 'c', 'code-samples/fork.c', 'general', 0, 'Runtime Error (ABRT)'),
 	array (262, 'POINTS', 'c', 'code-samples/mem.c', 'general', 0, 'Runtime Error (ABRT)'),
