@@ -41,3 +41,4 @@ foreach ($res as $row) {
 
 }
 
+echo "Check Complete.\n";
