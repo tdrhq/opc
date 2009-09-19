@@ -136,8 +136,8 @@ class ContestQueueManager {
 	  }
 	  if ( empty($ar))  {
 		if (!empty($exit_on_done)) exit(0);
-		$ms = config::$queue_inactive_sleep_time * 1000000 ; 
-		usleep(mt_rand($ms/2,$ms)) ;
+		$us = config::$queue_inactive_sleep_time * 1000000000 ; 
+		usleep(mt_rand($us/2,$us)) ;
 		//sleep(1);
 		continue ;
 	  }
