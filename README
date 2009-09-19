@@ -104,4 +104,52 @@ Adding Contests
   See docs/ContestAdministration
   
 
+Alternatives
+------------
 
+When this Judge was first written, there were few, if any,
+configurable open source judges available. Today, almost every
+University has its own [buggy] judge. There are few credible open
+source alternatives available:
+
+ * PC^2    <http://www.ecs.csus.edu/pc2/>
+
+   PC^2 is one of the most popular contest Judges, but as of today
+   does not support an online mode of operation. It is used for almost
+   all onsite contests, including the ACM ICPC World Finals.
+
+ * Mooshak <http://mooshak.dcc.fc.up.pt/~zp/mooshak/>
+
+   Probably one of the more popular web based Judges. I have had
+   experience with it as a participant at an ACM ICPC Regionals, in
+   2006. At that time it was buggy. I think it provides far more
+   configurability that the CMI Judge.
+
+ * hackzor <http://code.google.com/p/hackzor/>
+
+   Hackzor is a simple Python based judge from Anna University,
+   Chennai. I mention it because I used it as a basis for some parts
+   of the CMI Judge. I don't believe it is actively mainted. 
+
+Apart from that, several Online Programming Archives can directly host
+contests for you. You might want to contact one of these:
+
+ * The IARCS Online Judge  <http://opc.iarcs.org.in>
+
+   Maintained by me :-). This archive is based on the CMI Online
+   Judge, and hosted reliably on Amazon EC2, courtesy of IARCS. I
+   would help you organize your contest, and we can work out some
+   amount of compensation for my efforts. :-)
+
+ * SPOJ <http://www.spoj.pl>
+
+   SPOJ is well known for hosting many private contests. 
+
+ * CodeChef <http://www.codechef.com>
+
+   CodeChef is based on the SPOJ (I think), and I do think they hold
+   private contests.
+
+ * UVa Judge <http://uva.onlinejudge.org/>
+
+   One of the oldest and most well known online judges.
