@@ -31,7 +31,7 @@ require_once "lib/db.inc";
 $db = contestDB::get_zend_db ();
 $res = $db->select ()->from ("problemdata")->query ();
 
-foreach ($res as $row) {
+while ($row = $res->fetchObject ()) {
 	$p = ProblemTable::fsckProblem ($row->id);
 	if (!$p) {
         	echo "{$row->id} failed check.\n";
