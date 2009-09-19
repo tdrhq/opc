@@ -38,7 +38,14 @@ $test_uploads = array (
 	array (262, 'POINTS', 'c', 'code-samples/simple.c', 'general', 0, 'Wrong Answer')
 );
 
+$problems_for_validation = array (
+	"POINTS",
+	"VPATTERN" 
 
+	/* I know the following fail because of a badly formed id */
+//	"iarcs-oct04-ad-1",
+//	"iarcs-sep07-ad-1",
+//	"iarcs-jan05-ad-1");
 	
-
+);
 

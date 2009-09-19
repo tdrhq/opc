@@ -165,14 +165,26 @@ class ProblemsController extends Zend_Controller_Action {
 			/* tidy to XHTML strict */
 			$opt = array("output-xhtml" => true,
 				     "add-xml-decl" => true,
+				     "bare" => true,
+				     "clean" => true,
+				     "quote-ampersand" => true,
 				     "doctype" => "strict");
 			$tidy = tidy_parse_string($this->view->content_html, $opt);
 			tidy_clean_repair ($tidy);
 
 			$this->view->content_html = tidy_get_output ($tidy);
+
+			$this->fixImages ();
+
+			/* redo the tidy, I agree it's slow, but easy way out. :) */
+			$opt = array ("output-xhtml" => true, 
+				      "doctype" => "strict",
+				      "show-body-only" => true);
+			$tidy = tidy_parse_string ($this->view->content_html, $opt);
+			tidy_clean_repair ($tidy);
+			$this->view->content_html = tidy_get_output ($tidy);
 		}
 
-		$this->fixImages ();
 
 		if ($this->_request->get("plain") == "true") {
 			$this->_helper->layout->disableLayout ();

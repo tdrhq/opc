@@ -36,7 +36,6 @@ Zend_Loader::loadClass('Zend_Debug');
 Zend_Loader::loadClass('Zend_Auth');
 Zend_Loader::loadClass('Zend_Auth_Adapter_Interface') ;
 Zend_Loader::loadClass('Zend_Layout') ;
-Zend_Layout::startMvc(array('layoutPath' => 'application/views/layouts'));
 require_once "lib/user.inc" ;
 
 class MyAuthAdapter implements Zend_Auth_Adapter_Interface { 
@@ -64,7 +63,9 @@ class App {
 
 	public function bootstrap () 
 	{
-                /* setup auth session */
+		Zend_Layout::startMvc(array('layoutPath' => dirname (__FILE__) . '/application/views/layouts'));
+                
+		/* setup auth session */
 		$auth = Zend_Auth::getInstance() ;
 		Zend_Loader::loadClass('Zend_Auth_Storage_Session');
 		$auth->setStorage(new Zend_Auth_Storage_Session(webconfig::$session_namespace));
