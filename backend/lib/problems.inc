@@ -420,7 +420,26 @@ class ProblemTable
 		$xml = get_file_name("data/problems/" . $id . ".xml");
 		$dom = new DomDocument;
 		$dom->load ($xml);
-		return $dom->relaxNGValidate (get_file_name ("schema/problem.rng"));
+		if (!$dom->relaxNGValidate (get_file_name ("schema/problem.rng"))) 
+			return false;
+
+		/* validate that the HTML file provided can be tidied to XHTML strict */
+		$opt = array("output-xhtml" => true,
+                                     "add-xml-decl" => true,
+                                     "bare" => true,
+                                     "clean" => true,
+                                     "quote-ampersand" => true,
+                                     "doctype" => "strict");
+
+		$tidy = tidy_parse_string(file_get_contents (
+						  get_file_name ("data/problems/$id/index.html")
+						  ), $opt);
+		tidy_clean_repair ($tidy);
+		$xhtml = tidy_get_output ($tidy);
+
+		$dom = new DomDocument;
+		$dom->loadXML ($xhtml, LIBXML_DTDLOAD);
+		return $dom->validate ();
 	}
 }
 

@@ -25,5 +25,8 @@
 require_once dirname(__FILE__) . "/../config.inc";
 require_once "lib/problems.inc";
 $p = ProblemTable::fsckProblem ($argv[1]);
-assert ($p);
-
+if (!$p) {
+	echo "{$argv[1]} failed check.\n";
+	exit (1);
+} else
+	echo "{$argv[1]} seems clean.\n";
