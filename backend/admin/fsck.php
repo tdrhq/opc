@@ -30,15 +30,15 @@ require_once "lib/db.inc";
 
 $db = contestDB::get_zend_db ();
 $res = $db->select ()->from ("problemdata")->query ();
-
+$errors = 0;
 while ($row = $res->fetchObject ()) {
 	$p = ProblemTable::fsckProblem ($row->id);
 	if (!$p) {
         	echo "{$row->id} failed check.\n";
-        	exit (1);
+        	$errors ++;
 	} else
         	echo "{$row->id} seems clean.\n";
 
 }
 
-echo "Check Complete.\n";
+echo "Check Complete. ($errors errors)\n";
