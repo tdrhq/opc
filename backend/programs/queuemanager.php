@@ -65,7 +65,8 @@ class ContestQueueManager {
   public $table = 'submissiondata' ;
   public $id ; 
   public $info = array() ; 
- 
+  public $terminating = false;
+  
   function __construct() {
 
   }
@@ -127,9 +128,7 @@ class ContestQueueManager {
   function start_queue () {
 	global $exit_on_done;
 	fprintf(STDOUT,"The queue has started.\n");
-	while ( !file_exists("stop_queue_manager")  ) {
-
-
+	while ( !$this->terminating  ) {
 	  $ar = $this->get_waiting_queue(1) ;
 	  if ( count($ar) > 1 ) { 
 		throw new Exception("Too many elements");
@@ -147,13 +146,32 @@ class ContestQueueManager {
 		$this->start_process_submission($x) ;
 	  }
 	}
-	echo "Exiting gracefully...\n" ;
+	echo "Exiting gracefully.\n" ;
+	exit (0);
   }
 
  
 }
 
-
 $queue = new ContestQueueManager  ;
+declare (ticks = 1);
+
+function sigterm_handler ($signo) 
+{
+	if ($signo == SIGINT || $signo == SIGTERM) {
+		global $queue;
+		$queue->terminating = true;
+	} else 
+		echo "Warning: received $signo, expected SIGTERM\n";
+}
+
+if (function_exists ("pcntl_signal")) {
+	pcntl_signal (SIGINT, "sigterm_handler");
+	pcntl_signal (SIGTERM, "sigterm_handler");
+} else {
+  fprintf (STDOUT, "Warning: pcntl_signal does not exist, cannot kill cleanly!\n");
+}
+
 $queue -> start_queue() ;
-?>
+
+
