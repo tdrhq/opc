@@ -50,8 +50,9 @@ class ErrorController extends Zend_Controller_Action {
 			break;
 		default:
 			if (!empty($__zend_test_no_dispatch)) throw $errors->exception;
+			Logger::get_logger()->alert ($errors->exception);
 			$exception = $errors->exception;
-			$this->view->message = "An exception was thrown. We would appreciate it if you could report this bug to us. \n\n" 
+			$this->view->message = "An unexpected internal error has occured. Our administrators have been notified of this error, and will look into it shortly. Please let us know if you keep having this issue." 
 			  . ($exception->getMessage() . "\n"
 				    . $exception->getTraceAsString());
 			break;
