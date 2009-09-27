@@ -33,13 +33,14 @@ class SafeException extends Exception {
 
 require_once "scorers/OpcScorer.php";
 require_once "scorers/IoiScorer.php";
+require_once "lib/logger.inc";
 
 class SubmissionProcessor 
 {
 	function runcase ($input, $output, $score, $j /* Judge */, $scorer)
 	{
-		if (defined("DEBUG")) 
-			echo "Running on $input\n";
+		$logger = Logger::get_logger ();
+		$logger->log ("Running on $input", Zend_Log::DEBUG);
 		
 		$ret = $j->run ($input,
 				$this->prob->getResourceLimitString(), 
@@ -50,10 +51,11 @@ class SubmissionProcessor
 		else if (!$scorer->processCaseRun (NULL))
 			assert (false); /* seriously? */
 		
-		if (defined('DEBUG')) echo "Verifying\n";
+		$logger->log ("Verifying with $output", Zend_Log::DEBUG);
 		$ret = $j->verify($output);
 
-		if (defined('DEBUG')) echo "Verified\n";
+		$logger->log ("Verification complete", Zend_Log::DEBUG);
+
 		if ($this->prob->doesCheckerOutputScore)
 			return $scorer->processCaseVerify ($j->checker_score, 
 							     $ret);
@@ -116,7 +118,7 @@ class SubmissionProcessor
 		
 		if (!file_put_contents($res, $xml->flush(), LOCK_EX )) {
 			// No write permissions perhaps?
-			echo "Unable to write to XML results file\n";
+			Logger::get_loger()->log ("Unable to write to $res!", Zend_Log::ALERT);
 			assert (false);
 			exit(1);
 		}
