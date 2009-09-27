@@ -21,18 +21,11 @@
  * @author Arnold Noronha <arnold@cmi.ac.in>
  */
 
-chdir(dirname($argv[0])) ;
-
-$conffile = "../config.inc" ;
-
-
-include_once $conffile  ;
-ob_end_clean();
-include_once "lib/db.inc";
-include_once "lib/submissions.inc" ;
+require_once dirname(__FILE__) . "/../config.inc";
+require_once "lib/db.inc";
+require_once "lib/submissions.inc" ;
 require_once "HookAgent.php" ;
-
-include_once dirname(__FILE__) . "/compiler/common.inc" ;
+require_once "programs/compiler/common.inc" ;
 
 /* options */
 for ($i = 1; $i < $argc; $i++) {
