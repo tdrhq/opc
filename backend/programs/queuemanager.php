@@ -23,6 +23,7 @@
 
 require_once dirname(__FILE__) . "/../config.inc";
 require_once "lib/db.inc";
+require_once "lib/logger.inc";
 require_once "lib/submissions.inc" ;
 require_once "HookAgent.php" ;
 require_once "programs/compiler/common.inc" ;
@@ -85,22 +86,23 @@ class ContestQueueManager {
   function start_process_submission ($id) 
   {
 	$this->id = $id ;
+	$logger = Logger::get_logger ();
 	$info = array("id" => $id ) ;
 	$res =SubmissionTable::set_state($id, SUBMISSION_STATE_RUNNING ,
 								SUBMISSION_STATE_WAITING);
 	if ( !$res) { 
-	  echo "Processing $id failed, possible race conditition.\n";
-	  return true;
+		$logger->log ("Processing $id skipped, another process took charge.", Zend_Log::INFO);
+		return true;
 	}
-	echo "Processing $id\n" ;
+	$logger->log ("Processing $id", Zend_Log::INFO);
 
 	exec(config::get_path_to_evaluator() .  " $id 2>/dev/null",$output,$ret);
 
 	if ( $ret) {
 	  SubmissionTable::set_state($id,SUBMISSION_STATE_FATAL ) ; 
-	  echo "FATAL ERROR: Submission ID $id could not be run!\n";
-	  echo "exec: returned $ret\n";
-	  echo "Program returned: $output\n";
+	  $logger->log ("FATAL ERROR: Submission ID $id could not be run!", Zend_Log::ERR);
+	  $logger->log ("exec: returned $ret", Zend_Log::ERR);
+	  $logger->log ("Program returned: $output", Zend_Log::ERR);
 	  $info['state'] = 'fatal' ; 
 	  $agent = new HookAgent($id, $this->info) ;
 	  $agent->run_hooks() ; 
@@ -120,7 +122,8 @@ class ContestQueueManager {
    */ 
   function start_queue () {
 	global $exit_on_done;
-	fprintf(STDOUT,"The queue has started.\n");
+	$logger = Logger::get_logger ();
+	$logger->log ("The queue has started.", Zend_Log::INFO);
 	while ( !$this->terminating  ) {
 	  $ar = $this->get_waiting_queue(1) ;
 	  if ( count($ar) > 1 ) { 
@@ -139,7 +142,7 @@ class ContestQueueManager {
 		$this->start_process_submission($x) ;
 	  }
 	}
-	echo "Exiting gracefully.\n" ;
+	$logger->log ("Queue exiting gracefully.", Zend_Log::INFO);
 	exit (0);
   }
 
