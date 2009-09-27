@@ -9,15 +9,18 @@ function safeSystem ($string) {
 	system ($string, $ret);
 	if ($ret != 0) {
 		echo "$string: failed\n";
-//		exit (1);
+		assert (false);
 	}
 }
 class OpcDataTest extends OpcTest {
 	public function setUp ()
 	{
-		$this->assertFalse (contestDB::get_zend_db()->isConnected());
-		safeSystem ("if [ -d ../backend/data ] ; then rm -rf ../backend/data-old && mv -fT ../backend/data ../backend/data-old; else true; fi");
-		safeSystem ("cp -r ../tests/data ../backend/data");
+		$blankdir = "/tmp/opc-blank-dir";
+		safeSystem ("rm -rf $blankdir");
+		safeSystem ("mkdir $blankdir");
+		$datadir = get_file_name ("data/");
+		$testdatadir = getcwd () . "/data";
+		safeSystem ("unionfs-fuse -o cow,nonempty,exec,allow_root $blankdir=RW:$testdatadir=RO $datadir");
 		parent::setUp ();
 	}
 	public function testDummy ()
@@ -27,7 +30,7 @@ class OpcDataTest extends OpcTest {
 	public function tearDown ()
 	{
 		contestDB::get_zend_db ()->closeConnection();
-		safeSystem ("rm -rf ../backend/data");
-		safeSystem ("if [ -d ../backend/data-old ] ; then mv -fT ../backend/data-old ../backend/data; else true; fi");
+		$datadir = get_file_name ("data/");
+		safeSystem ("fusermount -zu $datadir");
 	} 
 }
