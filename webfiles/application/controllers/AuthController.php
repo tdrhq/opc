@@ -26,7 +26,7 @@ class AuthController  extends Zend_Controller_Action
 {
 	function init()
 	{
-		$this->log = new Logger::get_logger ();
+		$this->log = Logger::get_logger ();
 	}
 	function indexAction()
 	{
