@@ -20,15 +20,13 @@
  * @author Arnold Noronha <arnold@cmi.ac.in>
  */
 
+require_once "lib/logger.inc";
+
 class AuthController  extends Zend_Controller_Action
 {
 	function init()
 	{
-		Zend_Loader::loadClass("Zend_Log_Writer_Stream") ;
-		Zend_Loader::loadClass("Zend_Log");
-		$this->mock = new Zend_Log_Writer_Stream ("/tmp/opc-login-log") ;
-		$this->log = new Zend_Log($this->mock) ;
-
+		$this->log = new Logger::get_logger ();
 	}
 	function indexAction()
 	{
