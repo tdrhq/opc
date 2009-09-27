@@ -39,7 +39,7 @@ class Logger
 		Zend_Loader::loadClass ("Zend_Log");
 		Zend_Loader::loadClass ("Zend_Log_Writer_Stream");
 
-		$filename = "data/logs/" . getmyuid() . ".log";
+		$filename = "data/logs/" . posix_getuid() . ".log";
 		$writer = new Zend_Log_Writer_Stream (get_file_name ($filename));
 		
 		self::$logger = new Zend_Log ();
