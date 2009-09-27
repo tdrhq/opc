@@ -35,7 +35,7 @@ class Logger
 	 */
 	static function get_logger () 
 	{
-		if (self::$logger) return $this->logger;
+		if (self::$logger) return self::$logger;
 		Zend_Loader::loadClass ("Zend_Log");
 		Zend_Loader::loadClass ("Zend_Log_Writer_Stream");
 
