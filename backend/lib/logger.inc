@@ -25,7 +25,7 @@ require_once "Zend/Loader.php";
 
 class Logger
 {
-	private $logger = null;
+	private static $logger = null;
 
 	/**
 	 * Get a Zend_Log object that can be used for logging.
