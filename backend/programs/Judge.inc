@@ -38,6 +38,7 @@ include_once "compiler/CompilerCpp.inc" ;
 include_once "compiler/CompilerC.inc" ;
 include_once "compiler/CompilerGcj.inc" ;
 include_once "compiler/CompilerGenericInterpreter.inc" ;
+require_once "lib/logger.inc";
 
 /**
  * The assumed "Compiler" interface (at this stage of development
@@ -264,8 +265,10 @@ class Judge {
   
   public function __destruct() {
 	/* cleanup temps */
-	if (defined('DEBUG')) echo "Cleaning up Judge files\n";
-	else unlink ($this->temp_output) ;
+	  if (defined('DEBUG')) {
+		  Logger::get_logger()->log ("Cleaning up Judge files", Zend_Log::DEBUG);
+		  unlink ($this->temp_output) ;
+	  }
    }
 
   /**
