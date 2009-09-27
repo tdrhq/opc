@@ -20,6 +20,8 @@
  * @author Arnold Noronha <arnold@cmi.ac.in>
  */
 
+require_once "lib/logger.inc";
+
 class ErrorController extends Zend_Controller_Action { 
 	public function illegalAction() { 
 	}
@@ -57,5 +59,10 @@ class ErrorController extends Zend_Controller_Action {
 				    . $exception->getTraceAsString());
 			break;
 		}
+	}
+
+	public function unitTestAction ()
+	{
+		throw new Exception ("This is an internal test.");
 	}
 }
