@@ -21,6 +21,7 @@
  */
 
 require_once "lib/user.inc";
+require_once "lib/logger.inc";
 
 class ProfileController extends Zend_Controller_Action { 
 	var $user = "" ; 
@@ -133,7 +134,6 @@ class ProfileController extends Zend_Controller_Action {
 		$this->view->email2 = $this->email2 ;
 		$this->view->error_message = $this->error_message ; 
 		$this->view->log = $this->log; 
-		$this->view->mock = $this->mock ;
 		$this->view->institute = $this->institute ;
 		$this->view->country = $this->country;
 		$this->view->timezone = $this->timezone;
@@ -178,8 +178,6 @@ class ProfileController extends Zend_Controller_Action {
 	}
 
 	public function init() { 
-		Zend_Loader::loadClass("Zend_Log_Writer_Stream") ;
-		Zend_Loader::loadClass("Zend_Log");
 		$this->user = "" ; 
 		$this->password = "" ; 
 		$this->confirm = "" ; 
@@ -190,13 +188,10 @@ class ProfileController extends Zend_Controller_Action {
 		$this->name2 = "" ; 
 		$this->email2 = "" ;
 		$this->error_message = "" ;
-		$this->mock = new Zend_Log_Writer_Stream ("/tmp/register-log") ;
 		$this->institute = "" ;
 		$this->country = "" ; 
 		$this->timezone = "Asia/Calcutta"; 
-		$this->log = new Zend_Log($this->mock) ;
-		$this->log->info("New Registration") ;
-
+		$this->log = Logger::get_logger ();
 	}
 
 	public function postDispatch() { 
