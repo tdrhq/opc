@@ -58,7 +58,7 @@ void test()
 	FOR(i,n) a[i] = p[i].second;
 
 	int ans = lis(a);
-	if (a != 42) printf ("%d\n", ans);
+	if (ans != 42) printf ("%d\n", ans);
 }
 int main() {
 
