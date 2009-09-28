@@ -119,25 +119,6 @@ class config {
   static $frontend_css = ""; 
   static $script_time ; //static time when this script was called
 
-  /**
-   * Handle how the format string for time in the queue viewer
-   * looks like. May want to change it depending on length
-   * of contests.Format is as used by strptime.
-   *
-   * TYPE: string
-   */
-  static $info_queue_date_string = "%H:%M:%S";
-
-  const data_dir="";//config::base_dir . "/data/";
-
-
-  /**
-   * Syslog name for the server log
-   *
-   * TYPE: string
-   */
-  static $log_file = "opclog" ;
-
   /** Don't change these unless you know what you're doing */
 
   /**
@@ -237,9 +218,6 @@ class config {
   static function get_path_to_evaluator() {
 	return config::get_programs_dir() . "submissions.php" ;
   }
-  static function get_log_file() { 
-	return get_file_name(config::$log_file) ;
-  }
 
   /**
    * Returns the absolute path of the path specified. If the path is
@@ -292,7 +270,6 @@ config::$compile_temp_directory =get_file_name(config::$compile_temp_directory);
 config::$upload_directory = get_file_name(config::$upload_directory) ;
 assert(!empty(config::$upload_directory)) ;
 config::$chroot_dir = get_file_name(config::$chroot_dir) ;
-config::$log_file = get_file_name(config::$log_file) ;
 
 if ( !empty(config::$path_to_zend) )
 	  set_include_path(get_include_path() . ":" .
