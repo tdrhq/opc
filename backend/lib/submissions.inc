@@ -149,7 +149,7 @@ class Submission
 		if (!empty($this->pathtocode)) 
 			return config::getFilename($this->pathtocode); 
 		
-		return self::getPathToCodeFromId ($id);
+		return self::getPathToCodeFromId ($this->id);
 	}
 
 	public function getLang() 
