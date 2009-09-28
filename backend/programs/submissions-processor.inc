@@ -77,7 +77,7 @@ class SubmissionProcessor
 					$this->sub->lang);
 		else 
 			$j = new Judge($this->sub->pathtocode, 
-				       $this->sub->lang, $this->sub->checker);
+				       $this->sub->lang, $this->prob->checker);
 		
 		if ($this->prob->grading_style == "opc")
 			$scorer = new OpcScorer ();
