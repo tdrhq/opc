@@ -128,11 +128,28 @@ class Submission
 		return $this->problemid; 
 	}
 
+	public static function getPathToCodeFromId ($id)
+	{
+		$id = (int) $id;
+		$dirnum = intval ($id / 1000);
+		$filenum = $id % 1000;
+
+		$dir = get_file_name ("data/uploads/$dirnum");
+		if (!is_dir ($dir)) {
+			mkdir ($dir);
+			chmod ($dir, 0777);
+		}
+
+		$filename = get_file_name (sprintf ("data/uploads/%d/%03d", $dirnum, $filenum));
+		return $filename;
+	}
+
 	public function getPathToCode() 
 	{ 
 		if (!empty($this->pathtocode)) 
 			return config::getFilename($this->pathtocode); 
-		return config::getFilename("data/uploads/{$this->uid}.{$this->problemid}.{$this->id}");
+		
+		return self::getPathToCodeFromId ($id);
 	}
 
 	public function getLang() 
@@ -222,7 +239,7 @@ class Submission
 		$dom->load ($xml);
 		return $dom->relaxNGValidate (get_file_name ("schema/result.rng"));
 	}
-	
+
 }
 
 /**
