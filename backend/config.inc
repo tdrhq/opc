@@ -1,19 +1,6 @@
 <?
 
-config::$script_time            =time() ;
 class config { 
-  /**
-   * The base URL of the webfiles direcory, as seen
-   * by the outside world.
-   * Remember to keep a '/' at the end.
-   * @deprecated Use webconfig::$base_url instead. 
-   */
-  static $base_url="" ;
-  
-  //before,after,ongoing,suspended
-  const registration_status="ongoing" ;
-  const contest_status="before";
-
   static $contest_name="Please modify local_config.inc"; 
   
   // hour,minute,second,month,day,year
@@ -115,10 +102,6 @@ class config {
    */
   static $default_grading_style = "opc" ;
 
-  /** Frontend aspects */
-  static $frontend_css = ""; 
-  static $script_time ; //static time when this script was called
-
   /** Don't change these unless you know what you're doing */
 
   /**
@@ -137,13 +120,6 @@ class config {
    */
   static $chroot_dir = NULL ;
 
-  /**
-   * No. of seconds the score updater should wait before updating
-   * the score table again. 
-   * 
-   * TYPE: float
-   */
-  static $score_updater_sleep_time=10 ; 
   /**
    * Enable hash testing to see if the user has submitted
    * the same solution twice .
@@ -241,10 +217,6 @@ function get_file_name($file) {
   return config::getFilename($file) ;
 }
 
-/* Windows development fix for include path */
-if ( array_key_exists("OS", $_ENV) && trim($_ENV["OS"])=="Windows_NT")
-set_include_path(get_include_path().";".config::get_installation_dir() );
-else
 set_include_path(get_include_path().":".config::get_installation_dir() );
 
 

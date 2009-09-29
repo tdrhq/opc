@@ -99,10 +99,6 @@ require_once webconfig::$backend_location  . "/config.inc" ;
 require_once "lib/contest.inc";
 
 
-/*
- * This is only for backward compatibility.
- */
-config::$base_url = webconfig::$base_url ;
 
 if (array_key_exists("OS", $_ENV) && trim($_ENV["OS"])=="Windows_NT")
 	set_include_path(get_include_path().";". dirname(__FILE__) );
