@@ -168,9 +168,6 @@ class config {
   static $mailer_admin_email = "";
   static $mailer_admin_name = "";
 
-  static function get_installation_dir() { 
-	return realpath( dirname(__FILE__) ) ;
-  }
   static function get_data_dir() {
     return config::get_installation_dir(); 
   }
@@ -196,7 +193,7 @@ class config {
   static function getFilename($file) { 
 	if ( $file == NULL ) return $file ;
 	if (substr($file, 0, 1) != "/" ) 
-	  $file = config::get_installation_dir() . "/" . $file ; 
+	  $file = dirname(__FILE__) . "/" . $file ; 
 	$ret = realpath($file) ;
 	if( empty($ret) ) 
 	  return $file ; 
@@ -211,23 +208,21 @@ function get_file_name($file) {
   return config::getFilename($file) ;
 }
 
-set_include_path(get_include_path().":".config::get_installation_dir() );
+set_include_path(get_include_path(). ":" . dirname(__FILE__));
 
 
 /*
  * Include a custom config file if found. 
  * consider this a hack for development purposes :)
  */
-if (is_file ( config::get_installation_dir() . "/local_config.inc" )) 
-	include config::get_installation_dir() . "/local_config.inc" ;
+if (is_file (dirname(__FILE__) . "/local_config.inc")) 
+	include dirname(__FILE__) . "/local_config.inc";
 
 /*
  * Fix all relative paths given in local_config.inc
  */
 
 
-config::$programs_directory = get_file_name(config::$programs_directory) ;
-assert(!empty(config::$programs_directory));
 config::$problems_directory = get_file_name(config::$problems_directory) ;
 assert(!empty(config::$problems_directory));
 config::$results_directory = get_file_name(config::$results_directory) ;

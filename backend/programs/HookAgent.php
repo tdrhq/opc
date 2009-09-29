@@ -45,7 +45,7 @@ class HookAgent {
 
 	echo "Running hook: $hook\n" ;
 	$d = getcwd() ; 
-	chdir( config::get_installation_dir() ) ;
+	chdir(dirname(__FILE__) . "/..") ;
 	system($hook, $ret) ; 
 	chdir($d) ;
 
