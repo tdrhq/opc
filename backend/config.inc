@@ -171,19 +171,8 @@ class config {
   static function get_data_dir() {
     return config::get_installation_dir(); 
   }
-  static function get_programs_dir() {
-
-	return config::$programs_directory ;
-  }
   static function get_problems_dir() { 
 	  return config::$problems_directory ;
-  }
-
-  static function get_path_to_runner() {
-    return config::get_programs_dir() . "/runner" ;
-  }
-  static function get_path_to_evaluator() {
-	return config::get_programs_dir() . "submissions.php" ;
   }
 
   /**

@@ -179,7 +179,7 @@ class Judge {
 	chdir( $this->compiler_object->get_exec_dir() );
 
 	$res = runandgetoutputerr
-	  (config::get_path_to_runner () . 
+	  (get_file_name ("programs/runner") . 
 	   (empty(config::$chroot_dir) ? "" : "--chroot=" . config::$chroot_dir) .
 	   " $options " .
 	   " --input={$testdata_input} " .
