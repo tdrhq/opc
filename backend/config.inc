@@ -42,15 +42,6 @@ class config {
   static $path_to_zend ; 
 
   /**
-   * Programs dir
-   * 
-   * Location of the programs directory. 
-   *
-   * TYPE: string 
-   */
-  static $programs_directory = 'programs/' ;
- 
-  /**
    * Problems dir
    *
    * Location of the problems statement directory.
@@ -69,6 +60,7 @@ class config {
    * TYPE: string
    */
   static $results_directory = 'data/results';
+  
   /**
    * Temporary directory for storing compiled executables.
    *
@@ -147,6 +139,8 @@ class config {
    * Main.java. This is possibly more secure than the other
    * system where the java classname is extracted from
    * uploaded filename.
+   *
+   * @todo not implemented
    *
    * TYPE: boolean
    */
