@@ -22,6 +22,7 @@
 
 require_once dirname(__FILE__) . "/../config.inc";
 require_once "Zend/Loader.php";
+require_once "lib/mailer.inc";
 
 class Logger
 {
@@ -38,13 +39,25 @@ class Logger
 		if (self::$logger) return self::$logger;
 		Zend_Loader::loadClass ("Zend_Log");
 		Zend_Loader::loadClass ("Zend_Log_Writer_Stream");
+		Zend_Loader::loadClass ("Zend_Log_Writer_Mail");
 
 		$filename = "data/logs/" . posix_getuid() . ".log";
 		$writer = new Zend_Log_Writer_Stream (get_file_name ($filename));
 		
+
 		self::$logger = new Zend_Log ();
 		self::$logger->addWriter ($writer);
 
+		if (!empty(config::$admin_email)) {
+			$mailer = Mailer::get_mailer ();
+			$mailer->addTo (config::$admin_email);
+			$writer_mail = new Zend_Log_Writer_Mail ($mailer);
+			$writer_mail->setSubjectPrependText ("Errors from CMI Judge installation");
+			$writer_mail->addFilter (Zend_Log::ERR);
+			
+			self::$logger->addWriter ($writer_mail);
+		}
+		
 		return self::$logger;
 	}
 

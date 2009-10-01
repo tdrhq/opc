@@ -168,6 +168,9 @@ class config {
   static $mailer_admin_email = "";
   static $mailer_admin_name = "";
 
+  /** Admin email will be used to send alert logs, in case of failure */ 
+  static $admin_email = ""; 
+
   static function get_data_dir() {
     return config::get_installation_dir(); 
   }
