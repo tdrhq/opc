@@ -241,11 +241,11 @@ class ProfileController extends Zend_Controller_Action {
 		$this->saveXML () ;
 
 		$this->copyToView() ;
-		$this->_redirect(webconfig::getContestRelativeBaseUrl () . "/profile/success") ;
+		$this->_redirect(webconfig::getContestRelativeBaseUrl () . "/profile/success/user/{$this->user}") ;
 	}
 
 	public function successAction() { 
-		$user = $this->_request->get("user") ;
+		$this->view->username = $this->_request->get("user") ;
 	}
 
 	public function updateAction() { 
