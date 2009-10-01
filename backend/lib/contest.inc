@@ -20,6 +20,8 @@
  * @author Arnold Noronha <arnold@cmi.ac.in>
  */
 
+require_once "lib/logger.inc";
+
 class Contest 
 {
 	var $id ;
@@ -95,10 +97,14 @@ class Contest
 	}
 	public static function factory($id) 
 	{
-		if ( !preg_match("/^[a-zA-Z0-9]*$/", $id)) return NULL ;
+		if ( !preg_match("/^[a-zA-Z0-9]*$/", $id)) {
+			Logger::get_logger()->error ("Contest id '$id' contains invalid characters");
+			return NULL;
+		}
 		try {
 			return new Contest($id);
 		} catch (Exception $e) {
+			Logger::get_logger()->info ("Contest '$id' could not be loaded");
 			return NULL ;
 		}
 	}
