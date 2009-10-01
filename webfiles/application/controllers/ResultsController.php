@@ -32,6 +32,12 @@ class ResultsController extends Zend_Controller_Action {
 		$download = $this->getRequest()->get("download") ;
 		$this->view->sub = SubmissionTable::get_submission(
 			$this->view->id) ;
+
+		if (empty ($this->view->sub)) {
+			$this->_forward ("404", "error");
+			return;
+		}
+
 		$this->view->user = Zend_Auth::getInstance()->getIdentity() ; 
 		$this->view->admin = User::factory($this->view->user)
 			->isAdmin() ;

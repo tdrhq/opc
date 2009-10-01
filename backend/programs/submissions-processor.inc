@@ -65,6 +65,8 @@ class SubmissionProcessor
 	function process ($sub_id, $debug = NULL)
 	{
 		$this->sub = SubmissionTable::get_submission($sub_id) ;
+		assert (!empty ($this->sub));
+		
 		$this->prob = ProblemTable::get_problem($this->sub->problemid );
 		
 		assert (is_array($this->prob->scoreweights));

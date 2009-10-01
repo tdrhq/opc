@@ -313,7 +313,7 @@ class SubmissionTable
 			->where("id = ?", $id)->query();
 		
 		$obj = $res->fetch ();
-		if (empty($obj)) throw new Exception("Attempted to find a bad submission ($id)");
+		if (empty($obj)) return NULL; 
 		return new Submission($obj) ;
 	}
 	
