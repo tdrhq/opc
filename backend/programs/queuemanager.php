@@ -96,7 +96,7 @@ class ContestQueueManager {
 	}
 	$logger->log ("Processing $id", Zend_Log::INFO);
 
-	exec(config::get_path_to_evaluator() .  " $id 2>/dev/null",$output,$ret);
+	exec(get_file_name ("programs/submissions.php") .  " $id 2>/dev/null",$output,$ret);
 
 	if ( $ret) {
 	  SubmissionTable::set_state($id,SUBMISSION_STATE_FATAL ) ; 
@@ -157,8 +157,10 @@ function sigterm_handler ($signo)
 	if ($signo == SIGINT || $signo == SIGTERM) {
 		global $queue;
 		$queue->terminating = true;
-	} else 
+	} else {
 		echo "Warning: received $signo, expected SIGTERM\n";
+		Logger::get_logger()->warn ("caught signal $signo, expected SIGTERM");
+	}
 }
 
 if (function_exists ("pcntl_signal")) {
@@ -168,6 +170,11 @@ if (function_exists ("pcntl_signal")) {
   fprintf (STDOUT, "Warning: pcntl_signal does not exist, cannot kill cleanly!\n");
 }
 
-$queue -> start_queue() ;
+try {
+	$queue->start_queue() ;
+} catch (Exception $e) {
+	Logger::get_logger()->alert ("Queue has died!"); 
+	Logger::get_logger()->alert ($e);
+  }
 
 
