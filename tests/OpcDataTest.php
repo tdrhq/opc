@@ -20,7 +20,7 @@ class OpcDataTest extends OpcTest {
 		safeSystem ("mkdir $blankdir");
 		$datadir = get_file_name ("data/");
 		$testdatadir = getcwd () . "/data";
-		safeSystem ("unionfs-fuse -o cow,nonempty,exec,allow_root $blankdir=RW:$testdatadir=RO $datadir");
+		safeSystem ("unionfs-fuse -o cow,nonempty,exec,allow_other $blankdir=RW:$testdatadir=RO $datadir");
 		parent::setUp ();
 	}
 	public function testDummy ()
