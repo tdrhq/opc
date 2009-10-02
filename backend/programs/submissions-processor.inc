@@ -120,7 +120,7 @@ class SubmissionProcessor
 		
 		if (!file_put_contents($res, $xml->flush(), LOCK_EX )) {
 			// No write permissions perhaps?
-			Logger::get_loger()->log ("Unable to write to $res!", Zend_Log::ALERT);
+			Logger::get_logger()->log ("Unable to write to $res!", Zend_Log::ALERT);
 			assert (false);
 			exit(1);
 		}
