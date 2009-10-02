@@ -20,6 +20,9 @@
  * @author Arnold Noronha <arnold@cmi.ac.in>
  */
 
+require_once dirname(__FILE__) . "/../config.inc";
+require_once "Zend/Loader.php";
+
 class Mailer 
 {
   static function get_mailer () 
@@ -37,16 +40,16 @@ class Mailer
     
     return $mail;
   }
-}
 
-/* mailer self test */
-if (!empty($argc) && $argc == 2) {
-	require_once dirname(__FILE__) . "/../config.inc";
-	require_once "Zend/Loader.php";
+  static function self_test ()
+  {
 	$mail = Mailer::get_mailer();
 	$mail->setBodyText ("This is a test email");
 	$mail->addTo ($argv[1]);
 	$mail->setSubject ("Test Email");
 	$mail->send();
-}    
+
+  }
+}
+
 
