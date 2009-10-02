@@ -26,7 +26,6 @@
  */
 char   *infile = NULL;
 char   *outfile = NULL;
-double timelimit = 1.0;
 char   *chrootdir = NULL;
 bool   debug = false;
 
@@ -356,7 +355,7 @@ malicious, or overloaded system.\n", 6*limit_timehard);
 		
 	}
 	
-	if ( usertime + systime > timelimit ) die("TLE Time Limit exceeded\n") ;
+	if (usertime + systime > limit_time) die("TLE Time Limit exceeded\n") ;
 	
 	if (!WIFEXITED(status)) {
 		printf ("EXIT Program exited abnormally. This could be due to excessive memory usage, or any runtime error that is impossible to determine.\n");
