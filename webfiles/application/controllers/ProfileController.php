@@ -214,7 +214,7 @@ class ProfileController extends Zend_Controller_Action {
 			$this->validate() ;
 		} catch ( Exception $e ) { 
 			$this->error_message = $e->getMessage() ; 
-			$this->log->err("Registration Exception: $this->error_message");
+			$this->log->info ("Registration Exception: $this->error_message");
 			return;
 		}
 
@@ -289,6 +289,7 @@ class ProfileController extends Zend_Controller_Action {
 		try { 
 			$this->validate() ; 
 		} catch (Exception $e ) { 
+			$this->log->info ("Error in updated profile: " . $e->getMessage ());
 			$this->error_message = $e->getMessage() ; 
 			$this->copyToView() ;
 			return ;
