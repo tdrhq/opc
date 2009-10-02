@@ -33,7 +33,7 @@ if (is_file ( $sub->getPathToResult() ) ) {
   $dom = new DomDocument() ;
   $dom -> load( $sub->getPathToResult()  ) ;
   $xp = new domxpath($dom);
-  
+  $xmlContent = $dom->saveXML (); 
   
   echo "<p>Total score for this submission: $sub->score</p>";
   /* Show compiler error/warnings */
@@ -120,7 +120,7 @@ echo "";
 
 if ($this->admin ) {
   echo "<p><h1>The following execution log is visible only to admins: </h1></p>";
-  echo "<div><p><pre width='80'>".htmlentities($dom->saveXML())."</pre></p></div>" ;
+  echo "<div><p><pre width='80'>".htmlentities($xmlContent)."</pre></p></div>" ;
  }
 
 
