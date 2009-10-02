@@ -27,6 +27,7 @@ require_once "lib/logger.inc";
 require_once "lib/submissions.inc" ;
 require_once "HookAgent.php" ;
 require_once "programs/compiler/common.inc" ;
+require_once "programs/queue-awakeners/Timeout.php";
 
 /* options */
 for ($i = 1; $i < $argc; $i++) {
@@ -60,9 +61,10 @@ class ContestQueueManager {
   public $id ; 
   public $info = array() ; 
   public $terminating = false;
+  public $awakener;
   
   function __construct() {
-
+	$this->awakener = new QueueAwakenerTimeout ();
   }
   
  
@@ -130,15 +132,11 @@ class ContestQueueManager {
 		throw new Exception("Too many elements");
 	  }
 	  if ( empty($ar))  {
-		if (!empty($exit_on_done)) exit(0);
-		$ms = config::$queue_inactive_sleep_time * 1000000 ; 
-		usleep(mt_rand($ms/2,$ms)) ;
-		//sleep(1);
+		$this->awakener->wait ();
 		continue ;
 	  }
 
 	  foreach ( $ar as $x ) {
-		/* Note this includes a fork! */
 		$this->start_process_submission($x) ;
 	  }
 	}
