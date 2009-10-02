@@ -74,8 +74,8 @@ int unformatvalue (char* s)
 void print_usage ()
 {
 	printf (
-		"usage: runner [options] progname progarg1 progarg2 ...\n\
-\n									\
+		"usage: runner [options] progname progarg1 progarg2 ... \
+									\
   options:\n								\
      --input=<file>        redirect program input from file\n		\
      --output=<file>       redirect program output to file\n		\
@@ -160,6 +160,114 @@ int parse_args (int argc, char* argv[])
 	return optind;
 }
 
+int subprocess (int argc, char* argv[])
+{
+	
+	rlimit rlp;
+	
+	rlp.rlim_cur = rlp.rlim_max = limits["timehard"] ; 
+	/* This is a security issue, but is important to catch 
+	   time limit exceeded's correctly. */
+	rlp.rlim_max = rlp.rlim_cur + 1 ;
+	if ( setrlimit(RLIMIT_CPU,&rlp) != 0 )
+		perror("setrlimit: RLIMIT_CPU");
+	
+	fprintf(stderr, "Time limit is set to %d (hard:%d) seconds\n", 
+		(int) rlp.rlim_cur, (int) rlp.rlim_max );
+	
+	rlp.rlim_cur = rlp.rlim_max = limits["mem"] ;		\
+	if ( setrlimit(RLIMIT_DATA ,&rlp) != 0 ) 
+		perror("setrlimit: RLIMIT_DATA: ");
+	fprintf(stderr, "Memory limit is set to %d bytes\n", limits["mem"]);
+	
+	rlp.rlim_cur = rlp.rlim_max = limits["mem"]  ; 
+	if ( setrlimit(RLIMIT_AS,&rlp) != 0 ) 
+		perror("setrlimit: RLIMIT_AS");
+	
+	rlp.rlim_cur = rlp.rlim_max = limits["fsize"]; 
+	if (setrlimit(RLIMIT_FSIZE,&rlp) != 0)
+		perror("setrlimit: RLIMIT_FSIZE");
+	
+	rlp.rlim_cur = rlp.rlim_max = limits["file"]; 
+	if (setrlimit(RLIMIT_NOFILE,&rlp) != 0) 
+		perror("setrlimit: RLIMIT_NOFILE");
+	
+	rlp.rlim_cur = limits["stack"]; 
+	rlp.rlim_max = rlp.rlim_cur + 1024 ; 
+	if ( setrlimit(RLIMIT_STACK,&rlp) != 0 ) 
+		perror("setrlimit: RLIMIT_STACK");
+	
+	if(infile && freopen(infile,"r",stdin)==NULL)
+	{
+		perror("ERRIN");
+		fprintf(stderr,"Internal error: Couldn't redirect input to stdin\n");
+		return 23;
+	}
+	
+	if(outfile && freopen(outfile,"w",stdout)==NULL)
+	{
+		perror("ERROUT");
+		fprintf(stderr,"Internal error: Couldn't redirect output to stdout\n");
+		return 24;
+	}
+	
+	if (!chrootdir)
+		fprintf(stderr,"Chroot dir not specified.\n");
+	else {
+		if (chdir(chrootdir) != 0) {
+			perror ("Unable to change directory, chroot will be ineffective");
+		}
+		if (chroot(chrootdir)  != 0)  {
+			perror("Chroot failed. Continuing anyway") ; 
+			chrootdir = NULL ;
+		}
+	}
+	
+	fprintf(stderr,"Before setres[gu]id: Effective uid=%d gid=%d \n",geteuid(),getegid());
+	if ( setresgid(65534,65534,65534) != 0 or setresuid(65534,65534,65534)!=0 ){
+		perror("Unable to set the permissions of the running program\n" 
+		       "This is a severe security issue! Try chowning runner to "
+		       "root and setting the suid bit on\nContinuing anyway.");
+	}
+	
+	rlp.rlim_cur = rlp.rlim_max = limits["nproc"];  
+	if ( setrlimit(RLIMIT_NPROC,&rlp) != 0 ) 
+		perror("setrlimit: RLIMIT_PROC");
+	
+	fprintf(stderr,"Ready to exec with: Effective uid=%d gid=%d \n",geteuid(),getegid());
+	
+	if (geteuid () == 0 || getegid () == 0) {
+		fprintf (stderr, "FATAL: we're running as root!");
+		return 1;
+	}
+	
+	if (!debug) {
+		if ( freopen("/dev/null", "w", stderr) == NULL ) 
+		{
+			perror("freopen");
+			fprintf(stderr,"Internal error: Failed to redirect stderr\n");
+			return 25;
+		}
+		else
+			fprintf (stderr, "debug: not redirecting stderr on purpose.\n");
+	}
+	
+	if (chrootdir) {
+		argv[0] = argv[0] + strlen(chrootdir) - 1 ;
+		argv[0][0] = '/' ; 
+		fprintf(stderr, "The exec is at %s relative to %s\n", argv[0], chrootdir);
+	}
+	
+	char** commands = new char *[argc + 1];
+	for (int i = 0; i < argc; i++)
+		commands [i] = argv[i];
+	commands [argc] = NULL;
+	execve(argv[0], commands, NULL) ;
+	perror("Unable to execute program") ;
+	
+	exit (26);
+}
+
 int main (int argc, char* argv[])
 {
 	init_default_limits ();
@@ -184,110 +292,7 @@ int main (int argc, char* argv[])
 	pid_t pid = fork();
 	
 	if (pid==0) {
-		
-		rlimit rlp;
-		
-		rlp.rlim_cur = rlp.rlim_max = limits["timehard"] ; 
-		/* This is a security issue, but is important to catch 
-		   time limit exceeded's correctly. */
-		rlp.rlim_max = rlp.rlim_cur + 1 ;
-		if ( setrlimit(RLIMIT_CPU,&rlp) != 0 )
-			perror("setrlimit: RLIMIT_CPU");
-		
-		fprintf(stderr, "Time limit is set to %d (hard:%d) seconds\n", 
-			(int) rlp.rlim_cur, (int) rlp.rlim_max );
-		
-		rlp.rlim_cur = rlp.rlim_max = limits["mem"] ;	\
-		if ( setrlimit(RLIMIT_DATA ,&rlp) != 0 ) 
-			perror("setrlimit: RLIMIT_DATA: ");
-		fprintf(stderr, "Memory limit is set to %d bytes\n", limits["mem"]);
-		
-		rlp.rlim_cur = rlp.rlim_max = limits["mem"]  ; 
-		if ( setrlimit(RLIMIT_AS,&rlp) != 0 ) 
-			perror("setrlimit: RLIMIT_AS");
-		
-		rlp.rlim_cur = rlp.rlim_max = limits["fsize"]; 
-		if (setrlimit(RLIMIT_FSIZE,&rlp) != 0)
-			perror("setrlimit: RLIMIT_FSIZE");
-		
-		rlp.rlim_cur = rlp.rlim_max = limits["file"]; 
-		if (setrlimit(RLIMIT_NOFILE,&rlp) != 0) 
-			perror("setrlimit: RLIMIT_NOFILE");
-		
-		rlp.rlim_cur = limits["stack"]; 
-		rlp.rlim_max = rlp.rlim_cur + 1024 ; 
-		if ( setrlimit(RLIMIT_STACK,&rlp) != 0 ) 
-			perror("setrlimit: RLIMIT_STACK");
-		
-		if(infile && freopen(infile,"r",stdin)==NULL)
-		{
-			perror("ERRIN");
-			fprintf(stderr,"Internal error: Couldn't redirect input to stdin\n");
-			return 23;
-		}
-		
-		if(outfile && freopen(outfile,"w",stdout)==NULL)
-		{
-			perror("ERROUT");
-			fprintf(stderr,"Internal error: Couldn't redirect output to stdout\n");
-			return 24;
-		}
-		
-		if (!chrootdir)
-			fprintf(stderr,"Chroot dir not specified.\n");
-		else {
-			if (chdir(chrootdir) != 0) {
-				perror ("Unable to change directory, chroot will be ineffective");
-			}
-			if (chroot(chrootdir)  != 0)  {
-				perror("Chroot failed. Continuing anyway") ; 
-				chrootdir = NULL ;
-			}
-		}
-		
-		fprintf(stderr,"Before setres[gu]id: Effective uid=%d gid=%d \n",geteuid(),getegid());
-		if ( setresgid(65534,65534,65534) != 0 or setresuid(65534,65534,65534)!=0 ){
-			perror("Unable to set the permissions of the running program\n" 
-			       "This is a severe security issue! Try chowning runner to "
-			       "root and setting the suid bit on\nContinuing anyway.");
-		}
-		
-		rlp.rlim_cur = rlp.rlim_max = limits["nproc"];  
-		if ( setrlimit(RLIMIT_NPROC,&rlp) != 0 ) 
-			perror("setrlimit: RLIMIT_PROC");
-		
-		fprintf(stderr,"Ready to exec with: Effective uid=%d gid=%d \n",geteuid(),getegid());
-		
-		if (geteuid () == 0 || getegid () == 0) {
-			fprintf (stderr, "FATAL: we're running as root!");
-			return 1;
-		}
-		
-		if (!debug) {
-			if ( freopen("/dev/null", "w", stderr) == NULL ) 
-			{
-				perror("freopen");
-				fprintf(stderr,"Internal error: Failed to redirect stderr\n");
-				return 25;
-			}
-			else
-				fprintf (stderr, "debug: not redirecting stderr on purpose.\n");
-		}
-		
-		if ( chrootdir) {
-			argv[cmd_start_index] = argv[cmd_start_index] + strlen(chrootdir) - 1 ;
-			argv[cmd_start_index][0] = '/' ; 
-			fprintf(stderr, "The exec is at %s relative to %s\n", argv[cmd_start_index], chrootdir);
-		}
-		
-		char** commands = new char *[argc - cmd_start_index + 1];
-		for (int i = 0; cmd_start_index + i < argc; i++)
-			commands [i] = argv[cmd_start_index + i];
-		commands [argc - cmd_start_index] = NULL;
-		execve(argv[cmd_start_index], commands, NULL) ;
-		perror("Unable to execute program") ;
-		
-		return 26;
+		return subprocess (argc - cmd_start_index, argv + cmd_start_index);
 	}
 	
 	
