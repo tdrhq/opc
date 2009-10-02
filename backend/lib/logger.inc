@@ -75,6 +75,15 @@ class Logger
 		
 		self::$logger->addWriter ($writer2);
 	}
+
+
+	/**
+	 * Close the Zend_Log and therefore flush all logs.
+	 */
+	static function flush ()
+	{
+		self::$logger = null;
+	}
 }
 
 
