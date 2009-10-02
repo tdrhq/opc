@@ -275,12 +275,13 @@ int subprocess (int argc, char* argv[])
 
 int main (int argc, char* argv[])
 {
-	int cmd_start_index = parse_args (argc, argv);
+	int cmd_start_index;
 	int i;
 	pid_t pid, hardlimit_monitor;
 
 	init_default_limits ();
-	
+	cmd_start_index = parse_args (argc, argv);
+
 	/* be safe on the timehard! */
 	if (limit_timehard < 1 + (int) ceil (limit_time))
 		limit_timehard = 1 + (int) ceil (limit_time);
