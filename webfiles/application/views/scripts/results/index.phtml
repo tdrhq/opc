@@ -97,11 +97,6 @@ style='padding:4px 4px 4px 4px; background: #ddd;'>";
 	echo "</td></tr></table> </p>";
 
   }
-  if ($this->admin ) {
-	
-	echo "<div><p><pre width='80'>".htmlentities($dom->saveXML())."</pre></p></div>" ;
-  }
-
  }
 	echo "<p><table width='100%' style='border: solid 1px; border-color:#777;'>";
 	echo "<tr style='background:#ddd' cellpadding='0' cellspacing='0' ><td 
@@ -122,5 +117,12 @@ else
   passthru (" cat $sub->pathtocode ") ;
 echo "";
 	echo "</td></tr></table> </p>";
+
+if ($this->admin ) {
+  echo "<p><h1>The following execution log is visible only to admins: </h1></p>";
+  echo "<div><p><pre width='80'>".htmlentities($dom->saveXML())."</pre></p></div>" ;
+ }
+
+
 
 
