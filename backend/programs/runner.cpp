@@ -74,27 +74,27 @@ int unformatvalue (char* s)
 void print_usage ()
 {
 	printf (
-		"usage: runner [options] progname progarg1 progarg2 ... \
-									\
-  options:\n								\
-     --input=<file>        redirect program input from file\n		\
-     --output=<file>       redirect program output to file\n		\
-     --mem=<size>          set the runtime memory limit to <size>\n	\
-     --stack=<size>        set the runtime stack limit to <size>\n	\
-     --time=<seconds>      set the run time limit in seconds (real number)\n \
-     --fsize=<size>        set the limit on amount of data outputted\n	\
-     --chroot=<dir>        chroot to the given directory before executing\n \
-     --debug               increase verbosity, do not redirect stderr.\n \
-     --help                display this help page\n			\
-\n									\
-  <size> is in human readable format (12M, 12k etc., case insensitive.)\n \
-  If no suffix is provided, it is understood to be bytes. 1k is 1024 bytes,\n \
-  and 1M is 1024k.\n							\
-\n									\
-  This program is a part of the CMI Online Programming Contest Judge.\n	\
-  Copyright 2007-2009 Chennai Mathematical Institute. This program\n	\
-  is licensed under GNU General Public License, version 2.\n		\
-\n									\
+		"usage: runner [options] progname progarg1 progarg2 ... \n\
+									\n\
+  options:								\n\
+     --input=<file>        redirect program input from file		\n\
+     --output=<file>       redirect program output to file		\n\
+     --mem=<size>          set the runtime memory limit to <size>	\n\
+     --stack=<size>        set the runtime stack limit to <size>	\n\
+     --time=<seconds>      set the run time limit in seconds (float)    \n\
+     --fsize=<size>        set the limit on amount of data outputted	\n\
+     --chroot=<dir>        chroot to the directory before executing     \n\
+     --debug               increase verbosity, do not redirect stderr.	\n\
+     --help                display this help page			\n\
+									\n\
+  <size> is in human readable format (12M, 12k etc., case insensitive.) \n\
+  If no suffix is provided, it is understood to be bytes. 1k is 1024    \n\
+  bytes and 1M is 1024k.						\n\
+									\n\
+  This program is a part of the CMI Online Programming Contest Judge.	\n\
+  Copyright 2007-2009 Chennai Mathematical Institute. This program	\n\
+  is licensed under GNU General Public License, version 2.		\n\
+									\n\
 ");
 }
 
