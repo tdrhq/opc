@@ -219,16 +219,14 @@ int main (int argc, char* argv[])
 		if ( setrlimit(RLIMIT_STACK,&rlp) != 0 ) 
 			perror("setrlimit: RLIMIT_STACK");
 		
-		
-		
-		if(freopen(infile,"r",stdin)==NULL)
+		if(infile && freopen(infile,"r",stdin)==NULL)
 		{
 			perror("ERRIN");
 			fprintf(stderr,"Internal error: Couldn't redirect input to stdin\n");
 			return 23;
 		}
 		
-		if(freopen(outfile,"w",stdout)==NULL)
+		if(outfile && freopen(outfile,"w",stdout)==NULL)
 		{
 			perror("ERROUT");
 			fprintf(stderr,"Internal error: Couldn't redirect output to stdout\n");
@@ -265,7 +263,7 @@ int main (int argc, char* argv[])
 			return 1;
 		}
 		
-		if (!debug) 
+		if (!debug) {
 			if ( freopen("/dev/null", "w", stderr) == NULL ) 
 			{
 				perror("freopen");
@@ -274,6 +272,7 @@ int main (int argc, char* argv[])
 			}
 			else
 				fprintf (stderr, "debug: not redirecting stderr on purpose.\n");
+		}
 		
 		if ( chrootdir) {
 			argv[cmd_start_index] = argv[cmd_start_index] + strlen(chrootdir) - 1 ;
