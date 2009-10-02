@@ -233,11 +233,16 @@ int main (int argc, char* argv[])
     	return 24;
       }
 
-    if ( !chrootdir )
+    if (!chrootdir)
       fprintf(stderr,"Chroot dir not specified.\n");
-    else  if ( chroot(chrootdir)  != 0 )  {
-      perror("Chroot failed. Continuing anyway") ; 
-      chrootdir = NULL ;
+    else {
+      if (chdir(chrootdir) != 0) {
+	perror ("Unable to change directory, chroot will be ineffective");
+      }
+      if (chroot(chrootdir)  != 0)  {
+	perror("Chroot failed. Continuing anyway") ; 
+	chrootdir = NULL ;
+      }
     }
 
     fprintf(stderr,"Before setres[gu]id: Effective uid=%d gid=%d \n",geteuid(),getegid());
