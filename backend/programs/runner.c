@@ -1,55 +1,57 @@
-#include <iostream>
-#include <string>
-#include <cassert>
-#include <cstdio>
-#include <cstdlib>
-#include <string.h>
-#include <fstream>
-#include <sstream>
-#include <sys/types.h>
-#include <dirent.h>
-#include <sys/time.h>
-#include <sys/resource.h>
-#include <unistd.h>
-#include <errno.h>
-#include <time.h>
-#include <iomanip>
-#include <signal.h>
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <map>
-#include <fcntl.h>
+#include <assert.h>
 #include <getopt.h>
-using namespace std;
+#include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
+#include <sys/resource.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
-int MFILE=4;
-#define NPROC 0
-#define MB  1024*1024
-const int return_internal=1;
-const int return_badstatus=2;
+#ifndef bool
+#define bool int
+#endif
 
-map<string,int> limits;
-char* infile = NULL;
-char* outfile = NULL;
+#ifndef true
+#define true 1
+#endif
+
+#ifndef false
+#define false 0
+#endif
+
+/*
+ * Options for execution
+ */
+char   *infile = NULL;
+char   *outfile = NULL;
 double timelimit = 1.0;
-char* chrootdir = NULL;
-bool debug = false;
+char   *chrootdir = NULL;
+bool   debug = false;
+
+/* execution limits */
+int    limit_stack = 0;    /* limit on stack, in bytes */
+int    limit_mem   = 0;    /* limit on mem, in bytes */
+int    limit_fsize = 0;    /* limit on output, in bytes */
+float  limit_time  = 0;    /* limit on execution time, in seconds */
+int    limit_file  = 0;    /* number of files that can be opened */
+int    limit_timehard = 0; /* internal limit in order to achive limit_time */
+int    limit_nproc = 0;    /* num of processes */
 
 void init_default_limits () 
 {
-	limits["stack"]=8*1024*1024;
-	limits["mem"]= 64*1024 * 1024;
-	limits["fsize"]=50*MB; //specified in bytes?
-	limits["time"] = 2 ; /* this value will not be used as is. Take a look at the timelimit variable in main () */ 
+	limit_stack  = 8*1024*1024;
+	limit_mem    = 64*1024*1024;
+	limit_fsize  = 50*1024*1024; //specified in bytes?
+	limit_time   = 2;
+
 	/*
 	 * Under a proper chroot, a limit on number of files
-	 * should be unecessary. A limit of 4 works fine for C and C++
-	 * submissions but causes problems on some machines for Java.
+	 * should be not be necessary.
 	 */
-	limits["file"]=16;
-	limits["timehard"]=0;
-	limits["nproc"] = 1 ; /* dangerous don't change */
+	limit_file   = 16;
+	limit_nproc  = 1 ; /* dangerous don't change */
 }
 
 
@@ -131,24 +133,27 @@ int parse_args (int argc, char* argv[])
 		else if (strcmp (lopts[index].name, "output") == 0)
 			outfile = strdup (optarg);
 		else if (strcmp (lopts[index].name, "open-files") == 0)
-			limits["files"] = atoi (optarg);
+			limit_file = atoi (optarg);
 		else if (strcmp (lopts[index].name, "chroot") == 0)
 			chrootdir = strdup (optarg);
 		else if (strcmp (lopts[index].name, "debug") == 0)
-			debug = true;
+			debug = 1;
 		else if (strcmp (lopts[index].name, "help") == 0) {
 			print_usage ();
 			exit (0);
 		}
 		else if (strcmp (lopts[index].name, "time") == 0) {
-			timelimit = atof (optarg);
-			fprintf(stderr, "Parsed time limit is: %f\n", timelimit) ;
-			if (limits["timehard"] == 0) 
-				limits["timehard"] = int(timelimit + 1); 
+			limit_time = atof (optarg);
 		}
-		else {
-			limits [lopts[index].name] = unformatvalue (optarg);
-		}
+		else if (strcmp (lopts[index].name, "stack") == 0)
+			limit_stack = unformatvalue (optarg);
+		else if (strcmp (lopts[index].name, "mem") == 0)
+			limit_mem = unformatvalue (optarg);
+		else if (strcmp (lopts[index].name, "fsize") == 0)
+			limit_fsize = unformatvalue (optarg);
+		else if (strcmp (lopts[index].name, "timehard") == 0)
+			limit_timehard = atoi (optarg);
+		else assert (false);
 	}
 	
 	/* return the execute command */
@@ -162,37 +167,38 @@ int parse_args (int argc, char* argv[])
 
 int subprocess (int argc, char* argv[])
 {
-	
-	rlimit rlp;
-	
-	rlp.rlim_cur = rlp.rlim_max = limits["timehard"] ; 
-	/* This is a security issue, but is important to catch 
-	   time limit exceeded's correctly. */
-	rlp.rlim_max = rlp.rlim_cur + 1 ;
-	if ( setrlimit(RLIMIT_CPU,&rlp) != 0 )
+	struct rlimit rlp;
+	char   **commands;
+	int    i; 
+
+	rlp.rlim_cur = (int) ceil (limit_time); 
+	rlp.rlim_max = limit_timehard;
+	if (setrlimit(RLIMIT_CPU,&rlp) != 0) {
 		perror("setrlimit: RLIMIT_CPU");
+		exit (1);
+	}
 	
 	fprintf(stderr, "Time limit is set to %d (hard:%d) seconds\n", 
 		(int) rlp.rlim_cur, (int) rlp.rlim_max );
 	
-	rlp.rlim_cur = rlp.rlim_max = limits["mem"] ;		\
+	rlp.rlim_cur = rlp.rlim_max = limit_mem;
 	if ( setrlimit(RLIMIT_DATA ,&rlp) != 0 ) 
 		perror("setrlimit: RLIMIT_DATA: ");
-	fprintf(stderr, "Memory limit is set to %d bytes\n", limits["mem"]);
+	fprintf(stderr, "Memory limit is set to %d bytes\n", limit_mem);
 	
-	rlp.rlim_cur = rlp.rlim_max = limits["mem"]  ; 
+	rlp.rlim_cur = rlp.rlim_max = limit_mem; 
 	if ( setrlimit(RLIMIT_AS,&rlp) != 0 ) 
 		perror("setrlimit: RLIMIT_AS");
 	
-	rlp.rlim_cur = rlp.rlim_max = limits["fsize"]; 
+	rlp.rlim_cur = rlp.rlim_max = limit_fsize; 
 	if (setrlimit(RLIMIT_FSIZE,&rlp) != 0)
 		perror("setrlimit: RLIMIT_FSIZE");
 	
-	rlp.rlim_cur = rlp.rlim_max = limits["file"]; 
+	rlp.rlim_cur = rlp.rlim_max = limit_file; 
 	if (setrlimit(RLIMIT_NOFILE,&rlp) != 0) 
 		perror("setrlimit: RLIMIT_NOFILE");
 	
-	rlp.rlim_cur = limits["stack"]; 
+	rlp.rlim_cur = limit_stack; 
 	rlp.rlim_max = rlp.rlim_cur + 1024 ; 
 	if ( setrlimit(RLIMIT_STACK,&rlp) != 0 ) 
 		perror("setrlimit: RLIMIT_STACK");
@@ -224,13 +230,13 @@ int subprocess (int argc, char* argv[])
 	}
 	
 	fprintf(stderr,"Before setres[gu]id: Effective uid=%d gid=%d \n",geteuid(),getegid());
-	if ( setresgid(65534,65534,65534) != 0 or setresuid(65534,65534,65534)!=0 ){
+	if ( setresgid(65534,65534,65534) != 0 || setresuid(65534,65534,65534)!=0 ){
 		perror("Unable to set the permissions of the running program\n" 
 		       "This is a severe security issue! Try chowning runner to "
 		       "root and setting the suid bit on\nContinuing anyway.");
 	}
 	
-	rlp.rlim_cur = rlp.rlim_max = limits["nproc"];  
+	rlp.rlim_cur = rlp.rlim_max = limit_nproc;  
 	if ( setrlimit(RLIMIT_NPROC,&rlp) != 0 ) 
 		perror("setrlimit: RLIMIT_PROC");
 	
@@ -258,8 +264,8 @@ int subprocess (int argc, char* argv[])
 		fprintf(stderr, "The exec is at %s relative to %s\n", argv[0], chrootdir);
 	}
 	
-	char** commands = new char *[argc + 1];
-	for (int i = 0; i < argc; i++)
+	commands = (char**) malloc (sizeof (char*)*(argc + 1));
+	for (i = 0; i < argc; i++)
 		commands [i] = argv[i];
 	commands [argc] = NULL;
 	execve(argv[0], commands, NULL) ;
@@ -270,39 +276,37 @@ int subprocess (int argc, char* argv[])
 
 int main (int argc, char* argv[])
 {
-	init_default_limits ();
 	int cmd_start_index = parse_args (argc, argv);
+	int i;
+	pid_t pid, hardlimit_monitor;
+
+	init_default_limits ();
 	
 	/* be safe on the timehard! */
-	limits["timehard"] = max(limits["timehard"], 1 + int(timelimit)) ;
+	if (limit_timehard < 1 + (int) ceil (limit_time))
+		limit_timehard = 1 + (int) ceil (limit_time);
 	
 	if (chrootdir && strncmp(chrootdir, argv[cmd_start_index], strlen(chrootdir)) != 0 ) {
-		fprintf(stderr, "The executable file must be on the chrooted "
-			" drive. For one, keep your temp directory on the chroot "
-			"partition. I'm disabling chroot for now.\n");
-		free (chrootdir);
-		chrootdir = NULL;
+		fprintf(stderr, "The executable file must be on the chroot directory");
+		exit (1);
 	}
 	
-	/* close any inherited file descriptors. Can somebody tell me if this
-	 * is right? */
-	for (int i = 3; i < 200; i++)
+	/* close inherited file descriptors. Is there a better way? */
+	for (i = 3; i < (1<<16); i++)
 		close (i);
 	
-	pid_t pid = fork();
-	
+	pid = fork();
 	if (pid==0) {
 		return subprocess (argc - cmd_start_index, argv + cmd_start_index);
 	}
 	
-	
-	pid_t hardlimit_monitor = fork ();
+	hardlimit_monitor = fork ();
 	if (hardlimit_monitor == 0) {
-		sleep (6*limits["timehard"]);
-		/* if I reached here, then the main process is still running, upto
-		 * some race condition possibilities */
-		fprintf (stderr, "Severe hardlimit (%d) reached. Possibly malicious, or "
-			 "overloaded system.\n", 6*limits["timehard"]);
+		sleep (6*limit_timehard);
+		/* if I reached here, then the main process is still running,
+		 * upto some race condition possibilitiy */
+		fprintf (stderr, "Severe hardlimit (%d) reached. Possibly \
+malicious, or overloaded system.\n", 6*limit_timehard);
 		kill (pid, 9);
 		return 0;
 	}
@@ -321,12 +325,12 @@ int main (int argc, char* argv[])
 	
 	// lets output the limits.
 	fflush(stderr) ; /* ordering of output of child and parent should be right */
-	double usertime = float(usage.ru_utime.tv_sec) + 
-		float(usage.ru_utime.tv_usec)/1000000 ;
+	double usertime = (float) (usage.ru_utime.tv_sec) + 
+		((float) usage.ru_utime.tv_usec)/1000000 ;
 	fprintf(stderr, "Usertime: %lf\n", usertime);
 	
-	double systime = float(usage.ru_stime.tv_sec) +
-		float(usage.ru_stime.tv_usec)/1000000 ;
+	double systime = (float) (usage.ru_stime.tv_sec) +
+		((float)usage.ru_stime.tv_usec)/1000000 ;
 	fprintf(stderr, "Systime: %lf\n", systime);
 	fprintf(stderr, "Runtime: %lf\n", usertime+systime);
 	
