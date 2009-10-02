@@ -178,13 +178,15 @@ class Judge {
 
 	chdir( $this->compiler_object->get_exec_dir() );
 
-	$res = runandgetoutputerr
-	  (get_file_name ("programs/runner") . 
-	   (empty(config::$chroot_dir) ? "" : "--chroot=" . config::$chroot_dir) .
-	   " $options " .
-	   " --input={$testdata_input} " .
-	   " --output={$this->temp_output} " . 
-	   $this->compiler_object->get_exec_string (), $output, $err);
+	$runner_cmd = get_file_name ("programs/runner") . 
+		(empty(config::$chroot_dir) ? "" : " --chroot=" . config::$chroot_dir) .
+		" $options " .
+		" --input={$testdata_input} " .
+		" --output={$this->temp_output} " . 
+		$this->compiler_object->get_exec_string ();
+
+	Logger::get_logger()->info ("Running $runner_cmd");
+	$res = runandgetoutputerr ($runner_cmd, $output, $err);
 
 	chdir ( $olddir) ;
 

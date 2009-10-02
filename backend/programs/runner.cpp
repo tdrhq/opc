@@ -166,7 +166,7 @@ int main (int argc, char* argv[])
   /* be safe on the timehard! */
   limits["timehard"] = max(limits["timehard"], 1 + int(timelimit)) ;
 
-  if (chrootdir && strncmp(chrootdir, argv[0], strlen(chrootdir)) != 0 ) {
+  if (chrootdir && strncmp(chrootdir, argv[cmd_start_index], strlen(chrootdir)) != 0 ) {
     fprintf(stderr, "The executable file must be on the chrooted "
 	    " drive. For one, keep your temp directory on the chroot "
 	    "partition. I'm disabling chroot for now.\n");
@@ -265,10 +265,10 @@ int main (int argc, char* argv[])
 	fprintf (stderr, "debug: not redirecting stderr on purpose.\n");
 
     if ( chrootdir) {
-      argv[0] = argv[0] + strlen(chrootdir) - 1 ;
-      argv[0][0] = '/' ; 
+      argv[cmd_start_index] = argv[cmd_start_index] + strlen(chrootdir) - 1 ;
+      argv[cmd_start_index][0] = '/' ; 
+      fprintf(stderr, "The exec is at %s relative to %s\n", argv[cmd_start_index], chrootdir);
     }
-    fprintf(stderr, "The exec is at %s relative to %s\n", argv[0], chrootdir);
 
     char** commands = new char *[argc - cmd_start_index + 1];
     for (int i = 0; cmd_start_index + i < argc; i++)

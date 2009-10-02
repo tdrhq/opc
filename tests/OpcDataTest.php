@@ -31,6 +31,14 @@ class OpcDataTest extends OpcTest {
 	{
 		contestDB::get_zend_db ()->closeConnection();
 		$datadir = get_file_name ("data/");
+		
+		/* let's move our log file somewhere */
+		$logfile = "$datadir/logs/" . posix_getuid () . ".log";
+
+		if (is_file ($logfile)) {
+			$contents = file_get_contents ($logfile);
+			file_put_contents ("logs/" . posix_getuid () . ".log", $contents, FILE_APPEND);
+		}
 		safeSystem ("fusermount -zu $datadir");
 	} 
 }
