@@ -57,7 +57,7 @@ if (is_file ( $sub->getPathToResult() ) ) {
   $testar = $xp -> query ( "/judge/testcase" ) ;
   
   foreach ($testar as $test) {
-	echo "<table width='100%' style='border: solid 1px; border-color:#777;'>";
+	echo "<table class='result-message' width='100%' style='border: solid 1px; border-color:#777;'>";
 	echo "<tr style='background:#ddd' ><td 
 style='padding:4px 4px 4px 4px; background: #ddd;'>";
 	$res = $xp->query("message",$test) -> item(0) ->nodeValue;
@@ -96,7 +96,7 @@ style='padding:4px 4px 4px 4px; background: #ddd;'>";
 
   }
  }
-	echo "<table width='100%' style='border: solid 1px; border-color:#777;'>";
+	echo "<table class='result-message' width='100%' style='border: solid 1px; border-color:#777;'>";
 	echo "<tr style='background:#ddd' ><td 
 style='padding:4px 4px 4px 4px; background: #ddd;'>";
 

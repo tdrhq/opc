@@ -364,6 +364,11 @@ td.clear{
 width:14px;
 }
 
+table.result-message {
+	margin-top: 6px;
+	margin-bottom: 6px;
+}
+
 .paginationControl {
     position:relative;
     margin-left: auto;
