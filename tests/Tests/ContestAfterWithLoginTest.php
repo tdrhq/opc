@@ -14,10 +14,7 @@ class ContestAfterWithLoginTest extends ContestAfterTest
 	{
 		global $test_nonadmin_uid1;
 		parent::setUp ();
-		/* "login" */
-		Zend_Loader::loadClass('Zend_Auth');
-		$adapter = new SuAuthAdapter ($test_nonadmin_uid1);
-		Zend_Auth::getInstance()->authenticate($adapter);
+		$this->login ($test_nonadmin_uid1);
 
 	}
 

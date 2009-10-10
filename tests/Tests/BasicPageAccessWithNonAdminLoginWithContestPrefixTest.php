@@ -23,10 +23,7 @@ class BasicPageAccessWithNonAdminLoginWithContestPrefix extends OpcDataTest
 		webconfig::$multi_contest = true;
 		parent::setUp ();
 		system ("../backend/admin/addcontest.php  --id {$this->contest} --name TestContest --start-time '-1 hour' --duration '2 hours' --quiet");	
-		/* "login" */
-		Zend_Loader::loadClass('Zend_Auth');
-		$adapter = new SuAuthAdapter ($test_nonadmin_uid);
-		Zend_Auth::getInstance()->authenticate($adapter);
+		$this->login ($test_nonadmin_uid);
 	}
 
 	public function testContestCanAccessProblems() 
