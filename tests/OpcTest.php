@@ -13,7 +13,7 @@ echo "$testdir\n";
 
 /* Test that Zend Test is working! */
 
-class OpcTest extends Zend_Test_PHPUnit_ControllerTestCase {
+abstract class OpcTest extends Zend_Test_PHPUnit_ControllerTestCase {
 	public function setUp ()
 	{
 		$bootstrap = new App ();

@@ -12,7 +12,7 @@ function safeSystem ($string) {
 		assert (false);
 	}
 }
-class OpcDataTest extends OpcTest {
+abstract class OpcDataTest extends OpcTest {
 	public function setUp ()
 	{
 		$blankdir = "/tmp/opc-blank-dir";
