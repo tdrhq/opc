@@ -1,16 +1,14 @@
 <?php
 
 require_once "Zend/View/Helper/Abstract.php";
-if (!include_once ("/usr/share/php-geshi/geshi.php")) {
-    if (!include_once ("geshi/geshi.php")) 
-	Logger::get_logger()->warn ("GeSHi not found in path, code formatting disabled");
-}	
 
 class Zend_View_Helper_CodeHighlight
 	extends Zend_View_Helper_Abstract
 {
 	public function codeHighlight ($source, $lang)
 	{
+		Zend_Loader::loadFile ("geshi.php", array ("/usr/share/php-geshi", config::getFilename ("geshi/")),
+			true);
 		if ($lang == "cpp") $lang = "C++";
 		if ($lang == "gcj") $lang = "Java";
 
