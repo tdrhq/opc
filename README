@@ -38,10 +38,15 @@ In order to build and set up the system you're going to need:
 Several other packages:
 * The PHP database modules, depending on which database backend
   you're using. (php5-sqlite, php5-pgsql, or php5-mysql on Debian)
-* Frontend formatting tools: php5-tidy, java2html (optional), 
-  c2html (optional)
+* Frontend formatting tools: php5-tidy, php-geshi (see below)
 * Compilers and interpreters for running the submissions:
   g++, gcc, gcj (for Java), python, perl.
+
+Recommended:
+* GeSHi (>=1.0.8). GeSHi is used for syntax highlighting. Latest
+  Debian distributions have this version and can be installed with
+  "apt-get install php-geshi". You can also download GeSHi into the 
+  backend/ directory.
 
 In addition, for a high-security environment, you might want to use
 debootstrap to create a chroot-ed environment for running the contest.
