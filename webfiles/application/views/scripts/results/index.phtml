@@ -41,7 +41,7 @@ if (is_file ( $sub->getPathToResult() ) ) {
   
   if( $xp->query("/judge/compiler/status")
 	  ->item(0)->nodeValue == 'error' ) {
-	echo "Error while compilation: <textarea class='compile-messages' rows='5' cols='80' readonly='readonly'";
+	echo "Error while compilation: <textarea class='compile-messages' rows='5' cols='80' readonly='readonly'>";
 	echo htmlspecialchars ($xp->query("/judge/compiler/error")->item(0)->nodeValue);
 	echo "</textarea>";
   }
