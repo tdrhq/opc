@@ -86,4 +86,20 @@ class ContestAfterTest extends OpcDataTest
 		$this->assertAction ("after");
 	}
 
+	public function testAdminCanSubmit ()
+	{
+		global $test_admin_uid;
+		$this->login ($test_admin_uid);
+
+		$this->request->setMethod("POST")->setPost (array("probid" => $this->problem,
+			"lang" => 'cpp', 'MAX_FILE_SIZE' => '100000')) ;
+		/* dummy file to upload. */
+		$_FILES ['source'] = array ();
+		$_FILES['source'] ['tmp_name'] = tempnam ("/tmp", "prefix");	
+		$this->dispatch ("/contests/{$this->contest}/submit/upload");
+	
+		$this->assertController ("submit");
+		$this->assertRedirect ();
+	}
+
 }

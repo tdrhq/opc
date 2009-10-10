@@ -78,8 +78,6 @@ class SubmitController extends Zend_Controller_Action {
 		} else { 
 			$this->_redirect(webconfig::getContestRelativeBaseUrl () . "submit/success/$id") ;
 		}
-
-		throw new Exception("shouldn't be here\n");
 	}
 
 	public function successAction () { 
