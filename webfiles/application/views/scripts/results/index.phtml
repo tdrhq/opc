@@ -43,7 +43,7 @@ if (is_file ( $sub->getPathToResult() ) ) {
 	  ->item(0)->nodeValue == 'error' ) {
 	echo "Error while compilation: <pre style='font-size:smaller;'
 	width='80'>";
-	echo $xp->query("/judge/compiler/error")->item(0)->nodeValue ;
+	echo htmlspecialchars ($xp->query("/judge/compiler/error")->item(0)->nodeValue);
 	echo "</pre>";
   }
   
@@ -52,7 +52,7 @@ if (is_file ( $sub->getPathToResult() ) ) {
 	echo   "Your code compiled successfully but produced the" ;
 	echo " following warnings<br />";
 	echo "<pre width='80' style='font-size:smaller;'>" ;
-	echo $warning->nodeValue ; 
+	echo htmlspecialchars ($warning->nodeValue); 
 	echo "</pre>";
   }
   $testar = $xp -> query ( "/judge/testcase" ) ;
@@ -106,16 +106,10 @@ style='padding:4px 4px 4px 4px; background: #ddd;'>";
 
         echo "<div valign='top' style='float:right;'>
 <a href='$id?download=true'>Download</a></div>";
-	echo "</td></tr><tr><td style='padding: 0px 0px 0px 0px;'>";
+	echo "</td></tr><tr><td style='padding: 4px 4px 4px 4px;'>";
 
 
-if ( $sub -> lang == "c" ) 
-  passthru( "cat {$sub->getPathToCode()} | c2html -nsw 80 " ) ;
- else if ( $sub-> lang == "java" or $sub->lang == "gcj" or $sub->lang=="cpp") 
-   passthru (" cat {$sub->getPathToCode()} | java2html -nsw 80 " ) ;
-else 
-  passthru (" cat $sub->pathtocode ") ;
-echo "";
+echo $this->codeHighlight (file_get_contents ($sub->getPathToCode ()), $sub->lang);
 	echo "</td></tr></table> </p>";
 
 if ($this->admin ) {
