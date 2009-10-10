@@ -78,6 +78,7 @@ class ContestAfterTest extends OpcDataTest
 	 */
 	public function testCannotForceSubmit ($user)
 	{
+		if (!empty ($user)) $this->login ($user);
 		$this->request->setMethod("POST")->setPost (array("probid" => $this->problem,
 			"lang" => 'cpp', 'MAX_FILE_SIZE' => '100000')) ;
 		/* dummy file to upload. */
