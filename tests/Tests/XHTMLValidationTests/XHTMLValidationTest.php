@@ -28,9 +28,10 @@ class XHTMLValidationTest extends OpcDataTest
 	{
 		global $problems_for_validation;
 		global $test_nonadmin_uid1, $test_admin_uid;
+		global $submission_owned_by_uid1, $submission_owned_by_uid2;
 
 		assert (!empty($problems_for_validation));
-		$ret = array ("/problems", "/queue", "/queue/index", "/submit", "/ranks");
+		$ret = array ("/problems", "/queue", "/queue/index", "/submit", "/ranks", "/results/$submission_owned_by_uid1", "/results/$submission_owned_by_uid2");
 		foreach ($problems_for_validation as $pr) 
 			$ret [] = "/problems/$pr";
 		$ret2 = array ();
