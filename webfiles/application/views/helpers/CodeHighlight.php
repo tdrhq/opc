@@ -7,7 +7,7 @@ class Zend_View_Helper_CodeHighlight
 {
 	public function codeHighlight ($source, $lang)
 	{
-		Zend_Loader::loadFile ("geshi.php", array ("/usr/share/php-geshi", config::getFilename ("geshi/")),
+		Zend_Loader::loadFile ("geshi.php", array (config::getFilename ("geshi/"), "/usr/share/php-geshi"),
 			true);
 		if ($lang == "cpp") $lang = "C++";
 		if ($lang == "gcj") $lang = "Java";
