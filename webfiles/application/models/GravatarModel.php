@@ -28,7 +28,7 @@ function getgravatar ($user)
 	$email = $userm->getMember ($user, 0)->email;
 
 	$grav_url = "http://www.gravatar.com/avatar.php?gravatar_id=".md5( strtolower($email) ).
-		'&size=40';
+		'&amp;size=40';
 
 	return $grav_url;
 }
