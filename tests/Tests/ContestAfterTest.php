@@ -1,6 +1,6 @@
 <?
 require_once "test_config.inc";
-require_once "OpcTest.php";
+require_once "OpcDataTest.php";
 require_once  "lib/db.inc";
 
 
@@ -24,14 +24,37 @@ class ContestAfterTest extends OpcDataTest
 		webconfig::$multi_contest = true;
 	}
 
-	public function testContestCannotAccess() 
+
+	public function lprov ()
+	{
+		global $test_nonadmin_uid1;
+		return array (array ($test_nonadmin_uid1), array (""));
+	}
+
+	/**
+	 * @dataProvider lprov
+	 */
+	public function testContestCanAccessProblems($user) 
 	{
 		/* no exceptions, right? */
-		
+		if (!empty ($user)) $this->login ($user);
 		$this->dispatch("/contests/{$this->contest}/problems/");
 		$this->assertNotRedirect ();
 		$this->assertController ("problems");
 		$this->assertAction ("index");
+	}
+
+	/**
+	 * @dataProvider lprov
+	 */
+	public function testContestCanViewProblems($user) 
+	{
+		/* no exceptions, right? */
+		if (!empty ($user)) $this->login ($user);
+		$this->dispatch("/contests/{$this->contest}/problems/{$this->problem}");
+		$this->assertNotRedirect ();
+		$this->assertController ("problems");
+		$this->assertAction ("view");
 	}
 
 	public function testCannotAccessSubmitForm ()
@@ -39,6 +62,15 @@ class ContestAfterTest extends OpcDataTest
 		$this->dispatch ("/contests/{$this->contest}/submit");
 		$this->assertController("error");
 		$this->assertAction ("after");
+	}
+
+	public function testAdminCanAccessSubmitForm ()
+	{
+		global $test_admin_uid;
+		$this->login ($test_admin_uid);
+		$this->dispatch ("/contests/{$this->contest}/submit");
+		$this->assertController ("submit");
+		$this->assertAction ("index");
 	}
 	
 	public function testCannotForceSubmit ()
