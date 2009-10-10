@@ -1,6 +1,7 @@
 <?
 require_once "OpcTest.php";
 
+require_once "SuAuthAdapter.php";
 
 /* Test that Zend Test is working! */
 require_once "lib/db.inc";
@@ -22,6 +23,13 @@ abstract class OpcDataTest extends OpcTest {
 		$testdatadir = getcwd () . "/data";
 		safeSystem ("unionfs-fuse -o cow,nonempty,exec,allow_other $blankdir=RW:$testdatadir=RO $datadir");
 		parent::setUp ();
+	}
+
+	public function login ($user)
+	{
+		Zend_Loader::loadClass('Zend_Auth');
+                $adapter = new SuAuthAdapter ($user);
+                Zend_Auth::getInstance()->authenticate($adapter);
 	}
 
 	public function tearDown ()

@@ -14,24 +14,35 @@ class XHTMLValidationTest extends OpcDataTest
 	/**
 	 * @dataProvider provider
 	 */
-	public function testPageValid ($page)
-	{	
+	public function testPageValid ($page, $user)
+	{
+		if (!empty ($user)) $this->login ($user);
 		$this->dispatch ($page);
 		$dom = new DomDocument;
+		Logger::get_logger ()->debug ($this->getResponse()->getBody());
 		$dom->loadXML ($this->getResponse()->getBody(), LIBXML_DTDLOAD);
-		$this->assertEquals (true, $dom->validate ());
+		$this->assertTrue ($dom->validate (), $this->getResponse()->getBody());
 	}
 
 	public function provider ()
 	{
 		global $problems_for_validation;
+		global $test_nonadmin_uid1, $test_admin_uid;
+
 		assert (!empty($problems_for_validation));
 		$ret = array ("/problems", "/queue", "/queue/index", "/submit", "/ranks");
 		foreach ($problems_for_validation as $pr) 
 			$ret [] = "/problems/$pr";
 		$ret2 = array ();
 		foreach ($ret as $r)
-			$ret2[] = array($r);
+			$ret2[] = array($r, "");
+
+		foreach ($ret as $r) 
+			$ret2[] = array($r, $test_nonadmin_uid1);
+
+		foreach ($ret as $r)
+			$ret2[] = array ($r, $test_admin_uid);
+
 		return $ret2;	
 	}
 }
