@@ -13,8 +13,8 @@ class Zend_View_Helper_CodeHighlight
 
 		$source = htmlentities ($source);
 		$geshi = new GeSHi ($source, $lang); 
-		$geshi->set_header_type(GESHI_HEADER_DIV);
-//		$geshi->enable_line_numbers (GESHI_NORMAL_LINE_NUMBERS);
+		$geshi->set_header_type(GESHI_HEADER_PRE_TABLE);
+		$geshi->enable_line_numbers (GESHI_NORMAL_LINE_NUMBERS);
 		$code = $geshi->parse_code ();
 		return $code;
 	}
