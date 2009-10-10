@@ -73,7 +73,10 @@ class ContestAfterTest extends OpcDataTest
 		$this->assertAction ("index");
 	}
 	
-	public function testCannotForceSubmit ()
+	/**
+	 * @dataProvider lprov
+	 */
+	public function testCannotForceSubmit ($user)
 	{
 		$this->request->setMethod("POST")->setPost (array("probid" => $this->problem,
 			"lang" => 'cpp', 'MAX_FILE_SIZE' => '100000')) ;
