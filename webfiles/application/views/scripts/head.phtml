@@ -1,21 +1,14 @@
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta name="robots" content="index,follow" />
-  <?
-
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="robots" content="index,follow" />
+<?
    $base_url = Zend_Controller_Front::getInstance()->getBaseUrl() ; 
 	$static_baseurl = webconfig::$static_baseurl;
 ?>
-
 <style type="text/css" media="screen" >
 	@import url(<? echo "'$static_baseurl/public/styles/basic.css'" ?> ); 
 </style>
-
-<link rel="alternate" type="application/atom+xml" title="Atom 1.0" href=<? echo "'". $base_url . "announcements/feed.php'"; ?>  />
-
-
-
-<title> <? if (!empty($this->title)) echo $this->escape($this->title) . " - "; echo webconfig::getContestName();  ?> </title>
+<title><? if (!empty($this->title)) echo $this->escape($this->title) . " - "; echo webconfig::getContestName();  ?></title>
 </head>
 
 
