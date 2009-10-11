@@ -4,22 +4,16 @@
 <?
  $user = Zend_Auth::getInstance()->getIdentity();
  echo "<!-- user: $user -->\n";
-?>
-<body><div id="wrapper">
-
+?><body>
+  <div id="wrapper">
 <?= $this->render ("menu.phtml") ?>
-
-
-
- <div id="main">
- <div id="maincontent">
-
+    <div id="main">
+       <div id="maincontent">
 <?= $this->layout()->content; ?>
-
- </div> <!-- maincontent -->
+       </div> <!-- maincontent -->
 <?= $this->render ("righthand.phtml"); ?>
- </div> <!-- main -->
- </div> <!-- wrapper -->
+    </div> <!-- main -->
+  </div> <!-- wrapper -->
 </body>
 </html>
 
