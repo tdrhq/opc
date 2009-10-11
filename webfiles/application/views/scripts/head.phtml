@@ -1,16 +1,11 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="robots" content="index,follow" />
-<?
+  <?
    $base_url = Zend_Controller_Front::getInstance()->getBaseUrl() ; 
 	$static_baseurl = webconfig::$static_baseurl;
-?>
-<style type="text/css" media="screen" >
+?><style type="text/css" media="screen" >
 	@import url(<? echo "'$static_baseurl/public/styles/basic.css'" ?> ); 
-</style>
-<title><? if (!empty($this->title)) echo $this->escape($this->title) . " - "; echo webconfig::getContestName();  ?></title>
+  </style>
+  <title><? if (!empty($this->title)) echo $this->escape($this->title) . " - "; echo webconfig::getContestName();  ?></title>
 </head>
-
-
-
-
