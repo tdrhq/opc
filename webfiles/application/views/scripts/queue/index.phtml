@@ -41,7 +41,7 @@ foreach ( $this->paginator as $x ) {
   echo " <td class='styled' align='center'> <a href='$baseurl/problems/{$x->problemid}'>" . $x->problemid . "</a></td>\n ";
   echo "<td class='styled' align='center' title='$abstime'>$ts</td>\n";
   
-  echo " <td class='styled' align='center'> <a href='$baseurl/users/{$x->uid}'>$x->username</a> </td>\n" ;
+  echo " <td class='styled' align='center'> <a href='$baseurl/users/{$x->uid}'>" . $this->shortenText ($x->username, 12) . "</a> </td>\n" ;
   if ( $x -> lang == "cpp" ) $flang = "C++" ;
   elseif ( $x->lang == "c" ) $flang = "C" ; 
   elseif ($x->lang == "gcj" ) $flang = "Java" ; 
@@ -50,7 +50,7 @@ foreach ( $this->paginator as $x ) {
   echo " <td class='styled' align='center'> $flang </td> \n" ;
   echo "<td class='styled' align='center'> " . $x -> score . " </td>\n" ;
   if ( !$access) {
-  echo "<td class='styled' align='center'> " . $x ->state . "</td>\n" ;
+  echo "<td class='styled' align='center'> " . $this->shortenText ($x ->state, 12) . "</td>\n" ;
   }
   else {
 	echo "<td class='styled' align='center'><a href='$baseurl/results/{$x->id}'>" ;
