@@ -33,7 +33,7 @@ if (is_file ( $sub->getPathToResult() ) ) {
   $dom = new DomDocument() ;
   $dom -> load( $sub->getPathToResult()  ) ;
   $xp = new domxpath($dom);
-  
+  $xmlContent = $dom->saveXML (); 
   
   echo "<p>Total score for this submission: $sub->score</p>";
   /* Show compiler error/warnings */
@@ -41,26 +41,24 @@ if (is_file ( $sub->getPathToResult() ) ) {
   
   if( $xp->query("/judge/compiler/status")
 	  ->item(0)->nodeValue == 'error' ) {
-	echo "Error while compilation: <pre style='font-size:smaller;'
-	width='80'>";
-	echo $xp->query("/judge/compiler/error")->item(0)->nodeValue ;
-	echo "</pre>";
+	echo "Error while compilation: <textarea class='compile-messages' rows='5' cols='80' readonly='readonly'>";
+	echo htmlspecialchars ($xp->query("/judge/compiler/error")->item(0)->nodeValue);
+	echo "</textarea>";
   }
   
   $ar = $xp -> query("/judge/compiler/warnings" ) ;
   foreach ( $ar as $warning ) {
 	echo   "Your code compiled successfully but produced the" ;
 	echo " following warnings<br />";
-	echo "<pre width='80' style='font-size:smaller;'>" ;
-	echo $warning->nodeValue ; 
-	echo "</pre>";
+	echo "<textarea class='compile-message' rows='5' cols='80' readonly='readonly'>" ;
+	echo htmlspecialchars ($warning->nodeValue); 
+	echo "</textarea>";
   }
   $testar = $xp -> query ( "/judge/testcase" ) ;
   
   foreach ($testar as $test) {
-    echo "<p>";
-	echo "<table width='100%' style='border: solid 1px; border-color:#777;'>";
-	echo "<tr style='background:#ddd' cellpadding='0' cellspacing='0' ><td 
+	echo "<table class='result-message' width='100%' style='border: solid 1px; border-color:#777;'>";
+	echo "<tr style='background:#ddd' ><td 
 style='padding:4px 4px 4px 4px; background: #ddd;'>";
 	$res = $xp->query("message",$test) -> item(0) ->nodeValue;
 	echo "$res<br />";
@@ -94,33 +92,29 @@ style='padding:4px 4px 4px 4px; background: #ddd;'>";
 	}
 	$runtime = $xp->query("exec/runtime",$test)->item(0)->nodeValue ;
 	if ( $exec_status != 'TLE' ) echo "Runtime: $runtime<br />\n";
-	echo "</td></tr></table> </p>";
+	echo "</td></tr></table>";
 
   }
-  if ($this->admin ) {
-	
-	echo "<div><p><pre width='80'>".htmlentities($dom->saveXML())."</pre></p></div>" ;
-  }
-
  }
-	echo "<p><table width='100%' style='border: solid 1px; border-color:#777;'>";
-	echo "<tr style='background:#ddd' cellpadding='0' cellspacing='0' ><td 
+	echo "<table class='result-message' width='100%' style='border: solid 1px; border-color:#777;'>";
+	echo "<tr style='background:#ddd' ><td 
 style='padding:4px 4px 4px 4px; background: #ddd;'>";
 
-	echo "<div valign='top' style='float:left'>Your submitted code:</div>";
+	echo "<div style='float:left'>Your submitted code:</div>";
 
-        echo "<div valign='top' style='float:right;'>
+        echo "<div style='float:right;'>
 <a href='$id?download=true'>Download</a></div>";
-	echo "</td></tr><tr><td style='padding: 0px 0px 0px 0px;'>";
+	echo "</td></tr><tr><td style='padding: 4px 4px 4px 4px;'>";
 
 
-if ( $sub -> lang == "c" ) 
-  passthru( "cat {$sub->getPathToCode()} | c2html -nsw 80 " ) ;
- else if ( $sub-> lang == "java" or $sub->lang == "gcj" or $sub->lang=="cpp") 
-   passthru (" cat {$sub->getPathToCode()} | java2html -nsw 80 " ) ;
-else 
-  passthru (" cat $sub->pathtocode ") ;
-echo "";
-	echo "</td></tr></table> </p>";
+echo $this->codeHighlight (file_get_contents ($sub->getPathToCode ()), $sub->lang);
+	echo "</td></tr></table> ";
+
+if ($this->admin ) {
+  echo "<h1>The following execution log is visible only to admins: </h1>";
+  echo "<div><textarea class='compile-message' rows='25' cols='80' readonly='readonly'>".htmlentities($xmlContent)."</textarea></div>" ;
+ }
+
+
 
 

@@ -14,7 +14,7 @@ class UploadTest extends OpcDataTest
 	/**
 	 * @dataProvider provider
 	 */
-	public function testUpload ($user, $prob, $lang, $source, $owner, $score)
+	public function testUpload ($user, $prob, $lang, $source, $owner, $score, $result)
 	{	
 
 		ob_start ();
@@ -25,12 +25,17 @@ class UploadTest extends OpcDataTest
 		$b = $score;
 
 		ob_start ();
-		SubmissionProcessor::process ($a);
+		$sp = new SubmissionProcessor();
+		$sp->process ($a);
 		ob_end_clean ();
 		$db = contestDB::get_zend_db ();
 		$res = $db->select()->from("submissionqueue")->where("id=$a")->query();
 		$row = $res->fetch();
 		$this->assertEquals ($b, $row->score);
+		$this->assertEquals ($result, $row->state);
+		$sub = SubmissionTable::get_submission ($a);
+		$this->assertNotEquals ($sub, NULL);
+		$this->assertTrue ($sub->validateResultXML ());
 	}
 
 	/**

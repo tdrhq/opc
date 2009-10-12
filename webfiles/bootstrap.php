@@ -1,4 +1,24 @@
-<?
+<?php
+/**
+ * Copyright 2007-2009 Chennai Mathematical Institute
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * @file   bootstrap.php
+ * @author Arnold Noronha <arnold@cmi.ac.in>
+ */
 
 
 error_reporting(E_ALL|E_STRICT);
@@ -16,7 +36,6 @@ Zend_Loader::loadClass('Zend_Debug');
 Zend_Loader::loadClass('Zend_Auth');
 Zend_Loader::loadClass('Zend_Auth_Adapter_Interface') ;
 Zend_Loader::loadClass('Zend_Layout') ;
-Zend_Layout::startMvc(array('layoutPath' => 'application/views/layouts'));
 require_once "lib/user.inc" ;
 
 class MyAuthAdapter implements Zend_Auth_Adapter_Interface { 
@@ -44,7 +63,9 @@ class App {
 
 	public function bootstrap () 
 	{
-                /* setup auth session */
+		Zend_Layout::startMvc(array('layoutPath' => dirname (__FILE__) . '/application/views/layouts'));
+                
+		/* setup auth session */
 		$auth = Zend_Auth::getInstance() ;
 		Zend_Loader::loadClass('Zend_Auth_Storage_Session');
 		$auth->setStorage(new Zend_Auth_Storage_Session(webconfig::$session_namespace));

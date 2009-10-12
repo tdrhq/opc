@@ -4,5 +4,5 @@ $user = Zend_Auth::getInstance()->getIdentity ();
 if (!empty($user)) {
 	Zend_Loader::loadClass ("GravatarModel");
 	$g = new GravatarModel ();
-	echo "<img src='" . $g->getGravatar ($user) . " alt='$user' />\n";
+	echo "<img src='" . $g->getGravatar ($user) . "' alt='$user' />\n";
 }

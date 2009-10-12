@@ -1,6 +1,27 @@
-<?
+<?php
+/**
+ * Copyright 2007-2009 Chennai Mathematical Institute
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * @file   ProfileController.php
+ * @author Arnold Noronha <arnold@cmi.ac.in>
+ */
 
 require_once "lib/user.inc";
+require_once "lib/logger.inc";
 
 class ProfileController extends Zend_Controller_Action { 
 	var $user = "" ; 
@@ -113,7 +134,6 @@ class ProfileController extends Zend_Controller_Action {
 		$this->view->email2 = $this->email2 ;
 		$this->view->error_message = $this->error_message ; 
 		$this->view->log = $this->log; 
-		$this->view->mock = $this->mock ;
 		$this->view->institute = $this->institute ;
 		$this->view->country = $this->country;
 		$this->view->timezone = $this->timezone;
@@ -158,8 +178,6 @@ class ProfileController extends Zend_Controller_Action {
 	}
 
 	public function init() { 
-		Zend_Loader::loadClass("Zend_Log_Writer_Stream") ;
-		Zend_Loader::loadClass("Zend_Log");
 		$this->user = "" ; 
 		$this->password = "" ; 
 		$this->confirm = "" ; 
@@ -170,13 +188,10 @@ class ProfileController extends Zend_Controller_Action {
 		$this->name2 = "" ; 
 		$this->email2 = "" ;
 		$this->error_message = "" ;
-		$this->mock = new Zend_Log_Writer_Stream ("/tmp/register-log") ;
 		$this->institute = "" ;
 		$this->country = "" ; 
 		$this->timezone = "Asia/Calcutta"; 
-		$this->log = new Zend_Log($this->mock) ;
-		$this->log->info("New Registration") ;
-
+		$this->log = Logger::get_logger ();
 	}
 
 	public function postDispatch() { 
@@ -199,7 +214,7 @@ class ProfileController extends Zend_Controller_Action {
 			$this->validate() ;
 		} catch ( Exception $e ) { 
 			$this->error_message = $e->getMessage() ; 
-			$this->log->err("Registration Exception: $this->error_message");
+			$this->log->info ("Registration Exception: $this->error_message");
 			return;
 		}
 
@@ -226,11 +241,11 @@ class ProfileController extends Zend_Controller_Action {
 		$this->saveXML () ;
 
 		$this->copyToView() ;
-		$this->_redirect(webconfig::getContestRelativeBaseUrl () . "/profile/success") ;
+		$this->_redirect(webconfig::getContestRelativeBaseUrl () . "/profile/success/user/{$this->user}") ;
 	}
 
 	public function successAction() { 
-		$user = $this->_request->get("user") ;
+		$this->view->username = $this->_request->get("user") ;
 	}
 
 	public function updateAction() { 
@@ -274,6 +289,7 @@ class ProfileController extends Zend_Controller_Action {
 		try { 
 			$this->validate() ; 
 		} catch (Exception $e ) { 
+			$this->log->info ("Error in updated profile: " . $e->getMessage ());
 			$this->error_message = $e->getMessage() ; 
 			$this->copyToView() ;
 			return ;

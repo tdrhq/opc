@@ -458,3 +458,13 @@ input.button {
 	padding-left: 20px; margin: 0 10px 0 5px;	
 }
 
+table.result-message {
+	margin-top: 6px;
+	margin-bottom: 6px;
+}
+
+.paginationControl {
+    position:relative;
+    margin-left: auto;
+    margin-right: auto;
+}

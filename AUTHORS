@@ -1,0 +1,50 @@
+
+Lead and only Active Developer
+==============================
+Arnold Noronha <arnold@cmi.ac.in>
+
+
+Code Contributors
+=================
+
+The following people have made various forms of contributions in the
+past. (@cmi should be @cmi.ac.in.) Please let me know if I missed your
+name.
+
+
+OPC 2007
+--------
+
+  Arnold Noronha <arnold@cmi> (Lead Developer)
+  Ramprasad Saptharishi <ramprasad@cmi> (UI Design)
+  Arpith Siromoney <arpith@cmi> (UI Design)
+  Anshul Khandelwal <anshul@cmi>
+  R Shreevatsa <shreevatsa@cmi>
+  Hrushikesh Tilak <hrushikesh@cmi>
+  Preyas Popat <preyas@cmi>
+
+(This list is based on the 2007 Subversion repository history.)
+
+
+OPC 2006
+--------
+
+While the Judge was almost rewritten for OPC 2007, we did take many
+elements from the OPC 2006 code (which was taken from OPC 2005, and
+possibly 2004). Our code repositories do not date so far back, so from
+my weak memory, I remember the following people worked on the OPC 2006
+code:
+
+  R Shreevatsa <shreevatsa@cmi>
+  KaZiM <kazim@cmi>
+  Ramprasad Saptharishi <ramprasad@cmi>
+  A B Belliappa <belliappa@cmi>
+  Prakash Chandrasekaran <prakash@cmi>
+
+
+Pre-2006
+--------
+
+Legend has it, that the pre-2006 version of the Judge was written
+entirely by Indraneel Mukherjee <indraneel@cmi>. 
+

@@ -1,18 +1,33 @@
-#!/usr/bin/php5 
-<?
+#!/usr/bin/env php
+<?php
+/**
+ * Copyright 2007-2009 Chennai Mathematical Institute
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * @file   queuemanager.php
+ * @author Arnold Noronha <arnold@cmi.ac.in>
+ */
 
-chdir(dirname($argv[0])) ;
-
-$conffile = "../config.inc" ;
-
-
-include_once $conffile  ;
-ob_end_clean();
-include_once "lib/db.inc";
-include_once "lib/submissions.inc" ;
+require_once dirname(__FILE__) . "/../config.inc";
+require_once "lib/db.inc";
+require_once "lib/logger.inc";
+require_once "lib/submissions.inc" ;
 require_once "HookAgent.php" ;
-
-include_once dirname(__FILE__) . "/compiler/common.inc" ;
+require_once "programs/compiler/common.inc" ;
+require_once "programs/queue-awakeners/Timeout.php";
 
 /* options */
 for ($i = 1; $i < $argc; $i++) {
@@ -45,9 +60,11 @@ class ContestQueueManager {
   public $table = 'submissiondata' ;
   public $id ; 
   public $info = array() ; 
- 
+  public $terminating = false;
+  public $awakener;
+  
   function __construct() {
-
+	$this->awakener = new QueueAwakenerTimeout ();
   }
   
  
@@ -71,22 +88,23 @@ class ContestQueueManager {
   function start_process_submission ($id) 
   {
 	$this->id = $id ;
+	$logger = Logger::get_logger ();
 	$info = array("id" => $id ) ;
 	$res =SubmissionTable::set_state($id, SUBMISSION_STATE_RUNNING ,
 								SUBMISSION_STATE_WAITING);
 	if ( !$res) { 
-	  echo "Processing $id failed, possible race conditition.\n";
-	  return true;
+		$logger->log ("Processing $id skipped, another process took charge.", Zend_Log::INFO);
+		return true;
 	}
-	echo "Processing $id\n" ;
+	$logger->log ("Processing $id", Zend_Log::INFO);
 
-	exec(config::get_path_to_evaluator() .  " $id 2>/dev/null",$output,$ret);
+	exec(get_file_name ("programs/submissions.php") .  " $id 2>/dev/null",$output,$ret);
 
 	if ( $ret) {
 	  SubmissionTable::set_state($id,SUBMISSION_STATE_FATAL ) ; 
-	  echo "FATAL ERROR: Submission ID $id could not be run!\n";
-	  echo "exec: returned $ret\n";
-	  echo "Program returned: $output\n";
+	  $logger->log ("FATAL ERROR: Submission ID $id could not be run!", Zend_Log::ERR);
+	  $logger->log ("exec: returned $ret", Zend_Log::ERR);
+	  $logger->log ("Program returned: $output", Zend_Log::ERR);
 	  $info['state'] = 'fatal' ; 
 	  $agent = new HookAgent($id, $this->info) ;
 	  $agent->run_hooks() ; 
@@ -106,34 +124,55 @@ class ContestQueueManager {
    */ 
   function start_queue () {
 	global $exit_on_done;
-	fprintf(STDOUT,"The queue has started.\n");
-	while ( !file_exists("stop_queue_manager")  ) {
-
-
+	$logger = Logger::get_logger ();
+	$logger->log ("The queue has started.", Zend_Log::INFO);
+	while ( !$this->terminating  ) {
 	  $ar = $this->get_waiting_queue(1) ;
 	  if ( count($ar) > 1 ) { 
 		throw new Exception("Too many elements");
 	  }
 	  if ( empty($ar))  {
-		if (!empty($exit_on_done)) exit(0);
-		$ms = config::$queue_inactive_sleep_time * 1000000 ; 
-		usleep(mt_rand($ms/2,$ms)) ;
-		//sleep(1);
+		$this->awakener->wait ();
 		continue ;
 	  }
 
 	  foreach ( $ar as $x ) {
-		/* Note this includes a fork! */
 		$this->start_process_submission($x) ;
 	  }
 	}
-	echo "Exiting gracefully...\n" ;
+	$logger->log ("Queue exiting gracefully.", Zend_Log::INFO);
+	exit (0);
   }
 
  
 }
 
-
 $queue = new ContestQueueManager  ;
-$queue -> start_queue() ;
-?>
+declare (ticks = 1);
+
+function sigterm_handler ($signo) 
+{
+	if ($signo == SIGINT || $signo == SIGTERM) {
+		global $queue;
+		$queue->terminating = true;
+	} else {
+		echo "Warning: received $signo, expected SIGTERM\n";
+		Logger::get_logger()->warn ("caught signal $signo, expected SIGTERM");
+	}
+}
+
+if (function_exists ("pcntl_signal")) {
+	pcntl_signal (SIGINT, "sigterm_handler");
+	pcntl_signal (SIGTERM, "sigterm_handler");
+} else {
+  fprintf (STDOUT, "Warning: pcntl_signal does not exist, cannot kill cleanly!\n");
+}
+
+try {
+	$queue->start_queue() ;
+} catch (Exception $e) {
+	Logger::get_logger()->alert ("Queue has died!"); 
+	Logger::get_logger()->alert ($e);
+  }
+
+

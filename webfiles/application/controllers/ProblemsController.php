@@ -1,4 +1,24 @@
-<?
+<?php
+/**
+ * Copyright 2007-2009 Chennai Mathematical Institute
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ * @file   ProblemsController.php
+ * @author Arnold Noronha <arnold@cmi.ac.in>
+ */
 
 require_once "lib/problems.inc" ;
 
@@ -145,14 +165,26 @@ class ProblemsController extends Zend_Controller_Action {
 			/* tidy to XHTML strict */
 			$opt = array("output-xhtml" => true,
 				     "add-xml-decl" => true,
+				     "bare" => true,
+				     "clean" => true,
+				     "quote-ampersand" => true,
 				     "doctype" => "strict");
 			$tidy = tidy_parse_string($this->view->content_html, $opt);
 			tidy_clean_repair ($tidy);
 
 			$this->view->content_html = tidy_get_output ($tidy);
+
+			$this->fixImages ();
+
+			/* redo the tidy, I agree it's slow, but easy way out. :) */
+			$opt = array ("output-xhtml" => true, 
+				      "doctype" => "strict",
+				      "show-body-only" => true);
+			$tidy = tidy_parse_string ($this->view->content_html, $opt);
+			tidy_clean_repair ($tidy);
+			$this->view->content_html = tidy_get_output ($tidy);
 		}
 
-		$this->fixImages ();
 
 		if ($this->_request->get("plain") == "true") {
 			$this->_helper->layout->disableLayout ();

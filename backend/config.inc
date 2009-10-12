@@ -1,19 +1,6 @@
 <?
 
-config::$script_time            =time() ;
 class config { 
-  /**
-   * The base URL of the webfiles direcory, as seen
-   * by the outside world.
-   * Remember to keep a '/' at the end.
-   * @deprecated Use webconfig::$base_url instead. 
-   */
-  static $base_url="" ;
-  
-  //before,after,ongoing,suspended
-  const registration_status="ongoing" ;
-  const contest_status="before";
-
   static $contest_name="Please modify local_config.inc"; 
   
   // hour,minute,second,month,day,year
@@ -55,15 +42,6 @@ class config {
   static $path_to_zend ; 
 
   /**
-   * Programs dir
-   * 
-   * Location of the programs directory. 
-   *
-   * TYPE: string 
-   */
-  static $programs_directory = 'programs/' ;
- 
-  /**
    * Problems dir
    *
    * Location of the problems statement directory.
@@ -82,6 +60,7 @@ class config {
    * TYPE: string
    */
   static $results_directory = 'data/results';
+  
   /**
    * Temporary directory for storing compiled executables.
    *
@@ -115,29 +94,6 @@ class config {
    */
   static $default_grading_style = "opc" ;
 
-  /** Frontend aspects */
-  static $frontend_css = ""; 
-  static $script_time ; //static time when this script was called
-
-  /**
-   * Handle how the format string for time in the queue viewer
-   * looks like. May want to change it depending on length
-   * of contests.Format is as used by strptime.
-   *
-   * TYPE: string
-   */
-  static $info_queue_date_string = "%H:%M:%S";
-
-  const data_dir="";//config::base_dir . "/data/";
-
-
-  /**
-   * Syslog name for the server log
-   *
-   * TYPE: string
-   */
-  static $log_file = "opclog" ;
-
   /** Don't change these unless you know what you're doing */
 
   /**
@@ -156,13 +112,6 @@ class config {
    */
   static $chroot_dir = NULL ;
 
-  /**
-   * No. of seconds the score updater should wait before updating
-   * the score table again. 
-   * 
-   * TYPE: float
-   */
-  static $score_updater_sleep_time=10 ; 
   /**
    * Enable hash testing to see if the user has submitted
    * the same solution twice .
@@ -191,6 +140,8 @@ class config {
    * system where the java classname is extracted from
    * uploaded filename.
    *
+   * @todo not implemented
+   *
    * TYPE: boolean
    */
   static $enable_unique_java_classname = true;
@@ -201,10 +152,12 @@ class config {
    * TYPE: array(string=>string)
    */
   static $supported_submission_languages 
-	= array ("cpp" => "C++ (g++ 4.1)",
-			 "c" => "C (gcc 4.1)",
-			 "gcj" => "Java (gcj 4.1)",
-			 );
+	= array ("cpp" => "C++ (g++)",
+		 "c" => "C (gcc)",
+		 "gcj" => "Java (gcj, filename should be Main.java)",
+		 "python" => "Python",
+		 "perl" => "Perl"
+		 );
 
   /** Mailer system */
 
@@ -215,28 +168,14 @@ class config {
   static $mailer_admin_email = "";
   static $mailer_admin_name = "";
 
-  static function get_installation_dir() { 
-	return realpath( dirname(__FILE__) ) ;
-  }
+  /** Admin email will be used to send alert logs, in case of failure */ 
+  static $admin_email = ""; 
+
   static function get_data_dir() {
     return config::get_installation_dir(); 
   }
-  static function get_programs_dir() {
-
-	return config::$programs_directory ;
-  }
   static function get_problems_dir() { 
 	  return config::$problems_directory ;
-  }
-
-  static function get_path_to_runner() {
-    return config::get_programs_dir() . "/runner" ;
-  }
-  static function get_path_to_evaluator() {
-	return config::get_programs_dir() . "submissions.php" ;
-  }
-  static function get_log_file() { 
-	return get_file_name(config::$log_file) ;
   }
 
   /**
@@ -246,7 +185,7 @@ class config {
   static function getFilename($file) { 
 	if ( $file == NULL ) return $file ;
 	if (substr($file, 0, 1) != "/" ) 
-	  $file = config::get_installation_dir() . "/" . $file ; 
+	  $file = dirname(__FILE__) . "/" . $file ; 
 	$ret = realpath($file) ;
 	if( empty($ret) ) 
 	  return $file ; 
@@ -261,27 +200,21 @@ function get_file_name($file) {
   return config::getFilename($file) ;
 }
 
-/* Windows development fix for include path */
-if ( array_key_exists("OS", $_ENV) && trim($_ENV["OS"])=="Windows_NT")
-set_include_path(get_include_path().";".config::get_installation_dir() );
-else
-set_include_path(get_include_path().":".config::get_installation_dir() );
+set_include_path(get_include_path(). ":" . dirname(__FILE__));
 
 
 /*
  * Include a custom config file if found. 
  * consider this a hack for development purposes :)
  */
-if (is_file ( config::get_installation_dir() . "/local_config.inc" )) 
-	include config::get_installation_dir() . "/local_config.inc" ;
+if (is_file (dirname(__FILE__) . "/local_config.inc")) 
+	include dirname(__FILE__) . "/local_config.inc";
 
 /*
  * Fix all relative paths given in local_config.inc
  */
 
 
-config::$programs_directory = get_file_name(config::$programs_directory) ;
-assert(!empty(config::$programs_directory));
 config::$problems_directory = get_file_name(config::$problems_directory) ;
 assert(!empty(config::$problems_directory));
 config::$results_directory = get_file_name(config::$results_directory) ;
@@ -290,7 +223,6 @@ config::$compile_temp_directory =get_file_name(config::$compile_temp_directory);
 config::$upload_directory = get_file_name(config::$upload_directory) ;
 assert(!empty(config::$upload_directory)) ;
 config::$chroot_dir = get_file_name(config::$chroot_dir) ;
-config::$log_file = get_file_name(config::$log_file) ;
 
 if ( !empty(config::$path_to_zend) )
 	  set_include_path(get_include_path() . ":" .

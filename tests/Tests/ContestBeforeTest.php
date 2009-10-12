@@ -1,6 +1,6 @@
 <?
 require_once "test_config.inc";
-require_once "OpcTest.php";
+require_once "OpcDataTest.php";
 require_once  "lib/db.inc";
 
 class ContestBeforeTest extends OpcDataTest
@@ -22,25 +22,44 @@ class ContestBeforeTest extends OpcDataTest
 
 	}
 
-	public function testContestCannotAccess() 
+	public function providerContestCannotAccess ()
+	{
+		global $test_nonadmin_uid1;
+		$url = $this->providerAccessTest ();
+		/* attach user to url */
+		$ret = array ();
+		foreach ($url as $i){
+			$ret [] = array ($i, NULL);
+			$ret [] = array ($i, $test_nonadmin_uid1);
+		}
+		return $ret;
+	}
+
+	/**
+	 * @dataProvider providerContestCannotAccess
+	 */
+	public function testContestCannotAccess($url, $user) 
 	{
 		/* no exceptions, right? */
-		
-		$this->dispatch("/contests/{$this->contest}/problems/");
+		if (!empty ($user)) $this->login ($user);
+		$this->dispatch("/contests/{$this->contest}$url");
 		$this->assertNotRedirect ();
 		$this->assertController ("error");
 		$this->assertAction ("before");
 	}
 
-	public function testCannotAccessSubmitForm ()
+
+	public function providerAccessTest ()
 	{
-		$this->dispatch ("/contests/{$this->contest}/submit");
-		$this->assertController("error");
-		$this->assertAction ("before");
+		return array ("/problems", "/submit", "/problems/{$this->problem}", "/submit/?probid={$this->problem}"); 
 	}
-	
-	public function testCannotForceSubmit ()
+ 
+	/**
+	 * @dataProvider providerCannotForceSubmit
+	 */
+	public function testCannotForceSubmit ($user)
 	{
+		if (!empty ($user)) $this->login ($user);
 		$this->request->setMethod("POST")->setPost (array("probid" => $this->problem,
 			"lang" => 'cpp', 'MAX_FILE_SIZE' => '100000')) ;
 		/* dummy file to upload. */
@@ -50,6 +69,12 @@ class ContestBeforeTest extends OpcDataTest
 	
 		$this->assertController ("error");
 		$this->assertAction ("before");
+	}
+
+	public function providerCannotForceSubmit ()
+	{
+		global $test_nonadmin_uid1;
+		return array (array ($test_nonadmin_uid1), array (""));
 	}
 
 }

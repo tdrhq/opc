@@ -3,6 +3,7 @@
 require_once "../backend/config.inc";
 require_once "Zend/Loader.php";
 require "Zend/Test/PHPUnit/ControllerTestCase.php";
+require_once "test_config.inc";
 
 $testdir = getcwd();
 chdir ("../webfiles");
@@ -12,7 +13,7 @@ echo "$testdir\n";
 
 /* Test that Zend Test is working! */
 
-class OpcTest extends Zend_Test_PHPUnit_ControllerTestCase {
+abstract class OpcTest extends Zend_Test_PHPUnit_ControllerTestCase {
 	public function setUp ()
 	{
 		$bootstrap = new App ();
@@ -20,7 +21,4 @@ class OpcTest extends Zend_Test_PHPUnit_ControllerTestCase {
 		parent::setUp ();
 	}
 
-	public function testDummy ()
-	{
-	}
 }

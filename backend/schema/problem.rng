@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<element name="problem" xmlns="http://relaxng.org/ns/structure/1.0">
+  <interleave>
+    <optional>
+      <element name="id">
+        <text/>
+      </element>
+    </optional>
+    <optional>
+      <element name="nick">
+        <text/>
+      </element>
+    </optional>
+    <zeroOrMore>
+      <element name="test">
+        <interleave>
+          <element name="inputpath">
+            <text/>
+          </element>
+          <element name="outputpath">
+            <text/>
+          </element>
+          <element name="score">
+            <text/>
+          </element>
+        </interleave>
+      </element>
+    </zeroOrMore>
+    <optional>
+      <element name="resourcelimits">
+        <interleave>
+          <optional>
+            <element name="memory">
+              <text/>
+            </element>
+          </optional>
+          <optional>
+            <element name="runtime">
+              <text/>
+            </element>
+          </optional>
+          <optional>
+            <element name="output">
+              <text/>
+            </element>
+          </optional>
+        </interleave>
+      </element>
+    </optional>
+    <optional>
+      <element name="grading-style">
+        <text/>
+      </element>
+    </optional>
+    <optional>
+      <element name="checker">
+        <text/>
+      </element>
+    </optional>
+    <optional>
+      <element name="resourcelimits_string">
+        <text/>
+      </element>
+    </optional>
+    <optional>
+      <element name="resource">
+        <text/>
+      </element>
+    </optional>
+    <optional>
+      <element name="author">
+        <text/>
+      </element>
+    </optional>
+    <zeroOrMore>
+      <element name="compile-options">
+	<attribute name='lang'><text/></attribute>
+	<text/>
+      </element>
+    </zeroOrMore>
+  </interleave>
+</element>
