@@ -54,7 +54,7 @@ foreach ( $this->paginator as $x ) {
   }
   else {
 	echo "<td class='styled' align='center'><a href='$baseurl/results/{$x->id}'>" ;
-	echo "{$x->state} </a></td>";
+	echo $this->shortenText ($x->state, 12) . "</a></td>";
   }
   
   echo "</tr>\n";
