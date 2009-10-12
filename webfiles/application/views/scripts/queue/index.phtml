@@ -19,6 +19,7 @@ if ( empty($mee) ) $isadmin = false ;
  else $isadmin = $mee -> isAdmin() ;
 
 $rowcount=0;
+$curtime = time ();
 foreach ( $this->paginator as $x ) {
   //  print_r ($x);
   $access = (  Zend_Auth::getInstance()->getIdentity() == $x->uid) ;
@@ -34,11 +35,11 @@ foreach ( $this->paginator as $x ) {
   else 
 	echo "<td> <a href='$baseurl/results/{$x->id}'> {$x->id} </a></td>";
   
-  $ts = strftime("%d %b %Y %H:%M:%S %z",strtotime($x -> time ));
-
+  $abstime = strftime("%d %b %Y %H:%M:%S %z",strtotime($x -> time ));
+  $ts = $this->timeDifference (strtotime ($x->time), $curtime); 
   //  echo "<td class='styled'>". print_r(strtotime($x -> time )) . "</td>" ;
   echo " <td class='styled' align='center'> <a href='$baseurl/problems/{$x->problemid}'>" . $x->problemid . "</a></td>\n ";
-  echo "<td class='styled' align='center'> " . $ts . "</td>\n";
+  echo "<td class='styled' align='center' title='$abstime'>$ts</td>\n";
   
   echo " <td class='styled' align='center'> <a href='$baseurl/users/{$x->uid}'>$x->username</a> </td>\n" ;
   if ( $x -> lang == "cpp" ) $flang = "C++" ;
