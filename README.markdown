@@ -29,7 +29,7 @@ The basic requirements:
 Source code:
 
 * CMI-Judge code: "git clone git://github.com/tdrhq/opc.git"
-* Zend Framework: http://framework.zend.com/download/overview
+* [Zend Framework](http://framework.zend.com/download/overview)
 
 In order to build and set up the system you're going to need:
 
@@ -84,9 +84,9 @@ directory structure:
   Now edit backend/local_config.inc with the following lines:
  
     <?php
-    config::$DB_Name="judgedbname" ; //that you created earlier
-    config::$DB_User="dbusername" ; 
-    config::$DB_Password="dbpassword" ;
+    config::$DB_Name="judgedbname"; //that you created earlier
+    config::$DB_User="dbusername"; 
+    config::$DB_Password="dbpassword";
     config::$DB_Hostname="localhost"; //or the host name if it's different
     config::$DB_Adapter="Pdo_Pgsql"; //or Pdo_Mysqli
   
