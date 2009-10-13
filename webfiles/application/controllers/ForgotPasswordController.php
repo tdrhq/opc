@@ -80,6 +80,7 @@ Please use the following link to reset your password:
 		$mail->addTo ($userm->getMember($obj, 0)->email,
 			      $userm->getMember($obj, 0)->name);
 		$mail->setSubject ("Password Reset");
+		Logger::get_logger ()->info ("Sending password reset to " . $userm->getMember ($obj, 0)->email);
 		$mail->send();
 	}
 
