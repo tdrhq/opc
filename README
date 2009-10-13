@@ -1,8 +1,7 @@
 
-          The CMI Online Programming Contest Judge
+## The CMI Online Programming Contest Judge
 
-About
------
+### About
 
 The CMI Judge is a configurable automated Judge for Online Programming
 Contests. The CMI-Judge was originally designed for the popular CMI
@@ -15,8 +14,7 @@ Indian Computing Olympiad.
 The CMI Judge is currently maintained by Arnold Noronha
 <arnold@cmi.ac.in>, a grad student at the University of Pennsylvania.
 
-System Requirements
--------------------
+### System Requirements
 
 CMIJ has been used on various flavors of Debian and Ubuntu. That said,
 it should not be very hard to get it to run on other flavors of
@@ -51,8 +49,7 @@ Recommended:
 In addition, for a high-security environment, you might want to use
 debootstrap to create a chroot-ed environment for running the contest.
 
-Installation
-------------
+### Installation
 
 Copy the "Zend" directory from Zend Framework into the "backend"
 directory of the CMI Judge. I imagine you know have the following
@@ -98,19 +95,16 @@ backend/programs/queuemanager.php in the background.
 
 See Advanced Frontend Setup for more configuration details.
 
-Adding problems
----------------
+### Adding problems
  
   See docs/ContestAdministration
 
-Adding Contests
----------------
+### Adding Contests
   
   See docs/ContestAdministration
   
 
-Alternatives
-------------
+### Alternatives
 
 When this Judge was first written, there were few, if any,
 configurable open source judges available. Today, almost every
