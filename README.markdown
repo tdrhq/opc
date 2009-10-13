@@ -44,6 +44,7 @@ Several other packages:
   g++, gcc, gcj (for Java), python, perl.
 
 Recommended:
+
 * GeSHi (>=1.0.8). GeSHi is used for syntax highlighting. Latest
   Debian distributions have this version and can be installed with
   "apt-get install php-geshi". You can also download GeSHi into the 
