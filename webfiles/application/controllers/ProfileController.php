@@ -37,7 +37,7 @@ class ProfileController extends Zend_Controller_Action {
 	 * if all is good. 
 	 */
 	public function validate() { 
-		$this->log->info("validating...\n");
+		$this->log->debug("validating profile information");
 		$this->user = $this->_request->get("user") ;
 		$this->password = $this->_request->get("password") ;
 		$this->confirm = $this->_request->get("confirm") ;
@@ -174,7 +174,7 @@ class ProfileController extends Zend_Controller_Action {
 		$userm->setInstitute($user, $this->institute) ;
 		$userm->setCountry($user, $this->country) ;
 		$userm->setTimezone($user, $this->timezone) ;
-		$this->log->info("Profile is seemingly saved");
+		$this->log->debug("Updated profile information saved");
 	}
 
 	public function init() { 
@@ -209,7 +209,7 @@ class ProfileController extends Zend_Controller_Action {
 	
 		$this->view->mode = "register" ; 
 		
-		$this->log->info("Registration in progress") ;
+		$this->log->debug("Registration in progress") ;
 		try { 
 			$this->validate() ;
 		} catch ( Exception $e ) { 
@@ -218,7 +218,7 @@ class ProfileController extends Zend_Controller_Action {
 			return;
 		}
 
-		$this->log->info("Validated.. seems fine to continue.");
+		$this->log->debug("Validated.. seems fine to continue.");
 		$u = User::factory($this->user) ;
 		if ( !empty($u) ) { 
 			$this->error_message = "This username is already in ".
