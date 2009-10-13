@@ -27,13 +27,16 @@ The basic requirements:
 * A database backend: SQLite3, Postgres, or MySQL.
 
 Source code:
+
 * CMI-Judge code: "git clone git://github.com/tdrhq/opc.git"
 * Zend Framework: http://framework.zend.com/download/overview
 
 In order to build and set up the system you're going to need:
+
 * GNU build-essential, g++ 
 
 Several other packages:
+
 * The PHP database modules, depending on which database backend
   you're using. (php5-sqlite, php5-pgsql, or php5-mysql on Debian)
 * Frontend formatting tools: php5-tidy, php-geshi (see below)
@@ -55,9 +58,9 @@ Copy the "Zend" directory from Zend Framework into the "backend"
 directory of the CMI Judge. I imagine you know have the following
 directory structure:
   
-  /backend
-  /backend/Zend
-  /webfiles
+    /backend
+    /backend/Zend
+    /webfiles
 
 * Backend setup for SQLite:
 
@@ -95,13 +98,19 @@ backend/programs/queuemanager.php in the background.
 
 See Advanced Frontend Setup for more configuration details.
 
-### Adding problems
+### Adding a Problem
  
-  See docs/ContestAdministration
+We currently do not support web-based uploads of problems. Please use
+the following script from the command line to add a new problem:
 
-### Adding Contests
-  
-  See docs/ContestAdministration
+    backend/admin/addproblem.php
+
+### Adding a Contest
+
+We currently do not support web-based creation of contests. Please use
+the following script from the command line to add a new contest:
+
+    backend/admin/addcontest.php
   
 
 ### Alternatives
