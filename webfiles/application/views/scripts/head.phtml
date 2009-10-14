@@ -7,5 +7,6 @@
 ?><style type="text/css" media="screen" >
 	@import url(<? echo "'$static_baseurl/public/styles/basic.css'" ?> ); 
   </style>
+  <link rel="icon" href="<? echo $static_baseurl . "/public/images/" . webconfig::$logo ?>" />
   <title><? if (!empty($this->title)) echo $this->escape($this->title) . " - "; echo webconfig::getContestName();  ?></title>
 </head>
