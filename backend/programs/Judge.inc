@@ -92,8 +92,7 @@ class Judge {
 	$this -> xmlw->setIndent(true);
 	$this -> xmlw->startDocument('1.0','ISO-8859-1');
 	$this -> xmlw->startElement('judge');
-	$this -> temp_output = tempnam (
-			config::$compile_temp_directory, "output" ) ;
+	$this -> temp_output = tempnam (sys_get_temp_dir (), "output" ) ;
 
   }
 
@@ -269,7 +268,7 @@ class Judge {
   
   public function __destruct() {
 	/* cleanup temps */
-	  if (defined('DEBUG')) {
+	  if (!defined('DEBUG')) {
 		  Logger::get_logger()->log ("Cleaning up Judge files", Zend_Log::DEBUG);
 		  unlink ($this->temp_output) ;
 	  }
