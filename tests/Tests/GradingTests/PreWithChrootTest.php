@@ -9,4 +9,12 @@ class PreWithChrootTest extends PreTest
 		config::$compile_temp_directory = realpath ("./chroot/tmp");
 		parent::setUp ();
 	}
+
+	public function tearDown ()
+	{
+		parent::tearDown ();
+		/* required for PHP < 5.3 */
+		config::$chroot_dir = "";
+		config::$compile_temp_directory = "/tmp";
+	}
 }
