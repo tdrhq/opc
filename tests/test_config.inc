@@ -38,7 +38,8 @@ $test_uploads = array (
 	array (262, 'iarcs-apr05-ad-2', 'c', 'code-samples/TLE.c', 'general', 0, 'Time Limit Exceeded'),
 	array (262, 'POINTS', 'c', 'code-samples/SEG.c', 'general', 0, 'Runtime Error (SEG)'),
 	array (262, 'iarcs-apr05-ad-2', 'c', 'code-samples/sigxcpu-handled.c', 'general', 0, 'Runtime Error (KILL)'),
-	array (262, 'POINTS', 'c', 'code-samples/simple.c', 'general', 0, 'Wrong Answer')
+	array (262, 'POINTS', 'c', 'code-samples/simple.c', 'general', 0, 'Wrong Answer'),
+	array (262, "iarcs-mar05-ad-1", "python", "code-samples/iarcs-mar05-ad-1-case4.py", "general", 0, "Wrong Answer") 
 );
 
 $problems_for_validation = array (
