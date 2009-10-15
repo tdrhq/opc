@@ -40,7 +40,10 @@ class CompilerGenericInterpreter
 	public function compile($pathtocode)  
 	{
 		$this->pathtocode = tempnam (config::$compile_temp_directory, "a");
+		assert (is_file ($pathtocode));
 		copy ($pathtocode, $this->pathtocode);
+		assert (is_file ($this->pathtocode));
+		chmod ($this->pathtocode, 0755);
 		return true;
 	}
 
@@ -53,8 +56,11 @@ class CompilerGenericInterpreter
 	{
 		$prefix = "";
 		if (!empty (config::$chroot_dir)) $prefix = config::$chroot_dir;
-		return "$prefix/usr/bin/env " . $this->interpreter 
-			. "  " .$this->pathtocode ;
+	
+		assert (substr ($this->pathtocode, 0, strlen ($prefix)) == $prefix);
+		$relpath = substr ($this->pathtocode, strlen ($prefix));
+		return "/usr/bin/env " . $this->interpreter 
+			. " " .$relpath ;
 	}
 	
 	public function get_exec_dir() 

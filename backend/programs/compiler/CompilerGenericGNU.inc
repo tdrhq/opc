@@ -83,7 +83,13 @@ class CompilerGenericGNU {
    * @return string
    */
   public function get_exec_string() {
-
+	if (!empty (config::$chroot_dir)) {
+		$chroot = realpath (config::$chroot_dir);
+		$output = realpath ($this->output_exec);
+		assert (substr ($output, 0, strlen ($chroot))
+			== $chroot);
+		return substr ($output, strlen($chroot));
+	}
 	return $this->output_exec;
   }
 

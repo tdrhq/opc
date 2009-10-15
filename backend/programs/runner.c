@@ -257,12 +257,6 @@ int subprocess (int argc, char* argv[])
 			fprintf (stderr, "debug: not redirecting stderr on purpose.\n");
 	}
 	
-	if (chrootdir) {
-		argv[0] = argv[0] + strlen(chrootdir) - 1 ;
-		argv[0][0] = '/' ; 
-		fprintf(stderr, "The exec is at %s relative to %s\n", argv[0], chrootdir);
-	}
-	
 	commands = (char**) malloc (sizeof (char*)*(argc + 1));
 	for (i = 0; i < argc; i++)
 		commands [i] = argv[i];
@@ -285,11 +279,6 @@ int main (int argc, char* argv[])
 	/* be safe on the timehard! */
 	if (limit_timehard < 1 + (int) ceil (limit_time))
 		limit_timehard = 1 + (int) ceil (limit_time);
-	
-	if (chrootdir && strncmp(chrootdir, argv[cmd_start_index], strlen(chrootdir)) != 0 ) {
-		fprintf(stderr, "The executable file must be on the chroot directory");
-		exit (1);
-	}
 	
 	/* close inherited file descriptors. Is there a better way? */
 	for (i = 3; i < (1<<16); i++)
