@@ -206,8 +206,10 @@ class Judge {
 	}
 
 	$this->xmlw->writeElement("stdout",$output);
+	Logger::get_logger ()->debug ("Runner stdout: $output");
 	if ( $err != "" ) { 
 	  $this->xmlw-> writeElement("stderr", $err) ;
+	  Logger::get_logger ()->debug ("Runner stderr: $err");
 	  /* Parse the stderr for result */ 
 	  $arr = explode('Runtime: ', $err) ;
 	  $runtime = 0.0+ $arr[1] ; 
