@@ -51,7 +51,9 @@ class CompilerGenericInterpreter
 
 	public function get_exec_string() 
 	{
-		return "/usr/bin/env " . $this->interpreter 
+		$prefix = "";
+		if (!empty (config::$chroot_dir)) $prefix = config::$chroot_dir;
+		return "$prefix/usr/bin/env " . $this->interpreter 
 			. "  " .$this->pathtocode ;
 	}
 	
