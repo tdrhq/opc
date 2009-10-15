@@ -30,10 +30,17 @@ class CompilerGenericInterpreter
 		assert (!empty($inter));
 		$this->interpreter = $inter; 
 	}
+
+	public function __destruct()
+	{
+		if (defined ('DEBUG')) return;
+		unlink ($this->pathtocode);
+	}
 	
 	public function compile($pathtocode)  
 	{
-		$this->pathtocode = $pathtocode;
+		$this->pathtocode = tempnam (config::$compile_temp_directory, "a");
+		copy ($pathtocode, $this->pathtocode);
 		return true;
 	}
 
