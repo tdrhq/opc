@@ -37,6 +37,7 @@ class XHTMLValidationTest extends OpcDataTest
 			      "/queue/index/user/arnstein",
 			      "/queue/index/uid/263",
 			      "/queue/index/problem/POINTS",
+			      "/queue/index/state/Accepted",
 			      "/queue/index", 
 			      "/submit", 
 			      "/ranks", 
