@@ -31,6 +31,7 @@ class QueueController extends Zend_Controller_Action {
 
 		$user = $this->_request->get("user");
 		$uid = $this->_request->get ("uid");
+		$problem = $this->_request->get("problem");
 
 		if (webconfig::getContest()->isQueuePrivate()) { 
 			$auth = Zend_Auth::getInstance();
@@ -49,7 +50,8 @@ class QueueController extends Zend_Controller_Action {
 		$query = $db->select ()->from('submissionqueue')->join("users", "submissionqueue.uid = users.uid")->where ("owner = ?", webconfig::getContestId())->order("id desc");
 		if (!empty($user)) $query = $query->where ("users.username = ?", $user);
 		if (!empty($uid)) $query = $query->where ("users.uid = ?", $uid);
-
+		if (!empty($problem)) $query = $query->where ("submissionqueue.problemid = ?", $problem);
+ 
 		$adapter = new Zend_Paginator_Adapter_DbSelect ($query);
 		$this->view->paginator = new Zend_Paginator ($adapter);
 
