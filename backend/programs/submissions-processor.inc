@@ -36,7 +36,58 @@ require_once "scorers/IoiScorer.php";
 require_once "lib/logger.inc";
 
 class SubmissionProcessor 
-{
+{	
+	/**
+	 * if true, do not update the database or result files once the
+	 * submission is processed.
+	 */
+	private $dry_run = false;
+
+	public function setDryRun ($_dry_run)
+	{
+		$this->dry_run = $_dry_run;
+	}
+
+	public function setState ($state)
+	{
+		if ($this->dry_run) {
+			Logger::get_logger()->info ("dry run: state $state");
+			return;
+		}
+
+		assert (!empty($this->sub));
+		SubmissionTable::set_state ($this->sub->id, $state);
+	}
+
+	public function setScore ($score)
+	{
+		if ($this->dry_run) {
+			Logger::get_logger()->info ("dry run: score $score");
+			return;
+		}
+
+		assert (!empty($this->sub));
+		SubmissionTable::set_score ($this->sub->id, $score);
+	}
+
+	public function setResultXml ($xml)
+	{
+		if ($this->dry_run) {
+			Logger::get_logger ()->debug ("dry run: $xml");
+			return;
+		}
+
+		$res = get_file_name ("data/results/{$this->sub->id}.xml") ;
+		
+		if (!file_put_contents($res, $xml, LOCK_EX )) {
+			// No write permissions perhaps?
+			Logger::get_logger()->log ("Unable to write to $res!", Zend_Log::ALERT);
+			assert (false);
+			exit(1);
+		}
+		chmod($res,0644);
+	}
+
 	function runcase ($input, $output, $score, $j /* Judge */, $scorer)
 	{
 		$logger = Logger::get_logger ();
@@ -87,13 +138,13 @@ class SubmissionProcessor
 			$scorer = new IoiScorer ();
 		
 		
-		SubmissionTable::set_state($this->sub->id, "Compiling");
+		$this->setState ($this->sub->id, "Compiling");
 		$compileOptions = "";
 		if (!empty ($this->prob->compileOptions[$this->sub->lang])) 
 			$compileOptions = $this->prob->compileOptions[$this->sub->lang];
 		if (!$j->compile($compileOptions)) {
-			SubmissionTable::set_state($this->sub->id, "Compile Error") ;
-			SubmissionTable::set_score ($this->sub->id, 0);
+			$this->setState ("Compile Error") ;
+			$this->setScore (0);
 		}
 		else {
 			for ($i = 0 ; $i < $this->prob->numcases; $i++){
@@ -110,20 +161,11 @@ class SubmissionProcessor
 				} 
 				$j->end_test_case ();
 			}
-			SubmissionTable::set_score($this->sub->id, $scorer->getScore());
-			SubmissionTable::set_state($this->sub->id, $scorer->getResponse());
+			$this->setScore ($scorer->getScore());
+			$this->setState ($scorer->getResponse());
 
 		}
-		
-		$res = get_file_name ("data/results/{$this->sub->id}.xml") ;
-		$xml = $j -> end();
-		
-		if (!file_put_contents($res, $xml->flush(), LOCK_EX )) {
-			// No write permissions perhaps?
-			Logger::get_logger()->log ("Unable to write to $res!", Zend_Log::ALERT);
-			assert (false);
-			exit(1);
-		}
-		chmod($res,0644);
+		$xml = $j->end();
+		$this->setResultXml ($xml->flush());
 	}
 }
