@@ -155,6 +155,7 @@ class config {
 	= array ("cpp" => "C++ (g++)",
 		 "c" => "C (gcc)",
 		 "gcj" => "Java (gcj, filename should be Main.java)",
+		 "java" => "Java (J2SE, filename should be Main.java)",
 		 "python" => "Python",
 		 "perl" => "Perl"
 		 );

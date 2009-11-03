@@ -32,6 +32,8 @@ $test_uploads = array (
         array ('263', 'POINTS', 'cpp', 'code-samples/points.cpp', 'general', 100, 'Accepted'),
 	array (263, 'POINTS', 'cpp', 'code-samples/points-wrong.cpp', 'general', 0, 'Wrong Answer'),
 	array (262, 'POINTS', 'python', 'code-samples/points.py', 'general', 20, 'Wrong Answer'), /* python test! */
+	array (262, 'POINTS', 'java', 'code-samples/points-java/Main.java', 'general', 20, 'Wrong Answer'),
+	array (262, 'POINTS', 'gcj',  'code-samples/points-java/Main.java', 'general', 20, 'Wrong Answer'),
 	array (262, 'iarcs-apr05-ad-2', 'c', 'code-samples/sleep.c', 'general', 0, 'Runtime Error (KILL)'),
 	array (262, 'POINTS', 'c', 'code-samples/fork.c', 'general', 0, 'Runtime Error (ABRT)'),
 	array (262, 'POINTS', 'c', 'code-samples/mem.c', 'general', 0, 'Runtime Error (ABRT)'),

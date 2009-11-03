@@ -60,7 +60,7 @@ class CompilerJava {
 	return $this -> error;
   }
   public function get_exec_string() { 
-	return "java Main" ;
+	return "/usr/bin/env java Main" ;
   }
   public function get_exec_dir() {
 	return dirname($this->pathtocode) ;
