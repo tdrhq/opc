@@ -1,5 +1,6 @@
 <?
 $baseurl = Zend_Controller_Front::getInstance()->getBaseUrl() ;
+$contesturl = $baseurl . webconfig::getContestRelativeBaseUrl ();
 
 $user = $this->user; 
 
@@ -33,15 +34,15 @@ foreach ( $this->paginator as $x ) {
   if ( ! $access ) 
 	echo " <td> " . $x->id ." </td>";
   else 
-	echo "<td> <a href='$baseurl/results/{$x->id}'> {$x->id} </a></td>";
+	echo "<td> <a href='{$contesturl}results/{$x->id}'> {$x->id} </a></td>";
   
   $abstime = strftime("%d %b %Y %H:%M:%S %z",strtotime($x -> time ));
   $ts = $this->timeDifference (strtotime ($x->time), $curtime); 
   //  echo "<td class='styled'>". print_r(strtotime($x -> time )) . "</td>" ;
-  echo " <td class='styled' align='center'> <a href='$baseurl/problems/{$x->problemid}'>" . $x->problemid . "</a></td>\n ";
+  echo " <td class='styled' align='center'> <a href='{$contesturl}problems/{$x->problemid}'>" . $x->problemid . "</a></td>\n ";
   echo "<td class='styled' align='center' title='$abstime'>$ts</td>\n";
   
-  echo " <td class='styled' align='center'> <a href='$baseurl/users/{$x->uid}'>" . $this->shortenText ($x->username, 12) . "</a> </td>\n" ;
+  echo " <td class='styled' align='center'> <a href='{$contesturl}users/{$x->uid}'>" . $this->shortenText ($x->username, 12) . "</a> </td>\n" ;
   if ( $x -> lang == "cpp" ) $flang = "C++" ;
   elseif ( $x->lang == "c" ) $flang = "C" ; 
   elseif ($x->lang == "gcj" ) $flang = "Java" ; 
@@ -53,7 +54,7 @@ foreach ( $this->paginator as $x ) {
   echo "<td class='styled' align='center'> " . $this->shortenText ($x ->state, 12) . "</td>\n" ;
   }
   else {
-	echo "<td class='styled' align='center'><a href='$baseurl/results/{$x->id}'>" ;
+	echo "<td class='styled' align='center'><a href='{$contesturl}results/{$x->id}'>" ;
 	echo $this->shortenText ($x->state, 12) . "</a></td>";
   }
   
@@ -64,7 +65,6 @@ foreach ( $this->paginator as $x ) {
 echo "</table>";
 
 echo $this->paginationControl ($this->paginator, 'Sliding', "pagination.phtml");
-?>
 
 
 
