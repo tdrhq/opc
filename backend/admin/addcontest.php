@@ -66,6 +66,7 @@ chdir(dirname($argv[0]));
 
 require_once "../config.inc" ;
 require_once "lib/db.inc" ;
+require_once "lib/logger.inc";
 
 ob_implicit_flush(true);
 
@@ -122,6 +123,7 @@ if (empty($quiet)) {
 	echo $dom->saveXML();
 
 	echo "\nJust verify that the timestamps have been correctly parsed.\n";
+	Logger::get_logger()->info ("contest added with: " . $argv);	
 }
 
 
