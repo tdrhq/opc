@@ -11,7 +11,7 @@ $isuser = Zend_Auth::getInstance()->hasIdentity();
 
 <?
    $class = "styled";
-$baseurl = Zend_Controller_Front::getInstance()->getBaseUrl() ; 
+$baseurl = webconfig::getContestRelativeBaseUrl (); 
 foreach ( $this->problems as $pro ) { 
   echo "  <tr class='$class'><td class='$class' align='right'>{$pro->rowid}</td><td class='$class'><a href='$baseurl/problems/{$pro->id}'>{$pro->id}</a></td><td class='$class'><a href='$baseurl/problems/{$pro->id}'>{$pro->nickname}</a></td>";
 
