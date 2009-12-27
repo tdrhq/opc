@@ -242,26 +242,20 @@ class ProblemDetails extends Problem
 	}
 	
 	/**
-	 * Returns a well formatted resourcelimit string.
+	 * Function to return resource limits as an associative array.
 	 *
-	 * @deprecated You should use getRuntimeLimit and getMemoryLimit 
-	 * directly. This function seems to assume how the runner.cpp file 
-	 * takes input.
-	 * @return string with the resource limits.
+	 * @return Associative array
 	 */
-	function getResourceLimitString() 
-	{ 
-		$ret = $this->resourcelimits; 
-		
-		if ($this->memory_limit) 
-			$ret .= " --mem=" . $this->memory_limit;
-		if ($this->runtime_limit) 
-			$ret .= " --time=" . $this->runtime_limit; 
-		if ($this->file_output_size_limit)
-			$ret .= " --fsize=" . $this->file_output_size_limit; 
-		return $ret; 
+	function getResourceLimitsArray ()
+	{
+		$ret = array ();
+		if ($this->memory_limit) $ret ["mem"] = $this->memory_limit;
+		if ($this->runtime_limit) $ret ["time"] = $this->runtime_limit;
+		if ($this->file_output_size_limit) 
+			$ret["fsize"] = $this->file_output_size_limit;
+		return $ret;
 	}
-	
+       
 	static function factory($probid) 
 	{ 
 		return ProblemTable::get_problem($probid);

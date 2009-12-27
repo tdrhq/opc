@@ -152,6 +152,15 @@ class Judge {
 	
   }
 
+  private function build_options_string ($options)
+  {
+	  $ret = "";
+	  foreach ($options as $key => $value)
+		  $ret .= " " . escapeshellarg("--$key") . 
+			  " " . escapeshellarg($value);
+	  return $ret;
+  }
+
   /**
    * Run the code agains the given testdata_input (input file) 
    * with $options to be given to runner, and the error response
@@ -164,24 +173,25 @@ class Judge {
    *      information.
    * @return TRUE if the run was succesful
    */
-  public function run ($testdata_input,$options,&$response) {
+  public function run ($testdata_input,$options_array,&$response) {
 
 	$this->xmlw -> startElement("exec") ;
 	$this->xmlw -> writeElement("time", date('r'));
-	//	echo $this ->compiler_object->get_exec_string();
-	// throw new Exception("Not compiled");
-	
-	//TODO: FIX
+
 	$output = "" ;
 	$olddir = getcwd() ;
-
+	$options = $this->build_options_string ($options_array);
 	chdir( $this->compiler_object->get_exec_dir() );
 
 	$runner_cmd = get_file_name ("programs/runner") . 
-		(empty(config::$chroot_dir) ? "" : " --chroot=" . config::$chroot_dir) .
+		(empty(config::$chroot_dir) 
+		 ? 
+		    "" 
+		 : 
+		    " --chroot " . escapeshellarg(config::$chroot_dir)) .
 		" $options " .
-		" --input={$testdata_input} " .
-		" --output={$this->temp_output} " . 
+		" --input " . escapeshellarg ($testdata_input) .
+ 		" --output " . escapeshellarg ($this->temp_output) . " " .
 		$this->compiler_object->get_exec_string ();
 
 	Logger::get_logger()->info ("Running $runner_cmd");

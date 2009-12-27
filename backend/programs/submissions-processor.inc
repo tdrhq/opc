@@ -94,7 +94,7 @@ class SubmissionProcessor
 		$logger->log ("Running on $input", Zend_Log::DEBUG);
 		
 		$ret = $j->run ($input,
-				$this->prob->getResourceLimitString(), 
+				$this->prob->getResourceLimitsArray(), 
 				$response);
 	
 		if (!$ret)
