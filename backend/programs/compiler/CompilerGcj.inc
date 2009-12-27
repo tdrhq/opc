@@ -50,6 +50,14 @@ class CompilerGcj extends CompilerGenericGNU {
 	rmdir(dirname($this->pathtocode) ) ;
 	parent::__destruct() ;
   }
+
+  public function fix_options_array ($options)
+  {
+	  if (empty($options["mem"])) return $options;
+	  $options["mem"] = $this->convert_memsize_to_bytes (config::$java_additional_memory) + $this->convert_memsize_to_bytes ($options["mem"]);
+	  return $options;
+  }
+
 };
 
-?>
+

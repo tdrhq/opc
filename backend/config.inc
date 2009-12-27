@@ -151,7 +151,7 @@ class config {
    * 
    * @todo move to better, standardized configuration.
    */
-  static $java_additional_memory = 64;
+  static $java_additional_memory = "64M";
 
   /**
    * Supported languages as associative array

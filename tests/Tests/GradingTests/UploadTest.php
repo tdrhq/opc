@@ -31,8 +31,8 @@ class UploadTest extends OpcDataTest
 		$db = contestDB::get_zend_db ();
 		$res = $db->select()->from("submissionqueue")->where("id=$a")->query();
 		$row = $res->fetch();
-		$this->assertEquals ($b, $row->score);
-		$this->assertEquals ($result, $row->state);
+		$this->assertEquals (array($b, $result), 
+					array($row->score, $row->state));
 		$sub = SubmissionTable::get_submission ($a);
 		$this->assertNotEquals ($sub, NULL);
 		$this->assertTrue ($sub->validateResultXML ());
