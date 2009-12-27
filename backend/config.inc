@@ -147,6 +147,13 @@ class config {
   static $enable_unique_java_classname = true;
 
   /**
+   * Additional memory allocated for java in MB.
+   * 
+   * @todo move to better, standardized configuration.
+   */
+  static $java_additional_memory = 64;
+
+  /**
    * Supported languages as associative array
    *
    * TYPE: array(string=>string)

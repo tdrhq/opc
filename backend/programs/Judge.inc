@@ -180,7 +180,8 @@ class Judge {
 
 	$output = "" ;
 	$olddir = getcwd() ;
-	$options = $this->build_options_string ($options_array);
+	$options = $this->build_options_string 
+		($this->compiler_object->fix_options_array ($options_array));
 	chdir( $this->compiler_object->get_exec_dir() );
 
 	$runner_cmd = get_file_name ("programs/runner") . 

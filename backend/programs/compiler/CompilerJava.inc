@@ -20,7 +20,9 @@
  * @author Arnold Noronha <arnold@cmi.ac.in>
  */
 
-class CompilerJava { 
+require_once dirname(__FILE__) . "/CompilerAbstract.inc";
+
+class CompilerJava extends CompilerAbstract { 
 
   var $compiler_string ; 
   

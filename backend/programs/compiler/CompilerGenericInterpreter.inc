@@ -21,7 +21,9 @@
  */
 
 
-class CompilerGenericInterpreter 
+require_once dirname(__FILE__) . "/CompilerAbstract.inc";
+
+class CompilerGenericInterpreter extends CompilerAbstract
 { 
 	var $interpreter ; 
 	var $pathtocode ; 

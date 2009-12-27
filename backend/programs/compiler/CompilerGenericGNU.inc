@@ -21,7 +21,9 @@
  */
 
 
-class CompilerGenericGNU { 
+require_once dirname (__FILE__) . "/CompilerAbstract.inc";
+
+class CompilerGenericGNU extends CompilerAbstract { 
 
   /**
    * The command line argument to compile the program
