@@ -39,7 +39,7 @@ foreach ( $this->paginator as $x ) {
   $abstime = strftime("%d %b %Y %H:%M:%S %z",strtotime($x -> time ));
   $ts = $this->timeDifference (strtotime ($x->time), $curtime); 
   //  echo "<td class='styled'>". print_r(strtotime($x -> time )) . "</td>" ;
-  echo " <td class='styled' align='center'> <a href='{$contesturl}problems/{$x->problemid}'>" . $x->problemid . "</a></td>\n ";
+  echo " <td class='styled' align='center'>". $this->problem ($x->problemid) . "</td>\n ";
   echo "<td class='styled' align='center' title='$abstime'>$ts</td>\n";
   
   echo " <td class='styled' align='center'> <a href='{$contesturl}users/{$x->uid}'>" . $this->shortenText ($x->username, 12) . "</a> </td>\n" ;

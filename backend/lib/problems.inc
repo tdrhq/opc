@@ -304,6 +304,7 @@ class ProblemTable
 		
 		/* fill in all the details. */
 		$prob -> id = $id;
+		$prob -> nickname = $obj->nickname;
 		$prob -> rowid = $obj->rowid;
 		$prob -> numcases = $obj->numcases; 
 		$prob -> inputpaths = NULL;
