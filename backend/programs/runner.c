@@ -110,6 +110,7 @@ int parse_args (int argc, char* argv[])
 			{"fsize", 1, NULL, 0},
 			{"time", 1, NULL, 0},
 			{"open-files", 1, NULL, 0},
+			{"proc", 1, NULL, 0},
 			{"timehard", 1, NULL, 0},
 			{"chroot", 1, NULL, 0},
 			{"debug", 0, NULL, 0},
@@ -133,6 +134,8 @@ int parse_args (int argc, char* argv[])
 			outfile = strdup (optarg);
 		else if (strcmp (lopts[index].name, "open-files") == 0)
 			limit_file = atoi (optarg);
+		else if (strcmp (lopts[index].name, "proc") == 0)
+			limit_nproc = atoi (optarg);
 		else if (strcmp (lopts[index].name, "chroot") == 0)
 			chrootdir = strdup (optarg);
 		else if (strcmp (lopts[index].name, "debug") == 0)
@@ -235,6 +238,8 @@ int subprocess (int argc, char* argv[])
 		       "root and setting the suid bit on\nContinuing anyway.");
 	}
 	
+	if (debug) 
+		fprintf(stderr, "nproc limit: %d\n", limit_nproc);
 	rlp.rlim_cur = rlp.rlim_max = limit_nproc;  
 	if ( setrlimit(RLIMIT_NPROC,&rlp) != 0 ) 
 		perror("setrlimit: RLIMIT_PROC");
