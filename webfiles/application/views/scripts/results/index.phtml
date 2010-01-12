@@ -14,9 +14,8 @@ if ( $this->download ) {
 echo "<p>Submission ID: $sub->id <br />" ; 
 echo "Submission Time: " . strftime("%R:%S",strtotime($sub->time)) . "<br />\n" ;
 echo "Language: $sub->lang<br />";
-echo "Team: <a href='users/{$sub->user}'>" . $sub->team . "</a><br />\n";
-echo "Problem: <a href='" . Zend_Controller_Front::getInstance()->getBaseUrl() . "/problems/" . 
-   $sub->problemid . "'>{$sub->problemid}</a></p>\n";
+echo "User: " . $this->link ("/users/{$sub->user}", $sub->uid) . "<br />\n";
+echo "Problem: " . $this->problem ($sub->getProblemId ()) . "</p>\n";
 
 /* if state is waiting/queue/running, then just say so and 
  * quit
@@ -102,8 +101,8 @@ style='padding:4px 4px 4px 4px; background: #ddd;'>";
 
 	echo "<div style='float:left'>Your submitted code:</div>";
 
-        echo "<div style='float:right;'>
-<a href='$id?download=true'>Download</a></div>";
+        echo "<div style='float:right;'>" . 
+	$this->link ("/results/$id?download=true", "Download") . "</div>";
 	echo "</td></tr><tr><td style='padding: 4px 4px 4px 4px;'>";
 
 
