@@ -95,14 +95,12 @@ array_push($contest_pages, "info/?form=teamlist");
 
 $i = 0;
 foreach ($contest_menu as $option) {
-  echo "<a href='" . $base_url . "/$contest_pages[$i]'>$option</a>\n";
+  echo $this->link ("/$contest_pages[$i]", $option);
   ++$i;
-  
-  //    echo "<a class=\"main_menu_item\" href=\"$base_url/$contest_pages[$i]\">$option</a></li>\n";
-  
 }
+
 if ( Zend_Auth::getInstance()->hasIdentity() ) 
-	echo "<a href='$base_url/auth/logout'>Logout</a>\n";
+  echo $this->link ("/auth/logout", "Logout");
 
 echo "</div> <!-- sublinks --> \n</div> <!--subheader-->\n ";
 //$option = $contest_menu[$i]; //Why do we need this?

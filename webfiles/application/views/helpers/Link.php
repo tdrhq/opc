@@ -22,7 +22,7 @@ class Zend_View_Helper_Link
 	 * @param $innerHtml The inner HTML inside the <a>
 	 * @param $opt       An array of options
 	 */
-	public function link ($url, $innerHtml, $opt)
+	public function link ($url, $innerHtml, $opt = array ())
 	{
 		/* fix the $url */
 		$url = $this->view->buildUrl ($url);
