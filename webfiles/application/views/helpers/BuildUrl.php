@@ -27,9 +27,9 @@ class Zend_View_Helper_BuildUrl
 
 		if (substr ($url, 0, strlen ("/public/")) == "/public/")
 			$url = $this->concat ($static_baseurl, $url);
-		else if (substr ($url, 0, 1) == "/") {
-			if (webconfig::$contest_id != "general")
-				$url = $this->concat ("/contests/" . webconfig::$contest_id, $url);
+		else {
+			if (webconfig::getContestId () != "general")
+				$url = $this->concat ("/contests/" . webconfig::getContestId (), $url);
 			$url = $this->concat ($baseurl, $url);
 		}
 
