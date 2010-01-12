@@ -42,7 +42,7 @@ function validate()
   // -->
 </script> 
 <p class="para">Submit your solutions here:</p>
-<form action="upload" method="post" onsubmit="return validate()" 
+<form action="<?= $this->buildUrl ('/submit/upload') ?>" method="post" onsubmit="return validate()" 
   enctype="multipart/form-data">
 <table>
 <tr>
