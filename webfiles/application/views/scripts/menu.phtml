@@ -10,7 +10,7 @@ $static_baseurl = webconfig::$static_baseurl;
 <div id="header">
 
   <?= $this->link (webconfig::$logo_href, 
-		   "<img alt='logo' src='$static_baseurl/public/images/" . webconfig::$logo . "'/>",
+		   "<img alt='logo' src='" . $this->buildUrl ("/public/images/") . webconfig::$logo . "'/>",
 	       array ("class" => "cmilogo"));?>
 
 <?php
@@ -95,7 +95,6 @@ array_push($contest_pages, "info/?form=teamlist");
 
 $i = 0;
 foreach ($contest_menu as $option) {
-  
   echo "<a href='" . $base_url . "/$contest_pages[$i]'>$option</a>\n";
   ++$i;
   
