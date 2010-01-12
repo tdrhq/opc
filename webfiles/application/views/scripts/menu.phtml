@@ -45,10 +45,7 @@ foreach ($main_menu As $option) {
 	  echo " <span style='font-size: smaller'>|</span> " ;
         $ii = ($i%4)+2;
     }
-?><a  href='<? echo "$base_url/$main_pages[$i]"?>'   > 
-		 <? echo $main_menu[$i] ?> 	   
-	  </a> 
-<?
+    echo $this->link ("/" . $main_pages [$i], $main_menu [$i]);
     ++$i;
 }
 

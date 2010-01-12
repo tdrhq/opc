@@ -12,7 +12,7 @@ foreach( $this->ranks as $entry) {
   $class = ($even ? "styleda" : "styled") ;
   echo " <tr class='$class'>\n";
 
-  echo "  <td class='styled'><a href='$baseurl/users/{$entry['team']}'>{$entry['team']}</a></td>\n";
+  echo "  <td class='styled'>" . $this->link ("/users/{$entry['team']}", $entry['team']) . "</td>\n";
   echo "  <td class='styled'>{$entry['score']}</td>\n";
   echo " </tr>\n";
   $even = !$even ; 
