@@ -9,8 +9,9 @@ $static_baseurl = webconfig::$static_baseurl;
 
 <div id="header">
 
-  <a class="cmilogo" href="<? echo webconfig::$logo_href; ?>"><img alt="logo" src="<? echo "$static_baseurl/public/images/" . webconfig::$logo ?>" /></a>
-
+  <?= $this->link (webconfig::$logo_href, 
+		   "<img alt='logo' src='$static_baseurl/public/images/" . webconfig::$logo . "'/>",
+	       array ("class" => "cmilogo"));?>
 
 <?php
 $main_menu =array();
