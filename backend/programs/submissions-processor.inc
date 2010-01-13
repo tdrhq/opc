@@ -138,7 +138,7 @@ class SubmissionProcessor
 			$scorer = new IoiScorer ();
 		
 		
-		$this->setState ($this->sub->id, "Compiling");
+		$this->setState ("Compiling");
 		$compileOptions = "";
 		if (!empty ($this->prob->compileOptions[$this->sub->lang])) 
 			$compileOptions = $this->prob->compileOptions[$this->sub->lang];

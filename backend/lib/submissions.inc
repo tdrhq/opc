@@ -364,6 +364,7 @@ class SubmissionTable
 	 */
 	public static function set_state($id, $state, $oldstate = NULL) 
 	{
+		assert (!is_numeric($state));
 		$db = contestDB::get_zend_db ();
 		/* WARNING TODO: $state isn't quoted */
 		$id = $db->quote ($id, 'INTEGER');
