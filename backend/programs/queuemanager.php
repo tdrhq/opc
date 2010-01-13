@@ -102,9 +102,10 @@ class ContestQueueManager {
 
 	if ( $ret) {
 	  SubmissionTable::set_state($id,SUBMISSION_STATE_FATAL ) ; 
-	  $logger->log ("FATAL ERROR: Submission ID $id could not be run!", Zend_Log::ERR);
+	  $logger->alert ("FATAL ERROR: Submission ID $id could not be run!");
 	  $logger->log ("exec: returned $ret", Zend_Log::ERR);
 	  $logger->log ("Program returned: $output", Zend_Log::ERR);
+	  Logger::flush ();
 	  $info['state'] = 'fatal' ; 
 	  $agent = new HookAgent($id, $this->info) ;
 	  $agent->run_hooks() ; 
