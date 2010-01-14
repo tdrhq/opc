@@ -14,7 +14,6 @@ class Zend_View_Helper_Link
 		$this->view = $_view;
 	}
 
-	static $links = array ();
 	/**
 	 * Return the URI associated with the given options.
 	 *
@@ -32,7 +31,6 @@ class Zend_View_Helper_Link
 			$ret .= " $key=\"" . htmlspecialchars ($value) . "\"";
 		$ret .= ">$innerHtml</a>";
 		
-		Zend_View_Helper_Link::$links [] = $url;
 		return $ret;
 	}
 

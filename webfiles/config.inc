@@ -58,10 +58,8 @@ class webconfig {
 	 */
 	static $default_timezone = "Asia/Calcutta" ;
 
-	static $static_baseurl = "";
-
 	static $enable_gravatars = false;
-	
+
 	static function getContestId ()
 	{
 		$front = Zend_Controller_Front::getInstance();
