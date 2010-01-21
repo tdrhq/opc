@@ -20,7 +20,7 @@
  * @author Arnold Noronha <arnold@cmi.ac.in>
  */
 
-error_reporting (E_ALL | E_STRICT);
+error_reporting (E_ALL);
 require_once "./config.inc";
 /* if this is called we can assume that mod_rewrite is disabled */
 

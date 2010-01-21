@@ -140,13 +140,21 @@ class App {
 		$router->addRoute('su', new Zend_Controller_Router_Route ('su/:user', array('controller' => 'su')));
 		
 	} /* function bootstrap */
+
+	/**
+	 * Set's up gracefully trapping frontend errors. Do not use this when
+	 * running automated tests since then errors can't be automatically
+	 * trapped.
+	 */
+	public function setupErrorHandling ()
+	{
+		Zend_Loader::loadClass ("Zend_Controller_Plugin_ErrorHandler");
+		Zend_Controller_Front::getInstance()->registerPlugin (new Zend_Controller_Plugin_ErrorHandler());
+	}
+
+	public function dispatch ()
+	{
+		Zend_Controller_Front::getInstance()->dispatch();
+	}
 } /* class App */
 
-if (empty ($__zend_test_no_dispatch)) {
-	$app = new App ();
-	$app->bootstrap();
-	Zend_Controller_Front::getInstance()->dispatch();
-
-	Zend_Loader::loadClass ("Zend_Controller_Plugin_ErrorHandler");
-	Zend_Controller_Front::getInstance()->registerPlugin (new Zend_Controller_Plugin_ErrorHandler());
-} 
