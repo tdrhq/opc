@@ -12,6 +12,10 @@ abstract class OpcTest extends Zend_Test_PHPUnit_ControllerTestCase {
 	public function setUp ()
 	{
 		$bootstrap = new App ();
+
+		/* @todo: I have no idea what the following does. Need to 
+		 * find out and then add it in the comment or use more
+		 * simple logic */
 		$this->bootstrap = array ($bootstrap, 'bootstrap');
 		parent::setUp ();
 	}
