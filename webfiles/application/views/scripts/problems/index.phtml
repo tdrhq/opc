@@ -17,7 +17,7 @@ foreach ( $this->problems as $pro ) {
 	<td class='$class' align='right'>{$pro->rowid}</td>
 	<td class='$class'>" . $this->link ("/problems/{$pro->id}", $pro->id) .
        "</td>
-	<td class='$class'> " . $this->link ("/problems{$pro->id}", $pro->nickname) . "</td>";
+	<td class='$class'> " . $this->link ("/problems/{$pro->id}", $pro->nickname) . "</td>";
   if ($isuser) 
     echo "<td class='$class'>{$pro->state}</td>";
   echo "</tr>\n";
