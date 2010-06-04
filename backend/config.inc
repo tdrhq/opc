@@ -1,4 +1,4 @@
-<?
+<?php
 
 class config { 
   static $contest_name="Please modify local_config.inc"; 
