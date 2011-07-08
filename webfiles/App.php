@@ -104,7 +104,7 @@ class App {
 		
 		$router = $frontController->getRouter(); // returns a rewrite router by default
 		
-		$router->addRoute ('comtestroute', new Zend_Controller_Router_Route ('contests/:contestid/:controller/:action', array ('controller' => 'index', 'action' => 'index')));
+		$router->addRoute ('contestroute', new Zend_Controller_Router_Route ('contests/:contestid/:controller/:action/*', array ('controller' => 'index', 'action' => 'index')));
 
 
 		/* for each of the following routes, we need two versions, with
