@@ -40,8 +40,8 @@ class QueueController extends Zend_Controller_Action {
 				$this->_forward("login", "error", NULL, array());
 			else { 
 				$userobj = User::factory($auth->getIdentity());
-				if (!$userobj->isAdmin()) 
-					$user = $auth->getIdentity();
+				if (!$userobj->isAdmin() and !isset($uid)) 
+					$this->_forward("privacy", "error", NULL, array());
 			}
 		}
 
