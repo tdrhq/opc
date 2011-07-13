@@ -28,7 +28,7 @@ class ProblemsController extends Zend_Controller_Action {
 	function fixImages ()
 	{
 		$dom = new DomDocument ();
-		$dom->loadXML ($this->view->content_html, LIBXML_DTDLOAD | LIBXML_NOXMLDECL);
+		@$dom->loadXML ($this->view->content_html, LIBXML_NOXMLDECL);
 		$xp = new DOMXPath ($dom);
 		$xp->registerNamespace(
 			'html','http://www.w3.org/1999/xhtml' );
