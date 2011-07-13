@@ -23,11 +23,29 @@
 require_once "lib/submissions.inc" ;
 
 class ResultsController extends Zend_Controller_Action { 
+
+ 	public function init() 
+	{
+		Zend_Loader::loadClass("ContestModel") ;
+	}
+
 	public function indexAction() { 
-		if (!Zend_Auth::getInstance()->hasIdentity()){
+		$uid = Zend_Auth::getInstance();
+		if (!$uid->hasIdentity()){
 			$this->_forward("login", "error", null, array());
 			return;
 		}
+		$user = User::factory($uid->getIdentity());
+		$this->contestmodel = new ContestModel;
+		$this->state = $this->contestmodel->getContestState(webconfig::getContestId());
+
+		$is_admin = $user->isAdmin();
+
+		if( !$is_admin and $this->state == "pending_result" ){
+			$this->_forward("pending", "error", null, array());
+			return;
+		}
+		
 		$this->view->id = (int) $this->getRequest()->get("id") ;
 		$download = $this->getRequest()->get("download") ;
 		$this->view->sub = SubmissionTable::get_submission(

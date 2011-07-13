@@ -35,6 +35,11 @@ class Contest
 	var $isPriv = false;
 
 	var $enable_queue_privacy = false; 
+	/**
+	 * Participants cannot see the results as long as this is false.
+	 * Change the corresponding xml tag once contest results are announced.
+	 */
+	var $result_declared = false;
 	
 	/**
 	 * The admin of the contest. May not be used at the moment.
@@ -90,6 +95,20 @@ class Contest
 		else
 			$this->enable_queue_privacy = false; 
 
+		/* result-declared */
+		$res = $this->_xp->query("/contest/result-declared") ; 
+
+		if ($res->length and ($res->item(0)->nodeValue != "yes" 
+				      and $res->item(0)->nodeValue != "true") )
+			$this->result_declared = false; 
+		else
+			$this->result_declared = true; 
+
+		/* admin */
+		$res = $this->_xp->query("/contest/admin") ;
+		if( $res->length )
+			$this->admin = $res->item(0)->nodeValue;
+		
 		$res = $this->_xp->query("/contest/roster") ;
 
 		if( $res->length) 
@@ -117,6 +136,15 @@ class Contest
 	public function getContestEndTime() 
 	{
 		return $this->contestEndTime;
+	}
+
+	/**
+	 * Get the username of this contest's admin
+	 * @returns string
+	 */
+	public function getAdmin()
+	{
+		return $this->admin;
 	}
 
 	/**
@@ -165,6 +193,17 @@ class Contest
 		return $this->isPriv; 
 	}
 
+	/**
+	 * Determine if the contest's result has been declared
+	 *
+	 * @return boolean
+	 */
+	public function isResultDeclared() 
+	{
+		return $this->result_declared; 
+	}
+
+	
 	/**
 	 * Should submissions for this contest be private?
 	 *

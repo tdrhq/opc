@@ -29,11 +29,13 @@ class ErrorController extends Zend_Controller_Action {
 	}
 	public function afterAction() {
 	}
-        public function loginAction() {
-        }
+	public function loginAction() {
+	}
 	public function regnotavailableAction() {
 	}
 	public function privacyAction() {
+	}
+	public function pendingAction() {
 	}
 	public function errorAction()
 	{

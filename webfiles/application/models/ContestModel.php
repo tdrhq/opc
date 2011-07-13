@@ -58,6 +58,7 @@ class ContestModel
 		$current = time() ;
 		if ( $current < $start ) return "before" ;
 		if ( $current < $end ) return "ongoing" ;
+		if ( !$contest->isResultDeclared() ) return "pending_result";
 		return "after" ;
 	}
 }
